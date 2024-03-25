@@ -1,9 +1,11 @@
-import Navbar from './components/Navbar';
+import PostDetail from './pages/PostDetail';
 import './App.css';
+import React from 'react';
+
 function App() {
   return (
     <>
-      <Navbar />
+      <PostDetail />
     </>
   );
 }
