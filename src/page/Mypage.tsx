@@ -121,7 +121,7 @@ function Mypage() {
       
 
       <div style={{ margin: "1vw" }}>
-        <div style={{ fontSize: "2vw", margin: "1vw"  , color:"white" , marginLeft:"3vw" }}>
+        <div style={{ fontSize: "2vw"  , color:"white" }}>
         최근 좋아요 누른 게시물
         </div>
         <Setupbutton><img src={textbox} alt="텍스트 상자" style={{width:"20vw"}}/></Setupbutton>
@@ -134,7 +134,7 @@ function Mypage() {
       </div>
       <div style={{display:"flex"}}>
         <div>
-          <div style={{ fontSize: "2vw" , margin: "1vw" , color:"white" , marginRight:"15vw" , display:"flex"}}>
+          <div style={{ fontSize: "2vw" , margin: "1vw" , color:"white" , marginRight:"16vw" , display:"flex"}}>
             나만의 데스크탑 만들기 
             <Dropdown/>
           </div>
