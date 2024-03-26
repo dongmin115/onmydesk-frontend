@@ -178,6 +178,7 @@ export default function Home() {
         <MenuButton>셋업 게시판</MenuButton>
         <MenuButton>상품 게시판</MenuButton>
         <MenuButton>마이 페이지</MenuButton>
+        
       </Menu>
       <SectionContainer>
         <HotDeskTitle>Today Hot Desk</HotDeskTitle>
