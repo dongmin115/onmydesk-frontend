@@ -10,6 +10,7 @@ let 상단바 = styled.header`
     text-align:center;
     font-size:30px;
     font-family: 'Courier New', Courier, monospace;
+    color:white;
     top: 0;`
 
 

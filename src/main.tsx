@@ -7,7 +7,7 @@ import Home from './components/Home.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Mypage />
+    <App />
   </React.StrictMode>,
 )
 
