@@ -11,7 +11,7 @@ import textbox from "../assets/image/mypage/text.svg";
 import plusbox from "../assets/image/mypage/plusbox.svg";
 import sumbox from "../assets/image/mypage/sum.svg";
 import changeprofile from "../assets/image/mypage/changeprofile.svg";
-
+import setting from "../assets/image/mypage/settings.svg"
 
 
 
@@ -30,14 +30,23 @@ const Name = styled.span`
 const ProfileButton = styled.button`
   background: rgba(52, 154, 248, 1);
   font-family: 'Courier New', Courier, monospace;
+  border-radius: 1vw;
   width: 10vw;
-  height: 2vw;
+  height: 2.5vw;
   margin: 1vw;
   margin-left:10vw;
   font-size: 1.2vw;
   border: none;
   cursor: pointer;
   position: relative;
+  display:flex;
+  justify-content: center; //중심축
+  align-items: center; //교차축
+
+
+  &:hover {
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5); /* 원하는 색상 및 효과에 맞게 조절 가능 */
+  }
 `;
 
 const Setupbutton = styled.button`
@@ -97,10 +106,10 @@ function Mypage() {
           <Name>한승철</Name>
           <div>
             <div>
-              <ProfileButton>이름 변경</ProfileButton>
+              <ProfileButton><img src={setting} style={{width:"2vw"}}/> 이름 변경</ProfileButton>
             </div>
             <div>
-              <ProfileButton>사진 변경</ProfileButton>
+              <ProfileButton><img src={setting} style={{width:"2vw"}}/> 사진 변경</ProfileButton>
             </div>
           </div>
         </ProfileContainer>
