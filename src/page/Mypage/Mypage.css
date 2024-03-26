@@ -1,6 +1,0 @@
-body {
-    justify-content: center; /* 수평 중앙 정렬 */
-    align-items: center; /* 수직 중앙 정렬 */
-    background-color: #262626;/* 뷰포트의 100% 높이를 차지하도록 설정 */
-    width:100%
-}

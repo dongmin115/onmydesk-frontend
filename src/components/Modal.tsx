@@ -18,7 +18,8 @@ const ModalContent = styled.div`
     padding: 20px;
     border-radius: 10px;
     width: 60vw;
-    height: 45vw;
+    height: 40vw;
+    margin-bottom:5vw;
 `;
 
 const ModalCloseButton = styled.button`
@@ -35,8 +36,8 @@ function Modal({ isOpen, onClose }) {
     return (
         <ModalWrapper>
             <ModalContent>
-            <h2>모달 내용</h2>
-            <p>모달 내용을 여기에 추가하세요.</p>
+            
+        
             <ModalCloseButton onClick={onClose}>닫기</ModalCloseButton>
           </ModalContent>
         </ModalWrapper>

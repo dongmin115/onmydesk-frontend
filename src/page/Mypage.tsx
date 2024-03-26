@@ -1,18 +1,19 @@
 import React , {useState} from "react";
 import styled from "styled-components";
 
-import Modal from "../../components/Modal.tsx"
-import Header from "../../components/Header.tsx"
+import Modal from "../components/Modal.tsx"
+import Header from "../components/Header.tsx"
+import Dropdown from "../components/Dropdown.tsx"
 
-import './Mypage.css'
+import profile from "../assets/image/mypage/profile-image.svg";
+import bar from "../assets/image/mypage/bar.svg";
+import textbox from "../assets/image/mypage/text.svg";
+import plusbox from "../assets/image/mypage/plusbox.svg";
+import sumbox from "../assets/image/mypage/sum.svg";
+import changeprofile from "../assets/image/mypage/changeprofile.svg";
 
-import profile from "../../assets/profile-image.svg";
-import bar from "../../assets/bar.svg";
-import textbox from "../../assets/text.svg";
-import plusbox from "../../assets/plusbox.svg";
-import sumbox from "../../assets/sum.svg";
 
-import changeprofile from "../../assets/changeprofile.svg";
+
 
 // 스타일드 컴포넌트 생성
 const ProfileContainer = styled.div`
@@ -44,8 +45,34 @@ const Setupbutton = styled.button`
   border: none;
   background-color: transparent;
   padding: 0%;
-  border-radius: 1vw;
+  border-radius: 0.8vw;
+
+
+  /* 기본적으로는 테두리가 투명하게 설정 */
+  box-shadow: 0 0 0 0 transparent;
+
+  /* 호버 시 테두리가 빛나도록 설정 */
+  &:hover {
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5); /* 원하는 색상 및 효과에 맞게 조절 가능 */
+    transform: scale(1.05)
+  }
 `;
+
+const Plusbutton = styled.button`
+  margin: 1vw;
+  border: none;
+  background-color: transparent;
+  padding: 0%;
+  border-radius: 2.5vw;
+
+    /* 기본적으로는 테두리가 투명하게 설정 */
+    box-shadow: 0 0 0 0 transparent;
+
+/* 호버 시 테두리가 빛나도록 설정 */
+  &:hover {
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5); /* 원하는 색상 및 효과에 맞게 조절 가능 */
+  }
+`
 
 function Mypage() {
   const [IsModalOpen , setIsModalOpen] = useState(false);
@@ -98,52 +125,53 @@ function Mypage() {
       </div>
       <div style={{display:"flex"}}>
         <div>
-          <div style={{ fontSize: "2vw" , margin: "1vw" , color:"white" , marginRight:"20vw"}}>
-            나만의 데스크탑 만들기
+          <div style={{ fontSize: "2vw" , margin: "1vw" , color:"white" , marginRight:"15vw" , display:"flex"}}>
+            나만의 데스크탑 만들기 
+            <Dropdown/>
           </div>
+
           <div style={{ display: "flex" }}>
-            <Setupbutton onClick={openModal}>
+            <Plusbutton onClick={openModal}>
               <img src={plusbox} alt="플러스 박스" style={{width:"10vw"}}/>
-            </Setupbutton>
-            <Setupbutton>
+            </Plusbutton>
+            <Plusbutton>
               <img src={plusbox} alt="플러스 박스" style={{width:"10vw"}}/>
-            </Setupbutton>
-            <Setupbutton>
+            </Plusbutton>
+            <Plusbutton>
               <img src={plusbox} alt="플러스 박스" style={{width:"10vw"}}/>
-            </Setupbutton>
+            </Plusbutton>
     
           </div>
           <div style={{ display: "flex" }}>
-            <Setupbutton>
+            <Plusbutton>
               <img src={plusbox} alt="플러스 박스" style={{width:"10vw"}}/>
-            </Setupbutton>
-            <Setupbutton>
+            </Plusbutton>
+            <Plusbutton>
               <img src={plusbox} alt="플러스 박스" style={{width:"10vw"}}/>
-            </Setupbutton>
-            <Setupbutton>
+            </Plusbutton>
+            <Plusbutton>
               <img src={plusbox} alt="플러스 박스" style={{width:"10vw"}}/>
-            </Setupbutton>
+            </Plusbutton>
         
           </div>
           <div style={{ display: "flex" }}>
-            <Setupbutton>
+            <Plusbutton>
               <img src={plusbox} alt="플러스 박스" style={{width:"10vw"}}/>
-            </Setupbutton>
-            <Setupbutton>
+            </Plusbutton>
+            <Plusbutton>
               <img src={plusbox} alt="플러스 박스" style={{width:"10vw"}}/>
-            </Setupbutton>
-            <Setupbutton>
+            </Plusbutton>
+            <Plusbutton>
               <img src={plusbox} alt="플러스 박스" style={{width:"10vw"}}/>
-            </Setupbutton>
+            </Plusbutton>
 
             
             <Modal isOpen={IsModalOpen} onClose={closeModal} />
-           
           </div>
         </div>
-         <div>
-          <img src = {sumbox} style={{width:"23vw" , marginRight:"1vw"}}/>
-         </div>
+          <div>
+            <img src = {sumbox} style={{width:"23vw" , marginRight:"1vw"}}/>
+          </div>
       </div>
     </div>
   );
