@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 // 컨테이너 스타일
@@ -174,11 +175,16 @@ export default function Home() {
         </TextOverlay>
       </ImageContainer>
       <Menu>
-        <MenuButton>Home</MenuButton>
-        <MenuButton>셋업 게시판</MenuButton>
+        <MenuButton>
+          <Link to="/">Home</Link>
+        </MenuButton>
+        <MenuButton>
+          <Link to="/setupboard">셋업게시판</Link>
+        </MenuButton>
         <MenuButton>상품 게시판</MenuButton>
-        <MenuButton>마이 페이지</MenuButton>
-        
+        <MenuButton>
+          <Link to="/mypage">마이페이지</Link>
+        </MenuButton>
       </Menu>
       <SectionContainer>
         <HotDeskTitle>Today Hot Desk</HotDeskTitle>

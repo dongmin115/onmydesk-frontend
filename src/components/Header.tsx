@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 // 상단바 컴포넌트
-let 상단바 = styled.header`
+const 상단바 = styled.header`
   background-color: rgba(0, 0, 0, 0.2);
   width: 100%;
   height: 7%;
