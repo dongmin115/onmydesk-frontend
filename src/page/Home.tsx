@@ -8,28 +8,6 @@ const Container = styled.div`
   item-align: center;
   width: 100wh;
 `;
-// 이미지 컨테이너 스타일
-const ImageContainer = styled.div`
-  position: relative;
-  width: 100%;
-  height: 30vh;
-`;
-
-// 텍스트 오버레이 스타일
-const TextOverlay = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 4rem;
-  font-weight: medium;
-  color: white;
-`;
-
-// 텍스트 스타일
-const Text = styled.p`
-  margin: 0; /* 기본 마진 제거 */
-`;
 
 const SectionContainer = styled.div`
   display: flex;
@@ -142,16 +120,6 @@ const HotGoodsImage = styled.img`
 export default function Home() {
   return (
     <Container>
-      <ImageContainer>
-        <img
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="main-image"
-          style={{ width: '100%', height: '100%' }}
-        />
-        <TextOverlay>
-          <Text>On My Desk!</Text>
-        </TextOverlay>
-      </ImageContainer>
       <Navbar />
       <SectionContainer>
         <HotDeskTitle>Today Hot Desk</HotDeskTitle>
