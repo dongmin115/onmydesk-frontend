@@ -37,7 +37,12 @@ const MenuButton = styled.button`
   color: #c1c1c1;
   background-color: #3d3d3d;
   border: none;
-  cursor: pointer;
+`;
+
+// 스타일이 적용된 링크 컴포넌트 정의
+const StyledLink = styled(Link)`
+  color: #c1c1c1;
+  text-decoration: none;
   font-size: 1rem;
 
   &:hover {
@@ -60,14 +65,19 @@ export default function Navbar() {
       </ImageContainer>
       <Menu>
         <MenuButton>
-          <Link to="/">Home</Link>
+          <StyledLink to="/">Home</StyledLink>
         </MenuButton>
+
         <MenuButton>
-          <Link to="/setupboard">셋업게시판</Link>
+          <StyledLink to="/setupboard">셋업게시판</StyledLink>
         </MenuButton>
-        <MenuButton>상품 게시판</MenuButton>
+
         <MenuButton>
-          <Link to="/mypage">마이페이지</Link>
+          <StyledLink to="/mypage">상품 게시판</StyledLink>
+        </MenuButton>
+
+        <MenuButton>
+          <StyledLink to="/mypage">마이페이지</StyledLink>
         </MenuButton>
       </Menu>
     </>
