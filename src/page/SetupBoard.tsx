@@ -60,7 +60,13 @@ const SetupBoardImage = styled.img`
   height: 100%;
   border-radius: 1rem;
   drop-shadow: 0 0 0.5rem #000000;
+
+  &:hover {
+    transform: scale(1.05);
+    transition: transform 0.5s;
+  }
 `;
+
 export default function SetupBoard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
