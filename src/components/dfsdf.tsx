@@ -15,12 +15,10 @@ const Logo = styled.h1`
   font-size: 3rem;
 `;
 
-function Header() {
+const Navbar = () => {
   return (
     <NavContainer>
       <Logo>On My Desk!</Logo>
     </NavContainer>
   );
-}
-
-export default Header;
+};
