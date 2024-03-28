@@ -47,10 +47,19 @@ const SetupBoardParagraph = styled.p`
 const SetupBoardContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 2% 2%;
+  grid-auto-rows: minmax(30vh, auto);
+  gap: 3vh;
   text-align: center;
   align-items: center;
-  padding: 0% 2% 0% 2%;
+  padding: 0% 5% 10vh 5%;
+  height: fit-content;
+`;
+
+const SetupBoardImage = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  drop-shadow: 0 0 0.5rem #000000;
 `;
 export default function SetupBoard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -111,15 +120,15 @@ export default function SetupBoard() {
         </div>
       </SetupBoardMenu>
       <SetupBoardContainer>
-        <div>1</div>
-        <div>2</div>
-        <div>3</div>
-        <div>4</div>
-        <div>5</div>
-        <div>6</div>
-        <div>7</div>
-        <div>8</div>
-        <div>9</div>
+        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
       </SetupBoardContainer>
     </Container>
   );
