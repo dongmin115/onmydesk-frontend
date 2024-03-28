@@ -22,7 +22,7 @@ export default function PositionedMenu() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
       >
-      다른 구성 만들기
+        다른 구성 만들기
       </Button>
       <Menu
         id="demo-positioned-menu"
@@ -39,9 +39,15 @@ export default function PositionedMenu() {
           horizontal: 'left',
         }}
       >
-        <MenuItem onClick={handleClose} style={{width:"10vw"}}>셋업1</MenuItem>
-        <MenuItem onClick={handleClose} style={{width:"10vw"}}>셋업2</MenuItem>
-        <MenuItem onClick={handleClose} style={{width:"10vw"}}>셋업3</MenuItem>
+        <MenuItem onClick={handleClose} style={{ width: '10vw' }}>
+          셋업1
+        </MenuItem>
+        <MenuItem onClick={handleClose} style={{ width: '10vw' }}>
+          셋업2
+        </MenuItem>
+        <MenuItem onClick={handleClose} style={{ width: '10vw' }}>
+          셋업3
+        </MenuItem>
       </Menu>
     </div>
   );
