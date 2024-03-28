@@ -73,7 +73,7 @@ export default function Navbar() {
         </MenuButton>
 
         <MenuButton>
-          <StyledLink to="/mypage">상품 게시판</StyledLink>
+          <StyledLink to="/goodsboard">상품 게시판</StyledLink>
         </MenuButton>
 
         <MenuButton>
