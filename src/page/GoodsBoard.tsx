@@ -68,7 +68,7 @@ const Flexbox = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: 70vw;
+  width: 80vw;
 `;
 
 const Flexbox2 = styled.div`
@@ -99,7 +99,7 @@ export default function GoodsBoard() {
               variant="contained"
               color="primary"
               size="large"
-              style={{ width: '15%' }}
+              style={{ width: '18%' }}
             >
               전체
             </Button>
@@ -107,7 +107,7 @@ export default function GoodsBoard() {
               variant="contained"
               color="secondary"
               size="large"
-              style={{ width: '15%' }}
+              style={{ width: '18%' }}
             >
               키보드
             </Button>
@@ -115,7 +115,7 @@ export default function GoodsBoard() {
               variant="contained"
               color="secondary"
               size="large"
-              style={{ width: '15%' }}
+              style={{ width: '18%' }}
             >
               마우스
             </Button>
@@ -123,7 +123,15 @@ export default function GoodsBoard() {
               variant="contained"
               color="secondary"
               size="large"
-              style={{ width: '15%' }}
+              style={{ width: '18%' }}
+            >
+              노트북
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="large"
+              style={{ width: '18%' }}
             >
               모니터
             </Button>
@@ -131,7 +139,7 @@ export default function GoodsBoard() {
               variant="contained"
               color="secondary"
               size="large"
-              style={{ width: '15%' }}
+              style={{ width: '18%' }}
             >
               데스크
             </Button>
@@ -139,7 +147,7 @@ export default function GoodsBoard() {
               variant="contained"
               color="secondary"
               size="large"
-              style={{ width: '15%' }}
+              style={{ width: '18%' }}
             >
               스피커
             </Button>
@@ -147,7 +155,7 @@ export default function GoodsBoard() {
               variant="contained"
               color="secondary"
               size="large"
-              style={{ width: '15%' }}
+              style={{ width: '18%' }}
             >
               기타
             </Button>
