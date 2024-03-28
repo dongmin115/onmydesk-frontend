@@ -26,7 +26,7 @@ const SetupBoardMenu = styled.div`
   justify-content: space-around;
   align-items: center;
   width: 100%;
-  height: 10vh;
+  height: 18vh;
 `;
 
 const SetupBoardTitle = styled.h1`
