@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar';
 import Profile from '../assets/ProfileImage.png';
 import SetupImage from '../assets/SetupImage.png';
 import Mouse from '../assets/Mouse.png';
-import Heart from '../assets/heart.png';
+import Heart from '../assets/Heart.png';
 import Share from '../assets/Share.png';
 import Bookmark from '../assets/Bookmark.png';
 const SetupTitleContainer = styled.div`
