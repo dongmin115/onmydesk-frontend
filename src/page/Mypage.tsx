@@ -26,6 +26,7 @@ const Name = styled.span`
 `;
 
 const ProfileButton = styled.button`
+  //프로필 변경 버튼
   background: rgba(52, 154, 248, 1);
   font-family: 'Courier New', Courier, monospace;
   border-radius: 1vw;
@@ -42,41 +43,53 @@ const ProfileButton = styled.button`
   align-items: center; //교차축
 
   &:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5); /* 원하는 색상 및 효과에 맞게 조절 가능 */
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5);
   }
 `;
 
 const Setupbutton = styled.button`
+  //좋아요 게시물 버튼
   margin: 1vw;
   border: none;
   background-color: transparent;
   padding: 0%;
   border-radius: 0.8vw;
+  cursor: pointer;
 
-  /* 기본적으로는 테두리가 투명하게 설정 */
   box-shadow: 0 0 0 0 transparent;
 
-  /* 호버 시 테두리가 빛나도록 설정 */
   &:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5); /* 원하는 색상 및 효과에 맞게 조절 가능 */
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5);
     transform: scale(1.05);
   }
 `;
 
+const PostImage = styled.img`
+  //좋아요 게시물 이미지
+  width: 20vw;
+  pointer-events: none;
+`;
+
 const Plusbutton = styled.button`
+  //나만의 데스크탑 아이템 추가 버튼
   margin: 1vw;
   border: none;
   background-color: transparent;
   padding: 0%;
   border-radius: 2.5vw;
+  cursor: pointer;
 
-  /* 기본적으로는 테두리가 투명하게 설정 */
   box-shadow: 0 0 0 0 transparent;
 
-  /* 호버 시 테두리가 빛나도록 설정 */
   &:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5); /* 원하는 색상 및 효과에 맞게 조절 가능 */
+    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5);
   }
+`;
+
+const PlusImage = styled.img`
+  // 아이템 추가 이미지
+  width: 10vw;
+  pointer-events: none;
 `;
 
 function Mypage() {
@@ -89,6 +102,15 @@ function Mypage() {
     setIsModalOpen(false);
   };
 
+  const Bar = styled.img`
+    width: 70vw;
+    pointer-events: none;
+  `;
+
+  const Flexdiv = styled.div`
+    display: flex;
+  `;
+
   return (
     <div
       style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
@@ -97,17 +119,29 @@ function Mypage() {
 
       <div className="profile">
         <ProfileContainer>
-          <img src={profile} alt="프로필 사진" style={{ width: '10vw' }} />
+          <img
+            src={profile}
+            alt="프로필 사진"
+            style={{ width: '10vw', pointerEvents: 'none' }}
+          />
           <Name>한승철</Name>
           <div>
             <div>
               <ProfileButton>
-                <img src={setting} style={{ width: '2vw' }} /> 이름 변경
+                <img
+                  src={setting}
+                  style={{ width: '2vw', pointerEvents: 'none' }}
+                />{' '}
+                이름 변경
               </ProfileButton>
             </div>
             <div>
               <ProfileButton>
-                <img src={setting} style={{ width: '2vw' }} /> 사진 변경
+                <img
+                  src={setting}
+                  style={{ width: '2vw', pointerEvents: 'none' }}
+                />{' '}
+                사진 변경
               </ProfileButton>
             </div>
           </div>
@@ -115,7 +149,7 @@ function Mypage() {
       </div>
 
       <div className="bar">
-        <img src={bar} alt="바" style={{ width: '70vw' }} />
+        <Bar src={bar} />
       </div>
 
       <div style={{ margin: '1vw' }}>
@@ -123,18 +157,18 @@ function Mypage() {
           최근 좋아요 누른 게시물
         </div>
         <Setupbutton>
-          <img src={textbox} alt="텍스트 상자" style={{ width: '20vw' }} />
+          <PostImage src={textbox} />
         </Setupbutton>
         <Setupbutton>
-          <img src={textbox} alt="텍스트 상자" style={{ width: '20vw' }} />
+          <PostImage src={textbox} />
         </Setupbutton>
         <Setupbutton>
-          <img src={textbox} alt="텍스트 상자" style={{ width: '20vw' }} />
+          <PostImage src={textbox} />
         </Setupbutton>
       </div>
 
       <div className="bar">
-        <img src={bar} alt="바" style={{ width: '70vw' }} />
+        <Bar src={bar} />
       </div>
       <div style={{ display: 'flex' }}>
         <div>
@@ -151,44 +185,47 @@ function Mypage() {
             <Dropdown />
           </div>
 
-          <div style={{ display: 'flex' }}>
+          <Flexdiv>
             <Plusbutton onClick={openModal}>
-              <img src={plusbox} alt="플러스 박스" style={{ width: '10vw' }} />
+              <PlusImage src={plusbox} />
             </Plusbutton>
             <Plusbutton>
-              <img src={plusbox} alt="플러스 박스" style={{ width: '10vw' }} />
+              <PlusImage src={plusbox} />
             </Plusbutton>
             <Plusbutton>
-              <img src={plusbox} alt="플러스 박스" style={{ width: '10vw' }} />
+              <PlusImage src={plusbox} />
             </Plusbutton>
-          </div>
-          <div style={{ display: 'flex' }}>
+          </Flexdiv>
+          <Flexdiv>
             <Plusbutton>
-              <img src={plusbox} alt="플러스 박스" style={{ width: '10vw' }} />
-            </Plusbutton>
-            <Plusbutton>
-              <img src={plusbox} alt="플러스 박스" style={{ width: '10vw' }} />
+              <PlusImage src={plusbox} />
             </Plusbutton>
             <Plusbutton>
-              <img src={plusbox} alt="플러스 박스" style={{ width: '10vw' }} />
-            </Plusbutton>
-          </div>
-          <div style={{ display: 'flex' }}>
-            <Plusbutton>
-              <img src={plusbox} alt="플러스 박스" style={{ width: '10vw' }} />
+              <PlusImage src={plusbox} />
             </Plusbutton>
             <Plusbutton>
-              <img src={plusbox} alt="플러스 박스" style={{ width: '10vw' }} />
+              <PlusImage src={plusbox} />
+            </Plusbutton>
+          </Flexdiv>
+          <Flexdiv>
+            <Plusbutton>
+              <PlusImage src={plusbox} />
             </Plusbutton>
             <Plusbutton>
-              <img src={plusbox} alt="플러스 박스" style={{ width: '10vw' }} />
+              <PlusImage src={plusbox} />
+            </Plusbutton>
+            <Plusbutton>
+              <PlusImage src={plusbox} />
             </Plusbutton>
 
             <Modal isOpen={IsModalOpen} onClose={closeModal} />
-          </div>
+          </Flexdiv>
         </div>
         <div>
-          <img src={sumbox} style={{ width: '23vw', marginRight: '1vw' }} />
+          <img
+            src={sumbox}
+            style={{ width: '23vw', marginRight: '1vw', pointerEvents: 'none' }}
+          />
         </div>
       </div>
     </div>

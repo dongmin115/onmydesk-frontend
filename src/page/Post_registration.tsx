@@ -75,6 +75,7 @@ const Thumbnailbutton = styled.button`
   background-color: transparent;
   padding: 0%;
   border-radius: 2.5vw;
+  cursor: pointer;
 
   box-shadow: 0 0 0 0 transparent;
 
@@ -151,7 +152,7 @@ function Post_reg() {
   return (
     <div>
       <Centerdiv>
-        <img src={logo} style={{ width: '30vw' }} />
+        <img src={logo} style={{ width: '30vw', pointerEvents: 'none' }} />
       </Centerdiv>
 
       <ForText>셋업 등록하기</ForText>
@@ -208,7 +209,10 @@ function Post_reg() {
 
       <Centerdiv>
         <Item_box>
-          <img src={mouse} style={{ width: '4.5vw', marginLeft: '2vw' }} />
+          <img
+            src={mouse}
+            style={{ width: '4.5vw', marginLeft: '2vw', pointerEvents: 'none' }}
+          />
           <div
             style={{
               color: 'white',
