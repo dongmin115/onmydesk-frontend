@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
+import { Link } from 'react-router-dom';
 import {
   Button,
   InputAdornment,
@@ -95,9 +96,11 @@ export default function SetupBoard() {
         />
         <SetupBoardTitle>데스크탑 셋업을 공유해보세요!</SetupBoardTitle>
         <div>
-          <Button endIcon={<TvIcon />}>
-            <SetupBoardParagraph>셋업공유</SetupBoardParagraph>
-          </Button>
+          <Link to="/Post_registration">
+            <Button endIcon={<TvIcon />}>
+              <SetupBoardParagraph>셋업공유</SetupBoardParagraph>
+            </Button>
+          </Link>
           <Button
             id="basic-button"
             aria-controls={open ? 'basic-menu' : undefined}
