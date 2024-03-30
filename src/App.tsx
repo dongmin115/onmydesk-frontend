@@ -5,6 +5,8 @@ import Mypage from './page/Mypage';
 import SetupBoard from './page/SetupBoard';
 import ProductDetail from './page/ProductDetail';
 import PostDetail from './page/PostDetail';
+import Post_reg from './page/Post_registration';
+import GoodsBoard from './page/GoodsBoard';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
       <Route path="/setupboard" element={<SetupBoard />} />
       <Route path="/postdetail" element={<PostDetail />} />
       <Route path="/productdetail" element={<ProductDetail />} />
+      <Route path="/Post_registration" element={<Post_reg />} />
+      <Route path="/goodsboard" element={<GoodsBoard />} />
     </Routes>
   );
 }

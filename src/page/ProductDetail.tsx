@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Mouse from '../assets/Mouse.png';
 import Keyboard from '../assets/Keyboard.png';
 import Heart from '../assets/Heart.png';
+import LeftArrow from '../assets/Leftarrow.png';
+import Arrow from '../assets/Arrows.png';
 const ProductInfoContainer = styled.div`
   //상부 전체를 묶는 컨테이너
   display: flex;
@@ -169,6 +171,19 @@ const ObjectName = styled.span`
   margin-left: 26%;
   margin-top: 12%;
 `;
+const LeftArrowButton = styled.img`
+  width: 4vw;
+  height: 5vh;
+  margin-right: 4%;
+  cursor: pointer;
+`;
+
+const RightArrow = styled.img`
+  width: 2vw;
+  height: 3vh;
+  margin-left: 5%;
+  cursor: pointer;
+`;
 
 const ProductDetail = () => {
   return (
@@ -219,6 +234,8 @@ const ProductDetail = () => {
         <SetupItem>You may also like</SetupItem>
       </Recommend>
       <RecommendProduct>
+        <LeftArrowButton src={LeftArrow}></LeftArrowButton>
+
         <SetupObjectContainer>
           <SetupObject>
             <ObjectImage src={Mouse}></ObjectImage>
@@ -239,6 +256,8 @@ const ProductDetail = () => {
             </ObjectNameContainer>
           </SetupObject>
         </SetupObjectContainer>
+
+        <RightArrow src={Arrow}></RightArrow>
       </RecommendProduct>
     </>
   );
