@@ -7,6 +7,8 @@ import ProductDetail from './page/ProductDetail';
 import PostDetail from './page/PostDetail';
 import Post_reg from './page/Post_registration';
 import GoodsBoard from './page/GoodsBoard';
+import Signup from './page/Signup';
+import Login from './page/Login';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
       <Route path="/goodsboard" element={<GoodsBoard />} />
       <Route path="/postdetail" element={<PostDetail />} />
       <Route path="/productdetail" element={<ProductDetail />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
     </Routes>
   );
 }
