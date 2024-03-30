@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
 import Header from '../components/Header';
-
 import test from '../assets/image/mypage/sum.svg';
 import logo from '../assets/logo.svg';
 import thumbnail from '../assets/image/Post_registration/thumbnail.svg';
