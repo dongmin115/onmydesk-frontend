@@ -9,6 +9,7 @@ import Post_reg from './page/Post_registration';
 import GoodsBoard from './page/GoodsBoard';
 import Signup from './page/Signup';
 import Login from './page/Login';
+import FavoriteBoard from './page/FavoriteBoard';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/productdetail" element={<ProductDetail />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/mypage/favoriteboard" element={<FavoriteBoard />} />
     </Routes>
   );
 }
