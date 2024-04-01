@@ -12,6 +12,8 @@ import plusbox from '../assets/image/mypage/plusbox.svg';
 import sumbox from '../assets/image/mypage/sum.svg';
 import changeprofile from '../assets/image/mypage/changeprofile.svg';
 import setting from '../assets/image/mypage/settings.svg';
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 // 스타일드 컴포넌트 생성
 const ProfileContainer = styled.div`
@@ -155,6 +157,9 @@ function Mypage() {
       <div style={{ margin: '1vw' }}>
         <div style={{ fontSize: '2vw', color: 'white' }}>
           최근 좋아요 누른 게시물
+          <Link to="/mypage/favoriteboard">
+            <Button>전체보기</Button>
+          </Link>
         </div>
         <Setupbutton>
           <PostImage src={textbox} />
