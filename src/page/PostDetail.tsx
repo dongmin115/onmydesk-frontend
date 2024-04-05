@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import Profile from '../assets/ProfileImage.png';
 import SetupImage from '../assets/SetupImage.png';
 import Mouse from '../assets/Mouse.png';
-import Heart from '../assets/Heart.png';
-import Share from '../assets/Share.png';
-import Bookmark from '../assets/Bookmark.png';
+import Button from '@mui/material/Button';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import ShareIcon from '@mui/icons-material/Share';
+
 const SetupTitleContainer = styled.div`
   width: 100%;
   height: 12vh;
@@ -18,13 +20,13 @@ const SetupTitle = styled.span`
   width: 100%;
   height: 5vh;
   font-family: 'Kiwi Maru';
-  font-size: 1.5rem;
+  font-size: 2.5rem;
 `;
 
 const DeskInfoContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-top: 1.8vh;
+  margin-top: 6.8vh;
   margin-left: 23vw;
   margin-right: 22vw;
   color: #ffffff;
@@ -33,7 +35,7 @@ const DeskInfoContainer = styled.div`
 
 const DeskInfo = styled.div`
   flex-grow: 1;
-  font-size: 1.8vh; // font-size는 vh 단위로 설정
+  font-size: 1.3rem;
 `;
 
 const EditDeleteContainer = styled.div`
@@ -42,25 +44,8 @@ const EditDeleteContainer = styled.div`
   color: #349af8;
 `;
 
-const EditButton = styled.span`
-  cursor: pointer;
-  font-size: 0.8rem;
-`;
-
-const DeleteButton = styled.span`
-  cursor: pointer;
-  font-size: 0.8rem;
-`;
-
 const DateInfo = styled.div`
   padding-left: 2%;
-`;
-
-const ProfileImage = styled.img`
-  width: 4vw;
-  height: 6vh;
-  border-radius: 50%;
-  margin-bottom: 2%;
 `;
 
 const Image = styled.img`
@@ -81,7 +66,7 @@ const TextContainer = styled.div`
 
 const Text = styled.p`
   font-family: 'Kantumruy';
-  font-size: 0.9rem;
+  font-size: 1.3rem;
   padding: 1%;
   text-align: center;
   line-height: 3rem;
@@ -113,6 +98,12 @@ const SetupObject = styled.div`
   width: 30%;
   border-radius: 1rem;
   background-color: #2f2d2d;
+  transition: 0.5s ease;
+  box-shadow: 0px 0px 10px 0px #000000;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 const ObjectImage = styled.img`
   height: 60%;
@@ -175,12 +166,6 @@ const CommentContainer = styled.div`
   position: relative;
 `;
 
-const CommentProfile = styled.img`
-  width: 6vw;
-  height: 10vh;
-  border-radius: 50%;
-  margin-top: 1.5rem;
-`;
 const CommentBox1 = styled.div`
   width: 45vw;
   height: 25vh;
@@ -208,37 +193,13 @@ const CommentBox2 = styled.div`
   border-radius: 1rem;
   display: flex;
 `;
-const Comment = styled.span`
-  font-family: 'Abhaya Libre ExtraBold';
-  font-size: 1rem;
-  color: #8a8383;
-  width: 30rem;
-  height: 14vh;
-  padding: 3%;
-  display: flex;
-`;
-const CommentButtonContainer = styled.button`
-  width: 7vw;
-  height: 3vh;
-  border-radius: 3rem;
-  background-color: #52a64b;
+
+const CommentButtonContainer = styled.div`
   position: absolute;
-  bottom: 6%;
+  bottom: 5%;
   left: 79%;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  border: none;
-`;
-
-const ButtonText = styled.span`
-  width: 6vw;
-  height: 2wh;
-  color: #000000;
-  font-family: 'Abhaya Libre ExtraBold';
-  font-size: 0.9rem;
-  margin-left: 4%;
-  margin-top: 1%;
 `;
 
 const Reply = styled.span`
@@ -256,30 +217,16 @@ const UserName = styled.span`
   color: #ffffff;
   font-family: 'Abhaya Libre ExtraBold';
   font-size: 1rem;
-  bottom: 32%;
-  left: 2%;
+  bottom: 23%;
+  left: 2.8%;
 `;
 
 const CommentEditContainer = styled.div`
-  display: flex;
-  gap: 1.2vw;
-  color: #349af8;
   position: absolute;
-  bottom: 8%;
-  left: 88%;
+  bottom: 3%;
+  left: 82%;
   display: flex;
   align-items: center;
-  cursor: pointer;
-`;
-
-const CommentEdit = styled.span`
-  cursor: pointer;
-  font-size: 0.8rem;
-`;
-
-const CommentDelete = styled.span`
-  cursor: pointer;
-  font-size: 0.8rem;
 `;
 
 const RightBox = styled.div`
@@ -298,28 +245,31 @@ const Circle = styled.div`
   height: 7vh;
   width: 77%;
   border-radius: 4rem;
-  background-color: #2f2d2d;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
 `;
-const HeartImg = styled.img`
-  height: 60%;
-  width: 60%;
-  border-radius: 4rem;
-  margin: auto;
-`;
-const BookmarkImg = styled.img`
-  height: 50%;
-  width: 40%;
-  margin: auto;
-`;
-const ShareImg = styled.img`
-  height: 60%;
-  width: 40;
 
-  margin: auto;
+const TextArea = styled.textarea`
+  flex: 1;
+  height: 50%;
+  padding: 1rem;
+  border: 1px solid #575757;
+  border-radius: 0.5rem;
+  background-color: #2c2c2c;
+  color: white;
+  align-items: flex-start;
+  font-size: 1.1rem;
+  resize: none;
+
+  &::placeholder {
+    color: #a9a9a9;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #808080;
+  }
 `;
 
 const PostDetail = () => {
@@ -330,24 +280,66 @@ const PostDetail = () => {
         <SetupTitle>Setup Title</SetupTitle>
       </SetupTitleContainer>
       <DeskInfoContainer>
-        <ProfileImage src={Profile} />
+        <AccountCircleIcon sx={{ fontSize: 50, mb: 2, mr: 2 }} />
         <DeskInfo>Sumin Lee's desk</DeskInfo>
         <EditDeleteContainer>
-          <EditButton>수정</EditButton>
-          <DeleteButton>삭제</DeleteButton>
+          <Button href="#text-buttons">수정</Button>
+          <Button href="#text-buttons">삭제</Button>
         </EditDeleteContainer>
         <DateInfo>2024.03.15</DateInfo>
       </DeskInfoContainer>
       <Image src={SetupImage} />
       <RightBox>
         <Circle>
-          <HeartImg src={Heart}></HeartImg>
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: '50%',
+              minWidth: '50px',
+              height: '50px',
+              bgcolor: 'grey.800',
+              color: 'red',
+              '&:hover': {
+                bgcolor: 'grey.700',
+              },
+            }}
+          >
+            <FavoriteBorderIcon />
+          </Button>
         </Circle>
         <Circle>
-          <BookmarkImg src={Bookmark}></BookmarkImg>
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: '50%',
+              minWidth: '50px',
+              height: '50px',
+              bgcolor: 'grey.800',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'grey.700',
+              },
+            }}
+          >
+            <BookmarkIcon />
+          </Button>
         </Circle>
         <Circle>
-          <ShareImg src={Share}></ShareImg>
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: '50%',
+              minWidth: '50px',
+              height: '50px',
+              bgcolor: 'grey.800',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'grey.700',
+              },
+            }}
+          >
+            <ShareIcon />
+          </Button>
         </Circle>
       </RightBox>
       <TextContainer>
@@ -396,19 +388,26 @@ const PostDetail = () => {
         <Total>89,000 KRW</Total>
       </TotalContainer>
       <CommentContainer>
-        <CommentProfile src={Profile}></CommentProfile>
-        <CommentBox1>
-          <CommentButtonContainer>
-            <ButtonText>댓글 작성</ButtonText>
-          </CommentButtonContainer>
-          <CommentBox2>
-            <Comment>댓글을 작성하세요</Comment>
-          </CommentBox2>
-        </CommentBox1>
+        <TextArea placeholder="댓글을 입력하세요" />
+
+        <CommentButtonContainer>
+          <Button
+            variant="contained"
+            color="success"
+            sx={{
+              borderRadius: '9px',
+              width: '7vw',
+              height: '3.5vh',
+              ml: 8,
+            }}
+          >
+            댓글 작성
+          </Button>
+        </CommentButtonContainer>
       </CommentContainer>
 
       <CommentContainer>
-        <CommentProfile src={Profile}></CommentProfile>
+        <AccountCircleIcon sx={{ color: 'white', fontSize: 90, mt: 5 }} />
         <UserName>임동민</UserName>
         <CommentBox1>
           <CommentBox2>
@@ -416,8 +415,8 @@ const PostDetail = () => {
           </CommentBox2>
         </CommentBox1>
         <CommentEditContainer>
-          <CommentEdit>수정</CommentEdit>
-          <CommentDelete>삭제</CommentDelete>
+          <Button href="#text-buttons">수정</Button>
+          <Button href="#text-buttons">삭제</Button>
         </CommentEditContainer>
       </CommentContainer>
     </>
