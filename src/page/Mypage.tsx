@@ -90,6 +90,7 @@ function Mypage() {
 
   const Flexdiv = styled.div`
     display: flex;
+    flex-direction: row;
   `;
 
   return (
@@ -126,16 +127,12 @@ function Mypage() {
                 style={{
                   background: 'rgba(52, 154, 248, 1)',
                   margin: '0.5vw',
-                  fontSize: '1vw',
+                  fontSize: '1.2vw',
                   width: '9vw',
                   height: '2.5vw',
                   whiteSpace: 'nowrap',
                 }}
               >
-                <img
-                  src={setting}
-                  style={{ width: '2vw', pointerEvents: 'none' }}
-                />{' '}
                 이름 변경
               </Button>
             </div>
@@ -147,17 +144,49 @@ function Mypage() {
                 style={{
                   background: 'rgba(52, 154, 248, 1)',
                   margin: '0.5vw',
-                  fontSize: '1vw',
+                  fontSize: '1.2vw',
                   width: '9vw',
                   height: '2.5vw',
                   whiteSpace: 'nowrap',
                 }}
               >
-                <img
-                  src={setting}
-                  style={{ width: '2vw', pointerEvents: 'none' }}
-                />{' '}
                 사진 변경
+              </Button>
+            </div>
+          </div>
+          <div>
+            <div>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                style={{
+                  background: 'rgba(52, 154, 248, 1)',
+                  margin: '0.5vw',
+                  fontSize: '1.2vw',
+                  width: '9vw',
+                  height: '2.5vw',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                홈으로
+              </Button>
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                style={{
+                  background: 'rgba(52, 154, 248, 1)',
+                  margin: '0.5vw',
+                  fontSize: '1.2vw',
+                  width: '9vw',
+                  height: '2.5vw',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                로그아웃
               </Button>
             </div>
           </div>
@@ -171,8 +200,10 @@ function Mypage() {
       <div style={{ display: 'flex' }}>
         <div
           style={{
+            backgroundColor: ' #414141',
+            borderRadius: '1vw',
             margin: '1vw',
-            marginRight: '3vw',
+            marginRight: '1vw',
             boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
             padding: '1vw',
             height: '31vw',
@@ -204,6 +235,8 @@ function Mypage() {
 
         <div
           style={{
+            backgroundColor: '#414141',
+            borderRadius: '1vw',
             display: 'flex',
             boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
             padding: '1vw',
@@ -222,33 +255,44 @@ function Mypage() {
               나만의 데스크탑 만들기
               <Dropdown />
             </div>
+            <div style={{ marginRight: '1vw' }}>
+              <Flexdiv>
+                <Plusbutton onClick={openModal}>
+                  <PlusImage src={plusbox} />
+                </Plusbutton>
+                <Plusbutton>
+                  <PlusImage src={plusbox} />
+                </Plusbutton>
+                <Plusbutton>
+                  <PlusImage src={plusbox} />
+                </Plusbutton>
+              </Flexdiv>
+              <Flexdiv>
+                <Plusbutton onClick={openModal}>
+                  <PlusImage src={plusbox} />
+                </Plusbutton>
+                <Plusbutton>
+                  <PlusImage src={plusbox} />
+                </Plusbutton>
+                <Plusbutton>
+                  <PlusImage src={plusbox} />
+                </Plusbutton>
+              </Flexdiv>
 
-            <Flexdiv>
-              <Plusbutton onClick={openModal}>
-                <PlusImage src={plusbox} />
-              </Plusbutton>
-              <Plusbutton>
-                <PlusImage src={plusbox} />
-              </Plusbutton>
-            </Flexdiv>
-            <Flexdiv>
-              <Plusbutton onClick={openModal}>
-                <PlusImage src={plusbox} />
-              </Plusbutton>
-              <Plusbutton>
-                <PlusImage src={plusbox} />
-              </Plusbutton>
-            </Flexdiv>
-            <Flexdiv>
-              <Plusbutton>
-                <PlusImage src={plusbox} />
-              </Plusbutton>
-              <Plusbutton>
-                <PlusImage src={plusbox} />
-              </Plusbutton>
+              <Flexdiv>
+                <Plusbutton>
+                  <PlusImage src={plusbox} />
+                </Plusbutton>
+                <Plusbutton>
+                  <PlusImage src={plusbox} />
+                </Plusbutton>
+                <Plusbutton>
+                  <PlusImage src={plusbox} />
+                </Plusbutton>
 
-              <Modal isOpen={IsModalOpen} onClose={closeModal} />
-            </Flexdiv>
+                <Modal isOpen={IsModalOpen} onClose={closeModal} />
+              </Flexdiv>
+            </div>
           </div>
           <div>
             <img
