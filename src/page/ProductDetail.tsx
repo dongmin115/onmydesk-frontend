@@ -2,9 +2,10 @@ import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import Mouse from '../assets/Mouse.png';
 import Keyboard from '../assets/Keyboard.png';
-import Heart from '../assets/Heart.png';
-import LeftArrow from '../assets/Leftarrow.png';
-import Arrow from '../assets/Arrows.png';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import Button from '@mui/material/Button';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const ProductInfoContainer = styled.div`
   //상부 전체를 묶는 컨테이너
   display: flex;
@@ -17,7 +18,7 @@ const ProductImage = styled.img`
   //상품 이미지
   background-size: cover;
   width: 27vw;
-  height: 42vh;
+  height: 44vh;
   border-radius: 5%;
   margin-top: 4.3%;
 `;
@@ -39,17 +40,10 @@ const Circle = styled.div`
   height: 6vh;
   width: 10%;
   border-radius: 4rem;
-  background-color: #2f2d2d;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-`;
-const HeartImg = styled.img`
-  height: 60%;
-  width: 60%;
-  border-radius: 4rem;
-  margin: auto;
 `;
 
 const ProductName = styled.h1`
@@ -107,13 +101,13 @@ const Line = styled.div`
   width: 55vw;
   height: 0.1vw;
   background-color: #ffffff;
-  margin-left: 23%;
+  margin-left: 22%;
   margin-top: 6%;
 `;
 
 const SetupItem = styled.span`
   //You may also like
-  margin-left: 19%;
+  margin-left: 18.5%;
   color: #ffffff;
   width: 100%;
   height: 2.4vh;
@@ -142,13 +136,20 @@ const SetupObjectContainer = styled.div`
   height: 35vh;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 3rem;
 `;
 
 const SetupObject = styled.div`
   height: 35vh;
   width: 26%;
-
   background-color: #2f2d2d;
+  border-radius: 1rem;
+  transition: 0.5s ease;
+  box-shadow: 0px 0px 10px 0px #000000;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 const ObjectImage = styled.img`
   height: 70%;
@@ -171,19 +172,6 @@ const ObjectName = styled.span`
   margin-left: 26%;
   margin-top: 12%;
 `;
-const LeftArrowButton = styled.img`
-  width: 4vw;
-  height: 5vh;
-  margin-right: 4%;
-  cursor: pointer;
-`;
-
-const RightArrow = styled.img`
-  width: 2vw;
-  height: 3vh;
-  margin-left: 5%;
-  cursor: pointer;
-`;
 
 const ProductDetail = () => {
   return (
@@ -195,7 +183,21 @@ const ProductDetail = () => {
           <TitleContainer>
             <ProductName>Apple Magic Keyboard</ProductName>
             <Circle>
-              <HeartImg src={Heart} />
+              <Button
+                variant="contained"
+                sx={{
+                  borderRadius: '50%',
+                  minWidth: '50px',
+                  height: '50px',
+                  bgcolor: 'grey.800',
+                  color: 'red',
+                  '&:hover': {
+                    bgcolor: 'grey.700',
+                  },
+                }}
+              >
+                <FavoriteBorderIcon />
+              </Button>
             </Circle>
           </TitleContainer>
           <ProductDetail1>
@@ -234,8 +236,14 @@ const ProductDetail = () => {
         <SetupItem>You may also like</SetupItem>
       </Recommend>
       <RecommendProduct>
-        <LeftArrowButton src={LeftArrow}></LeftArrowButton>
-
+        <ArrowBackIosNewIcon
+          sx={{
+            height: '50px',
+            color: 'white',
+            mr: 4,
+            mb: 5,
+          }}
+        ></ArrowBackIosNewIcon>
         <SetupObjectContainer>
           <SetupObject>
             <ObjectImage src={Mouse}></ObjectImage>
@@ -256,8 +264,14 @@ const ProductDetail = () => {
             </ObjectNameContainer>
           </SetupObject>
         </SetupObjectContainer>
-
-        <RightArrow src={Arrow}></RightArrow>
+        <ArrowForwardIosIcon
+          sx={{
+            height: '50px',
+            color: 'white',
+            ml: 4,
+            mb: 5,
+          }}
+        ></ArrowForwardIosIcon>
       </RecommendProduct>
     </>
   );
