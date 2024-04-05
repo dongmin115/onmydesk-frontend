@@ -23,30 +23,9 @@ const ProfileContainer = styled.div`
 `;
 
 const Name = styled.span`
-  margin-left: 10px; // 이름과 프로필 사진 사이의 간격 조정
-  font-size: 2vw; // 임시 이름의 글꼴 크기
-`;
-
-const ProfileButton = styled.button`
-  //프로필 변경 버튼
-  background: rgba(52, 154, 248, 1);
-  font-family: 'Courier New', Courier, monospace;
-  border-radius: 1vw;
-  width: 10vw;
-  height: 2.5vw;
-  margin: 1vw;
-  margin-left: 10vw;
-  font-size: 1.2vw;
-  border: none;
-  cursor: pointer;
-  position: relative;
-  display: flex;
-  justify-content: center; //중심축
-  align-items: center; //교차축
-
-  &:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5);
-  }
+  margin-right: 3vw; // 이름과 프로필 사진 사이의 간격 조정
+  margin-left: 0.5vw;
+  font-size: 1.5vw; // 임시 이름의 글꼴 크기
 `;
 
 const Setupbutton = styled.button`
@@ -68,13 +47,13 @@ const Setupbutton = styled.button`
 
 const PostImage = styled.img`
   //좋아요 게시물 이미지
-  width: 20vw;
+  width: 15vw;
   pointer-events: none;
 `;
 
 const Plusbutton = styled.button`
   //나만의 데스크탑 아이템 추가 버튼
-  margin: 1vw;
+  margin: 0.5vw;
   border: none;
   background-color: transparent;
   padding: 0%;
@@ -90,7 +69,7 @@ const Plusbutton = styled.button`
 
 const PlusImage = styled.img`
   // 아이템 추가 이미지
-  width: 10vw;
+  width: 8vw;
   pointer-events: none;
 `;
 
@@ -115,8 +94,19 @@ function Mypage() {
 
   return (
     <div
-      style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
     >
+      <style>
+        {`
+          body {
+            overflow: hidden;
+          }
+        `}
+      </style>
       <Header />
 
       <div className="profile">
@@ -124,27 +114,51 @@ function Mypage() {
           <img
             src={profile}
             alt="프로필 사진"
-            style={{ width: '10vw', pointerEvents: 'none' }}
+            style={{ width: '7vw', pointerEvents: 'none' }}
           />
           <Name>한승철</Name>
+
           <div>
             <div>
-              <ProfileButton>
+              <Button
+                variant="contained"
+                size="large"
+                style={{
+                  background: 'rgba(52, 154, 248, 1)',
+                  margin: '0.5vw',
+                  fontSize: '1vw',
+                  width: '9vw',
+                  height: '2.5vw',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 <img
                   src={setting}
                   style={{ width: '2vw', pointerEvents: 'none' }}
                 />{' '}
                 이름 변경
-              </ProfileButton>
+              </Button>
             </div>
             <div>
-              <ProfileButton>
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                style={{
+                  background: 'rgba(52, 154, 248, 1)',
+                  margin: '0.5vw',
+                  fontSize: '1vw',
+                  width: '9vw',
+                  height: '2.5vw',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 <img
                   src={setting}
                   style={{ width: '2vw', pointerEvents: 'none' }}
                 />{' '}
                 사진 변경
-              </ProfileButton>
+              </Button>
             </div>
           </div>
         </ProfileContainer>
@@ -154,83 +168,97 @@ function Mypage() {
         <Bar src={bar} />
       </div>
 
-      <div style={{ margin: '1vw' }}>
-        <div style={{ fontSize: '2vw', color: 'white' }}>
-          최근 좋아요 누른 게시물
-          <Link to="/mypage/favoriteboard">
-            <Button>전체보기</Button>
-          </Link>
-        </div>
-        <Setupbutton>
-          <PostImage src={textbox} />
-        </Setupbutton>
-        <Setupbutton>
-          <PostImage src={textbox} />
-        </Setupbutton>
-        <Setupbutton>
-          <PostImage src={textbox} />
-        </Setupbutton>
-      </div>
-
-      <div className="bar">
-        <Bar src={bar} />
-      </div>
       <div style={{ display: 'flex' }}>
-        <div>
-          <div
-            style={{
-              fontSize: '2vw',
-              margin: '1vw',
-              color: 'white',
-              marginRight: '16vw',
-              display: 'flex',
-            }}
-          >
-            나만의 데스크탑 만들기
-            <Dropdown />
+        <div
+          style={{
+            margin: '1vw',
+            marginRight: '3vw',
+            boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
+            padding: '1vw',
+            height: '31vw',
+          }}
+        >
+          <div style={{ fontSize: '1.4vw', color: 'white' }}>
+            최근 좋아요 누른 게시물
+            <Link to="/mypage/favoriteboard">
+              <Button style={{ fontSize: '1vw' }}>전체보기</Button>
+            </Link>
           </div>
-
-          <Flexdiv>
-            <Plusbutton onClick={openModal}>
-              <PlusImage src={plusbox} />
-            </Plusbutton>
-            <Plusbutton>
-              <PlusImage src={plusbox} />
-            </Plusbutton>
-            <Plusbutton>
-              <PlusImage src={plusbox} />
-            </Plusbutton>
-          </Flexdiv>
-          <Flexdiv>
-            <Plusbutton>
-              <PlusImage src={plusbox} />
-            </Plusbutton>
-            <Plusbutton>
-              <PlusImage src={plusbox} />
-            </Plusbutton>
-            <Plusbutton>
-              <PlusImage src={plusbox} />
-            </Plusbutton>
-          </Flexdiv>
-          <Flexdiv>
-            <Plusbutton>
-              <PlusImage src={plusbox} />
-            </Plusbutton>
-            <Plusbutton>
-              <PlusImage src={plusbox} />
-            </Plusbutton>
-            <Plusbutton>
-              <PlusImage src={plusbox} />
-            </Plusbutton>
-
-            <Modal isOpen={IsModalOpen} onClose={closeModal} />
-          </Flexdiv>
+          <div>
+            <Setupbutton>
+              <PostImage src={textbox} />
+            </Setupbutton>
+            <Setupbutton>
+              <PostImage src={textbox} />
+            </Setupbutton>
+          </div>
+          <div>
+            <Setupbutton>
+              <PostImage src={textbox} />
+            </Setupbutton>
+            <Setupbutton>
+              <PostImage src={textbox} />
+            </Setupbutton>
+          </div>
         </div>
-        <div>
-          <img
-            src={sumbox}
-            style={{ width: '23vw', marginRight: '1vw', pointerEvents: 'none' }}
-          />
+
+        <div
+          style={{
+            display: 'flex',
+            boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
+            padding: '1vw',
+            marginTop: '1vw',
+            height: '31vw',
+          }}
+        >
+          <div>
+            <div
+              style={{
+                fontSize: '1.4vw',
+                color: 'white',
+                display: 'flex',
+              }}
+            >
+              나만의 데스크탑 만들기
+              <Dropdown />
+            </div>
+
+            <Flexdiv>
+              <Plusbutton onClick={openModal}>
+                <PlusImage src={plusbox} />
+              </Plusbutton>
+              <Plusbutton>
+                <PlusImage src={plusbox} />
+              </Plusbutton>
+            </Flexdiv>
+            <Flexdiv>
+              <Plusbutton onClick={openModal}>
+                <PlusImage src={plusbox} />
+              </Plusbutton>
+              <Plusbutton>
+                <PlusImage src={plusbox} />
+              </Plusbutton>
+            </Flexdiv>
+            <Flexdiv>
+              <Plusbutton>
+                <PlusImage src={plusbox} />
+              </Plusbutton>
+              <Plusbutton>
+                <PlusImage src={plusbox} />
+              </Plusbutton>
+
+              <Modal isOpen={IsModalOpen} onClose={closeModal} />
+            </Flexdiv>
+          </div>
+          <div>
+            <img
+              src={sumbox}
+              style={{
+                width: '16vw',
+                pointerEvents: 'none',
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
