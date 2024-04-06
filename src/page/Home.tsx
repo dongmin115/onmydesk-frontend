@@ -100,9 +100,15 @@ const HotGoodsContainer = styled.div`
   height: fit-content;
 `;
 
-const SpanningItem = styled.div`
+const SpanningItem4 = styled.div`
   grid-column: span 2;
   grid-row: span 2;
+  height: 100%;
+  width: 100%;
+`;
+
+const SpanningItem2 = styled.div`
+  grid-column: span 2;
   height: 100%;
   width: 100%;
 `;
@@ -170,28 +176,24 @@ const HotGoods = () => {
         On My Desk에서 오늘의 인기있는 셋업 상품을 확인해보세요!
       </HotDeskDescription>
       <HotGoodsContainer>
-        <SpanningItem>
+        <SpanningItem4>
           <HotGoodsImage
             src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
             alt="hot-desk"
           />
-        </SpanningItem>
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
+        </SpanningItem4>
+        <SpanningItem2>
+          <HotGoodsImage
+            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+            alt="hot-desk"
+          />
+        </SpanningItem2>
+        <SpanningItem2>
+          <HotGoodsImage
+            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+            alt="hot-desk"
+          />
+        </SpanningItem2>
         <HotGoodsImage
           src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
           alt="hot-desk"
