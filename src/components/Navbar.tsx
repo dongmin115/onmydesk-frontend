@@ -55,7 +55,7 @@ export default function Navbar() {
     <>
       <ImageContainer>
         <img
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+          src="https://i.ibb.co/6tdC60g/Get-the-We-Heart-It-app.gif"
           alt="main-image"
           style={{ width: '100%', height: '100%' }}
         />

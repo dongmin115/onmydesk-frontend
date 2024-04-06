@@ -90,87 +90,156 @@ const HotDeskImage = styled.img`
 `;
 
 const HotGoodsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: start;
-  width: 30%;
-  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(30vh, auto);
+  gap: 3vh;
+  text-align: center;
+  align-items: center;
+  padding: 0% 5% 10vh 5%;
+  height: fit-content;
 `;
 
-const HotGoodsTitle = styled.div`
+const SpanningItem4 = styled.div`
+  grid-column: span 2;
+  grid-row: span 2;
+  height: 100%;
   width: 100%;
-  font-size: 1.5rem;
-  font-weight: 300;
-  color: #ffffff;
-  text-align: center;
+`;
+
+const SpanningItem2 = styled.div`
+  grid-column: span 2;
+  height: 100%;
+  width: 100%;
 `;
 
 const HotGoodsImage = styled.img`
   width: 100%;
-  height: 80%;
-  border-radius: 10px;
+  height: 100%;
+  border-radius: 1px;
   box-shadow: 0px 0px 10px 0px #000000;
   transition: 0.5s ease;
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 `;
+
+const HotDesk = () => {
+  return (
+    <>
+      <HotDeskTitle>Today Hot Desk</HotDeskTitle>
+      <HotDeskDescription>
+        On My Desk에서 오늘의 인기있는 DESK를 확인해보세요!
+      </HotDeskDescription>
+      <HotDeskImageContainer>
+        <HotDeskImageLayer>
+          <HotDeskImage
+            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
+            alt="hot-desk"
+          />
+        </HotDeskImageLayer>
+        <HotDeskImageLayer>
+          <HotDeskImage
+            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
+            alt="hot-desk"
+          />
+        </HotDeskImageLayer>
+        <HotDeskImageLayer>
+          <HotDeskImage
+            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
+            alt="hot-desk"
+          />
+        </HotDeskImageLayer>
+        <HotDeskImageLayer>
+          <HotDeskImage
+            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
+            alt="hot-desk"
+          />
+        </HotDeskImageLayer>
+        <HotDeskImageLayer>
+          <HotDeskImage
+            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
+            alt="hot-desk"
+          />
+        </HotDeskImageLayer>
+      </HotDeskImageContainer>
+    </>
+  );
+};
+
+const HotGoods = () => {
+  return (
+    <>
+      <HotDeskTitle>인기있는 셋업 상품</HotDeskTitle>
+      <HotDeskDescription>
+        On My Desk에서 오늘의 인기있는 셋업 상품을 확인해보세요!
+      </HotDeskDescription>
+      <HotGoodsContainer>
+        <SpanningItem4>
+          <HotGoodsImage
+            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+            alt="hot-desk"
+          />
+        </SpanningItem4>
+        <SpanningItem2>
+          <HotGoodsImage
+            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+            alt="hot-desk"
+          />
+        </SpanningItem2>
+        <SpanningItem2>
+          <HotGoodsImage
+            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+            alt="hot-desk"
+          />
+        </SpanningItem2>
+        <HotGoodsImage
+          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+          alt="hot-desk"
+        />
+        <HotGoodsImage
+          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+          alt="hot-desk"
+        />
+        <HotGoodsImage
+          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+          alt="hot-desk"
+        />
+        <HotGoodsImage
+          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+          alt="hot-desk"
+        />
+        <HotGoodsImage
+          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+          alt="hot-desk"
+        />
+        <HotGoodsImage
+          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+          alt="hot-desk"
+        />
+        <HotGoodsImage
+          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+          alt="hot-desk"
+        />
+        <HotGoodsImage
+          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
+          alt="hot-desk"
+        />
+      </HotGoodsContainer>
+    </>
+  );
+};
+
 export default function Home() {
   return (
     <Container>
       <Navbar />
       <SectionContainer>
-        <HotDeskTitle>Today Hot Desk</HotDeskTitle>
-        <HotDeskDescription>
-          On My Desk에서 오늘의 인기있는 DESK를 확인해보세요!
-        </HotDeskDescription>
-        <HotDeskImageContainer>
-          <HotDeskImageLayer>
-            <HotDeskImage
-              src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-              alt="hot-desk"
-            />
-          </HotDeskImageLayer>
-          <HotDeskImageLayer>
-            <HotDeskImage
-              src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-              alt="hot-desk"
-            />
-          </HotDeskImageLayer>
-          <HotDeskImageLayer>
-            <HotDeskImage
-              src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-              alt="hot-desk"
-            />
-          </HotDeskImageLayer>
-          <HotDeskImageLayer>
-            <HotDeskImage
-              src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-              alt="hot-desk"
-            />
-          </HotDeskImageLayer>
-          <HotDeskImageLayer>
-            <HotDeskImage
-              src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-              alt="hot-desk"
-            />
-          </HotDeskImageLayer>
-        </HotDeskImageContainer>
+        <HotDesk />
       </SectionContainer>
       <SectionContainer>
-        <HotDeskTitle>인기있는 셋업 상품</HotDeskTitle>
-        <HotDeskDescription>
-          On My Desk에서 오늘의 인기있는 셋업 상품을 확인해보세요!
-        </HotDeskDescription>
-        <HotGoodsContainer>
-          <HotGoodsImage
-            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-            alt="hot-desk"
-          />
-          <HotGoodsTitle>1등 상품 이름</HotGoodsTitle>
-        </HotGoodsContainer>
+        <HotGoods />
       </SectionContainer>
     </Container>
   );
