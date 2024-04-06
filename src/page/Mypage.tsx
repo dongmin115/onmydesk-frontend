@@ -10,8 +10,10 @@ import bar from '../assets/image/mypage/bar.svg';
 import textbox from '../assets/image/mypage/text.svg';
 import plusbox from '../assets/image/mypage/plusbox.svg';
 import sumbox from '../assets/image/mypage/sum.svg';
-import changeprofile from '../assets/image/mypage/changeprofile.svg';
-import setting from '../assets/image/mypage/settings.svg';
+import Heart from '../assets/Heart.png';
+import chat from '../assets/image/mypage/chat.svg';
+import Navbar from '../components/Navbar.tsx';
+
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
@@ -29,19 +31,17 @@ const Name = styled.span`
 `;
 
 const Setupbutton = styled.button`
-  //좋아요 게시물 버튼
   margin: 1vw;
   border: none;
   background-color: transparent;
   padding: 0%;
-  border-radius: 0.8vw;
+  border-radius: 1vw;
   cursor: pointer;
-
-  box-shadow: 0 0 0 0 transparent;
+  transition: 0.5s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 
   &:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5);
-    transform: scale(1.05);
+    transform: scale(1.1);
   }
 `;
 
@@ -49,6 +49,34 @@ const PostImage = styled.img`
   //좋아요 게시물 이미지
   width: 15vw;
   pointer-events: none;
+  border-radius: 1vw 1vw 0 0;
+`;
+
+const Postinfo = styled.div`
+  background: #3d3d3d;
+  width: 15vw;
+  height: 5vw;
+  border-radius: 0 0 1vw 1vw;
+`;
+
+const PostTitle = styled.div`
+  display: flex;
+  font-size: 1.2vw;
+  font-family: -moz-initial;
+  color: white;
+  padding: 0.5vw;
+  margin-left: 0.5vw;
+`;
+
+const PostItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Postdetail = styled.div`
+  display: flex;
+  align-items: center;
+  color: white;
 `;
 
 const Plusbutton = styled.button`
@@ -83,11 +111,6 @@ function Mypage() {
     setIsModalOpen(false);
   };
 
-  const Bar = styled.img`
-    width: 70vw;
-    pointer-events: none;
-  `;
-
   const Flexdiv = styled.div`
     display: flex;
     flex-direction: row;
@@ -99,6 +122,7 @@ function Mypage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        marginTop: '2vw',
       }}
     >
       <style>
@@ -108,7 +132,6 @@ function Mypage() {
           }
         `}
       </style>
-      <Header />
 
       <div className="profile">
         <ProfileContainer>
@@ -156,45 +179,45 @@ function Mypage() {
           </div>
           <div>
             <div>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                style={{
-                  background: 'rgba(52, 154, 248, 1)',
-                  margin: '0.5vw',
-                  fontSize: '1.2vw',
-                  width: '9vw',
-                  height: '2.5vw',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                홈으로
-              </Button>
+              <Link to="/">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  style={{
+                    background: 'rgba(52, 154, 248, 1)',
+                    margin: '0.5vw',
+                    fontSize: '1.2vw',
+                    width: '9vw',
+                    height: '2.5vw',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  홈으로
+                </Button>
+              </Link>
             </div>
             <div>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                style={{
-                  background: 'rgba(52, 154, 248, 1)',
-                  margin: '0.5vw',
-                  fontSize: '1.2vw',
-                  width: '9vw',
-                  height: '2.5vw',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                로그아웃
-              </Button>
+              <Link to="/login">
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  style={{
+                    background: 'rgba(52, 154, 248, 1)',
+                    margin: '0.5vw',
+                    fontSize: '1.2vw',
+                    width: '9vw',
+                    height: '2.5vw',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  로그아웃
+                </Button>
+              </Link>
             </div>
           </div>
         </ProfileContainer>
-      </div>
-
-      <div className="bar">
-        <Bar src={bar} />
       </div>
 
       <div style={{ display: 'flex' }}>
@@ -218,17 +241,87 @@ function Mypage() {
           <div>
             <Setupbutton>
               <PostImage src={textbox} />
+              <Postinfo>
+                <PostTitle>Setup Title</PostTitle>
+                <PostItem>
+                  <Postdetail style={{ marginLeft: '0.5vw' }}>
+                    <img src={profile} style={{ width: '1.3vw' }} />
+                    작성자
+                  </Postdetail>
+                  <Postdetail style={{ marginRight: '0.5vw' }}>
+                    <img src={Heart} style={{ width: '1.3vw' }} /> 24
+                    <img
+                      src={chat}
+                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
+                    />{' '}
+                    5
+                  </Postdetail>
+                </PostItem>
+              </Postinfo>
             </Setupbutton>
             <Setupbutton>
               <PostImage src={textbox} />
+              <Postinfo>
+                <PostTitle>Setup Title</PostTitle>
+                <PostItem>
+                  <Postdetail style={{ marginLeft: '0.5vw' }}>
+                    <img src={profile} style={{ width: '1.3vw' }} />
+                    작성자
+                  </Postdetail>
+                  <Postdetail style={{ marginRight: '0.5vw' }}>
+                    <img src={Heart} style={{ width: '1.3vw' }} /> 24
+                    <img
+                      src={chat}
+                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
+                    />{' '}
+                    5
+                  </Postdetail>
+                </PostItem>
+              </Postinfo>
             </Setupbutton>
           </div>
           <div>
             <Setupbutton>
               <PostImage src={textbox} />
+
+              <Postinfo>
+                <PostTitle>Setup Title</PostTitle>
+                <PostItem>
+                  <Postdetail style={{ marginLeft: '0.5vw' }}>
+                    <img src={profile} style={{ width: '1.3vw' }} />
+                    작성자
+                  </Postdetail>
+                  <Postdetail style={{ marginRight: '0.5vw' }}>
+                    <img src={Heart} style={{ width: '1.3vw' }} /> 24
+                    <img
+                      src={chat}
+                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
+                    />{' '}
+                    5
+                  </Postdetail>
+                </PostItem>
+              </Postinfo>
             </Setupbutton>
             <Setupbutton>
               <PostImage src={textbox} />
+
+              <Postinfo>
+                <PostTitle>Setup Title</PostTitle>
+                <PostItem>
+                  <Postdetail style={{ marginLeft: '0.5vw' }}>
+                    <img src={profile} style={{ width: '1.3vw' }} />
+                    작성자
+                  </Postdetail>
+                  <Postdetail style={{ marginRight: '0.5vw' }}>
+                    <img src={Heart} style={{ width: '1.3vw' }} /> 24
+                    <img
+                      src={chat}
+                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
+                    />{' '}
+                    5
+                  </Postdetail>
+                </PostItem>
+              </Postinfo>
             </Setupbutton>
           </div>
         </div>
@@ -260,10 +353,10 @@ function Mypage() {
                 <Plusbutton onClick={openModal}>
                   <PlusImage src={plusbox} />
                 </Plusbutton>
-                <Plusbutton>
+                <Plusbutton onClick={openModal}>
                   <PlusImage src={plusbox} />
                 </Plusbutton>
-                <Plusbutton>
+                <Plusbutton onClick={openModal}>
                   <PlusImage src={plusbox} />
                 </Plusbutton>
               </Flexdiv>
@@ -271,22 +364,22 @@ function Mypage() {
                 <Plusbutton onClick={openModal}>
                   <PlusImage src={plusbox} />
                 </Plusbutton>
-                <Plusbutton>
+                <Plusbutton onClick={openModal}>
                   <PlusImage src={plusbox} />
                 </Plusbutton>
-                <Plusbutton>
+                <Plusbutton onClick={openModal}>
                   <PlusImage src={plusbox} />
                 </Plusbutton>
               </Flexdiv>
 
               <Flexdiv>
-                <Plusbutton>
+                <Plusbutton onClick={openModal}>
                   <PlusImage src={plusbox} />
                 </Plusbutton>
-                <Plusbutton>
+                <Plusbutton onClick={openModal}>
                   <PlusImage src={plusbox} />
                 </Plusbutton>
-                <Plusbutton>
+                <Plusbutton onClick={openModal}>
                   <PlusImage src={plusbox} />
                 </Plusbutton>
 
