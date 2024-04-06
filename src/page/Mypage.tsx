@@ -79,6 +79,12 @@ const Postdetail = styled.div`
   color: white;
 `;
 
+const Text = styled.div`
+  white-space: nowrap;
+  font-size: 0.9vw;
+  margin-left: 0.3vw;
+`;
+
 const Plusbutton = styled.button`
   //나만의 데스크탑 아이템 추가 버튼
   margin: 0.5vw;
@@ -86,6 +92,7 @@ const Plusbutton = styled.button`
   background-color: transparent;
   padding: 0%;
   border-radius: 2.5vw;
+  transition: all 0.5s;
   cursor: pointer;
 
   box-shadow: 0 0 0 0 transparent;
@@ -122,7 +129,7 @@ function Mypage() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        marginTop: '2vw',
+        marginTop: '3vw',
       }}
     >
       <style>
@@ -246,15 +253,16 @@ function Mypage() {
                 <PostItem>
                   <Postdetail style={{ marginLeft: '0.5vw' }}>
                     <img src={profile} style={{ width: '1.3vw' }} />
-                    작성자
+                    <Text>작성자</Text>
                   </Postdetail>
                   <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <img src={Heart} style={{ width: '1.3vw' }} /> 24
+                    <img src={Heart} style={{ width: '1.3vw' }} />
+                    <Text>24</Text>
                     <img
                       src={chat}
                       style={{ width: '1.3vw', marginLeft: '0.5vw' }}
                     />{' '}
-                    5
+                    <Text>5</Text>
                   </Postdetail>
                 </PostItem>
               </Postinfo>
@@ -266,15 +274,16 @@ function Mypage() {
                 <PostItem>
                   <Postdetail style={{ marginLeft: '0.5vw' }}>
                     <img src={profile} style={{ width: '1.3vw' }} />
-                    작성자
+                    <Text>작성자</Text>
                   </Postdetail>
                   <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <img src={Heart} style={{ width: '1.3vw' }} /> 24
+                    <img src={Heart} style={{ width: '1.3vw' }} />{' '}
+                    <Text>24</Text>
                     <img
                       src={chat}
                       style={{ width: '1.3vw', marginLeft: '0.5vw' }}
                     />{' '}
-                    5
+                    <Text>5</Text>
                   </Postdetail>
                 </PostItem>
               </Postinfo>
@@ -289,15 +298,16 @@ function Mypage() {
                 <PostItem>
                   <Postdetail style={{ marginLeft: '0.5vw' }}>
                     <img src={profile} style={{ width: '1.3vw' }} />
-                    작성자
+                    <Text>작성자</Text>
                   </Postdetail>
                   <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <img src={Heart} style={{ width: '1.3vw' }} /> 24
+                    <img src={Heart} style={{ width: '1.3vw' }} />{' '}
+                    <Text>24</Text>
                     <img
                       src={chat}
                       style={{ width: '1.3vw', marginLeft: '0.5vw' }}
                     />{' '}
-                    5
+                    <Text>5</Text>
                   </Postdetail>
                 </PostItem>
               </Postinfo>
@@ -310,15 +320,16 @@ function Mypage() {
                 <PostItem>
                   <Postdetail style={{ marginLeft: '0.5vw' }}>
                     <img src={profile} style={{ width: '1.3vw' }} />
-                    작성자
+                    <Text>작성자</Text>
                   </Postdetail>
                   <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <img src={Heart} style={{ width: '1.3vw' }} /> 24
+                    <img src={Heart} style={{ width: '1.3vw' }} />{' '}
+                    <Text>24</Text>
                     <img
                       src={chat}
                       style={{ width: '1.3vw', marginLeft: '0.5vw' }}
                     />{' '}
-                    5
+                    <Text>5</Text>
                   </Postdetail>
                 </PostItem>
               </Postinfo>
