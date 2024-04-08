@@ -1,5 +1,7 @@
 import styled from 'styled-components';
-
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 const SignupContainer = styled.div`
   height: 100vh;
   display: flex;
@@ -43,11 +45,125 @@ const Signup = () => {
   return (
     <SignupContainer>
       <Title>On My Desk!</Title>
-      <Input type="text" placeholder="ID" />
-      <Input type="password" placeholder="PASSWORD" />
-      <Input type="password" placeholder="CONFIRM PASSWORD" />
-      <Input type="text" placeholder="USERNAME" />
-      <LoginButton>SIGN UP</LoginButton>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '24vw' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          id="outlined-basic"
+          label="ID"
+          variant="outlined"
+          sx={{
+            width: '100%',
+            '& label': {
+              color: '#ffffff',
+            },
+            '& fieldset': {
+              borderColor: 'white',
+            },
+            '&:hover fieldset': {
+              borderColor: '#349af8',
+            },
+            '& input': {
+              color: 'white',
+            },
+          }}
+        />
+      </Box>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '24vw' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          id="outlined-basic"
+          label="PASSWORD"
+          variant="outlined"
+          sx={{
+            width: '100%',
+            '& label': {
+              color: '#ffffff',
+            },
+            '& fieldset': {
+              borderColor: 'white',
+            },
+            '&:hover fieldset': {
+              borderColor: '#349af8',
+            },
+            '& input': {
+              color: 'white',
+            },
+          }}
+        />
+      </Box>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '24vw' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          id="outlined-basic"
+          label="CONFIRM PASSWORD"
+          variant="outlined"
+          sx={{
+            width: '100%',
+            '& label': {
+              color: '#ffffff',
+            },
+            '& fieldset': {
+              borderColor: 'white',
+            },
+            '&:hover fieldset': {
+              borderColor: '#349af8',
+            },
+            '& input': {
+              color: 'white',
+            },
+          }}
+        />
+      </Box>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '24vw' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          id="outlined-basic"
+          label="USERNAME"
+          variant="outlined"
+          sx={{
+            width: '100%',
+            '& label': {
+              color: '#ffffff',
+            },
+            '& fieldset': {
+              borderColor: 'white',
+            },
+            '&:hover fieldset': {
+              borderColor: '#349af8',
+            },
+            '& input': {
+              color: 'white',
+            },
+          }}
+        />
+      </Box>
+      <Button variant="contained" sx={{ mt: 2, width: '24.2vw' }}>
+        SIGN UP
+      </Button>
     </SignupContainer>
   );
 };
