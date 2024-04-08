@@ -8,6 +8,8 @@ import thumbnail from '../assets/image/Post_registration/thumbnail.svg';
 import extraimage from '../assets/image/Post_registration/extraimage.svg';
 import mouse from '../assets/image/Post_registration/mouse.svg';
 
+import { TextField, TextareaAutosize, Button } from '@mui/material';
+
 const Centerdiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -21,33 +23,19 @@ const ForText = styled.div`
   margin-left: 15vw;
 `;
 
-const Title_field = styled.input`
-  //제목 작성 필드
-  background-color: #3c3c3c;
-  color: white;
-  border: none;
-  border: 1px solid #424242;
-  margin: 1vw;
-  width: 68vw;
-  height: 2vw;
-  font-size: 1.5vw;
-  padding: 0.5vw;
-  outline: none;
-
-  ::placeholder {
-    color: #aaaaaa;
-  }
-
-  &:focus {
-    border-color: #349af8;
-  }
-`;
+const InputTextField = styled(TextField)({
+  '& label': {
+    // placeholder text color
+    color: 'grey',
+    fontSize: '1.4vw',
+  },
+});
 
 const Main_text_field = styled.textarea`
   //본문 작성 필드
   background-color: #3c3c3c;
   color: white;
-  border: 1px solid #424242;
+  border: 2px solid #424242;
   border-radius: 20px;
   margin: 1vw;
   width: 68vw;
@@ -56,6 +44,7 @@ const Main_text_field = styled.textarea`
   padding: 0.5vw;
   outline: none;
   resize: none;
+  transition: 0.3s;
 
   ::placeholder {
     color: #aaaaaa;
@@ -156,7 +145,19 @@ function Post_reg() {
       <ForText>셋업 등록하기</ForText>
 
       <Centerdiv style={{ marginTop: '1vw' }}>
-        <Title_field type="text" placeholder="게시글의 제목을 입력하세요." />
+        <InputTextField
+          sx={{
+            input: { color: 'white', fontSize: '1.3vw', marginTop: '0.5vw' },
+          }}
+          id="filled-basic"
+          label="Title"
+          variant="filled"
+          style={{
+            width: '68vw',
+            backgroundColor: '#3c3c3c',
+            color: 'white',
+          }}
+        />
         <div style={{ display: 'flex' }}>
           <div>
             <Thumbnailbutton>
