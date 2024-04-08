@@ -36,7 +36,6 @@ const Main_text_field = styled.textarea`
   background-color: #3c3c3c;
   color: white;
   border: 2px solid #424242;
-  border-radius: 20px;
   margin: 1vw;
   width: 68vw;
   height: 30vw;
