@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { SignUp } from '../api/User';
+import { useState } from 'react';
 const SignupContainer = styled.div`
   height: 100vh;
   display: flex;
@@ -17,31 +19,18 @@ const Title = styled.div`
   font-size: 6rem;
 `;
 
-const Input = styled.input`
-  font-size: 1rem;
-  padding: 1.1%;
-  margin: 1% 0;
-  border: none;
-  border-radius: 0.3rem;
-  outline: none;
-  width: 22vw;
-  height: 2vh;
-`;
-
-const LoginButton = styled.button`
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 0.3rem;
-  margin-top: 1%;
-  width: 24.3vw;
-  height: 6vh;
-  cursor: pointer;
-  font-family: 'Kiwi Maru';
-  font-size: 1rem;
-`;
-
 const Signup = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const jsonData = {
+    email: email,
+    password: password,
+    nickname: nickname,
+    name: name,
+  };
   return (
     <SignupContainer>
       <Title>On My Desk!</Title>
@@ -55,8 +44,10 @@ const Signup = () => {
       >
         <TextField
           id="outlined-basic"
-          label="ID"
+          label="EMAIL"
           variant="outlined"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           sx={{
             width: '100%',
             '& label': {
@@ -86,6 +77,8 @@ const Signup = () => {
           id="outlined-basic"
           label="PASSWORD"
           variant="outlined"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           sx={{
             width: '100%',
             '& label': {
@@ -115,6 +108,8 @@ const Signup = () => {
           id="outlined-basic"
           label="CONFIRM PASSWORD"
           variant="outlined"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           sx={{
             width: '100%',
             '& label': {
@@ -144,6 +139,8 @@ const Signup = () => {
           id="outlined-basic"
           label="USERNAME"
           variant="outlined"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           sx={{
             width: '100%',
             '& label': {
@@ -161,7 +158,42 @@ const Signup = () => {
           }}
         />
       </Box>
-      <Button variant="contained" sx={{ mt: 2, width: '24.2vw' }}>
+      <Box
+        component="form"
+        sx={{
+          '& > :not(style)': { m: 1, width: '24vw' },
+        }}
+        noValidate
+        autoComplete="off"
+      >
+        <TextField
+          id="outlined-basic"
+          label="NICKNAME"
+          variant="outlined"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+          sx={{
+            width: '100%',
+            '& label': {
+              color: '#ffffff',
+            },
+            '& fieldset': {
+              borderColor: 'white',
+            },
+            '&:hover fieldset': {
+              borderColor: '#349af8',
+            },
+            '& input': {
+              color: 'white',
+            },
+          }}
+        />
+      </Box>
+      <Button
+        variant="contained"
+        sx={{ mt: 2, width: '24.2vw' }}
+        onClick={() => SignUp(jsonData)}
+      >
         SIGN UP
       </Button>
     </SignupContainer>
