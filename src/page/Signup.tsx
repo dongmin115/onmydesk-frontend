@@ -102,9 +102,6 @@ const Signup = () => {
               '& fieldset': {
                 borderColor: errors.email ? 'red' : '#349af8',
               },
-              '&: hover fieldset': {
-                borderColor: errors.email ? 'red' : '#349af8',
-              },
               '& input': {
                 color: 'white',
               },
@@ -124,16 +121,20 @@ const Signup = () => {
             label="PASSWORD"
             variant="outlined"
             {...register('password')}
+            helperText={
+              <span style={{ color: errors.password ? 'red' : '#349af8' }}>
+                {errors.password
+                  ? errors.password.message
+                  : '사용가능한 비밀번호입니다.'}
+              </span>
+            }
             sx={{
               width: '100%',
               '& label': {
                 color: '#ffffff',
               },
               '& fieldset': {
-                borderColor: 'white',
-              },
-              '&:hover fieldset': {
-                borderColor: '#349af8',
+                borderColor: errors.password ? 'red' : '#349af8',
               },
               '& input': {
                 color: 'white',
@@ -154,16 +155,22 @@ const Signup = () => {
             label="CONFIRM PASSWORD"
             variant="outlined"
             {...register('confirmPassword')}
+            helperText={
+              <span
+                style={{ color: errors.confirmPassword ? 'red' : '#349af8' }}
+              >
+                {errors.confirmPassword
+                  ? errors.confirmPassword.message
+                  : '비밀번호가 일치합니다'}
+              </span>
+            }
             sx={{
               width: '100%',
               '& label': {
                 color: '#ffffff',
               },
               '& fieldset': {
-                borderColor: 'white',
-              },
-              '&:hover fieldset': {
-                borderColor: '#349af8',
+                borderColor: errors.confirmPassword ? 'red' : '#349af8',
               },
               '& input': {
                 color: 'white',
@@ -184,16 +191,18 @@ const Signup = () => {
             label="USERNAME"
             variant="outlined"
             {...register('name')}
+            helperText={
+              <span style={{ color: errors.name ? 'red' : '#349af8' }}>
+                {errors.name ? errors.name.message : '사용가능한 이름입니다.'}
+              </span>
+            }
             sx={{
               width: '100%',
               '& label': {
                 color: '#ffffff',
               },
               '& fieldset': {
-                borderColor: 'white',
-              },
-              '&:hover fieldset': {
-                borderColor: '#349af8',
+                borderColor: errors.name ? 'red' : '#349af8',
               },
               '& input': {
                 color: 'white',
@@ -214,16 +223,20 @@ const Signup = () => {
             label="NICKNAME"
             variant="outlined"
             {...register('nickname')}
+            helperText={
+              <span style={{ color: errors.nickname ? 'red' : '#349af8' }}>
+                {errors.nickname
+                  ? errors.nickname.message
+                  : '사용가능한 별명입니다.'}
+              </span>
+            }
             sx={{
               width: '100%',
               '& label': {
                 color: '#ffffff',
               },
               '& fieldset': {
-                borderColor: 'white',
-              },
-              '&:hover fieldset': {
-                borderColor: '#349af8',
+                borderColor: errors.nickname ? 'red' : '#349af8',
               },
               '& input': {
                 color: 'white',
