@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { SignUp } from '../api/User';
 import { useState } from 'react';
+import { z } from 'zod';
 const SignupContainer = styled.div`
   height: 100vh;
   display: flex;
@@ -31,6 +32,25 @@ const Signup = () => {
     nickname: nickname,
     name: name,
   };
+
+  const signUpFormSchema = z
+    .object({
+      email: z.string().email({ message: '이메일 형식이 아닙니다.' }), // 이메일 형식 지정
+      password: z // 비밀번호 형식 지정 (문자와 숫자가 혼합된 8~20자리)
+        .string()
+        .regex(
+          /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$/,
+          '문자와 숫자가 혼합된 8~20자리의 비밀번호를 입력해주세요.'
+        ),
+      confirmPassword: z.string(),
+      nickname: z.string(),
+      name: z.string(),
+    })
+    // 비밀번호와 비밀번호 확인이 일치하는지 확인
+    .refine((data) => data.password === data.confirmPassword, {
+      path: ['confirmPassword'],
+      message: '비밀번호가 일치하지 않습니다.',
+    });
   return (
     <SignupContainer>
       <Title>On My Desk!</Title>
