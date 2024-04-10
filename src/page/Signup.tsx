@@ -3,8 +3,10 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { SignUp } from '../api/User';
-import { useState } from 'react';
 import { z } from 'zod';
+import { FormProvider, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 const SignupContainer = styled.div`
   height: 100vh;
   display: flex;
@@ -21,18 +23,7 @@ const Title = styled.div`
 `;
 
 const Signup = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [nickname, setNickname] = useState<string>('');
-  const [name, setName] = useState<string>('');
-  const jsonData = {
-    email: email,
-    password: password,
-    nickname: nickname,
-    name: name,
-  };
-
+  // zod를 사용하여 회원가입 폼의 유효성 검사
   const signUpFormSchema = z
     .object({
       email: z.string().email({ message: '이메일 형식이 아닙니다.' }), // 이메일 형식 지정
@@ -51,171 +42,203 @@ const Signup = () => {
       path: ['confirmPassword'],
       message: '비밀번호가 일치하지 않습니다.',
     });
+
+  // 회원가입 폼의 타입 지정
+  type SignUpFormValues = z.infer<typeof signUpFormSchema>;
+
+  // 회원가입 폼의 기본값 설정
+  const defaultValues: SignUpFormValues = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    nickname: '',
+    name: '',
+  };
+
+  // useForm을 사용하여 회원가입 폼의 상태 관리
+  const form = useForm({
+    resolver: zodResolver(signUpFormSchema),
+    defaultValues,
+    mode: 'all',
+  });
+
+  const {
+    register,
+    formState: { errors },
+    trigger,
+  } = form;
+
   return (
     <SignupContainer>
       <Title>On My Desk!</Title>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '24vw' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          id="outlined-basic"
-          label="EMAIL"
-          variant="outlined"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+      <FormProvider {...form}>
+        <Box
+          component="form"
           sx={{
-            width: '100%',
-            '& label': {
-              color: '#ffffff',
-            },
-            '& fieldset': {
-              borderColor: 'white',
-            },
-            '&:hover fieldset': {
-              borderColor: '#349af8',
-            },
-            '& input': {
-              color: 'white',
-            },
+            '& > :not(style)': { m: 1, width: '24vw' },
           }}
-        />
-      </Box>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '24vw' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          id="outlined-basic"
-          label="PASSWORD"
-          variant="outlined"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField
+            id="outlined-basic"
+            label="Email"
+            variant="outlined"
+            inputMode="email"
+            error={!!errors.email}
+            {...register('email')}
+            helperText={
+              <span style={{ color: errors.email ? 'red' : '#349af8' }}>
+                {errors.email
+                  ? errors.email.message
+                  : '사용가능한 이메일입니다.'}
+              </span>
+            }
+            sx={{
+              width: '100%',
+              '& label': {
+                color: '#ffffff',
+              },
+              '& fieldset': {
+                borderColor: errors.email ? 'red' : '#349af8',
+              },
+              '&: hover fieldset': {
+                borderColor: errors.email ? 'red' : '#349af8',
+              },
+              '& input': {
+                color: 'white',
+              },
+            }}
+          />
+        </Box>
+        <Box
+          component="form"
           sx={{
-            width: '100%',
-            '& label': {
-              color: '#ffffff',
-            },
-            '& fieldset': {
-              borderColor: 'white',
-            },
-            '&:hover fieldset': {
-              borderColor: '#349af8',
-            },
-            '& input': {
-              color: 'white',
-            },
+            '& > :not(style)': { m: 1, width: '24vw' },
           }}
-        />
-      </Box>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '24vw' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          id="outlined-basic"
-          label="CONFIRM PASSWORD"
-          variant="outlined"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField
+            id="outlined-basic"
+            label="PASSWORD"
+            variant="outlined"
+            {...register('password')}
+            sx={{
+              width: '100%',
+              '& label': {
+                color: '#ffffff',
+              },
+              '& fieldset': {
+                borderColor: 'white',
+              },
+              '&:hover fieldset': {
+                borderColor: '#349af8',
+              },
+              '& input': {
+                color: 'white',
+              },
+            }}
+          />
+        </Box>
+        <Box
+          component="form"
           sx={{
-            width: '100%',
-            '& label': {
-              color: '#ffffff',
-            },
-            '& fieldset': {
-              borderColor: 'white',
-            },
-            '&:hover fieldset': {
-              borderColor: '#349af8',
-            },
-            '& input': {
-              color: 'white',
-            },
+            '& > :not(style)': { m: 1, width: '24vw' },
           }}
-        />
-      </Box>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '24vw' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          id="outlined-basic"
-          label="USERNAME"
-          variant="outlined"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField
+            id="outlined-basic"
+            label="CONFIRM PASSWORD"
+            variant="outlined"
+            {...register('confirmPassword')}
+            sx={{
+              width: '100%',
+              '& label': {
+                color: '#ffffff',
+              },
+              '& fieldset': {
+                borderColor: 'white',
+              },
+              '&:hover fieldset': {
+                borderColor: '#349af8',
+              },
+              '& input': {
+                color: 'white',
+              },
+            }}
+          />
+        </Box>
+        <Box
+          component="form"
           sx={{
-            width: '100%',
-            '& label': {
-              color: '#ffffff',
-            },
-            '& fieldset': {
-              borderColor: 'white',
-            },
-            '&:hover fieldset': {
-              borderColor: '#349af8',
-            },
-            '& input': {
-              color: 'white',
-            },
+            '& > :not(style)': { m: 1, width: '24vw' },
           }}
-        />
-      </Box>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '24vw' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          id="outlined-basic"
-          label="NICKNAME"
-          variant="outlined"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
+          noValidate
+          autoComplete="off"
+        >
+          <TextField
+            id="outlined-basic"
+            label="USERNAME"
+            variant="outlined"
+            {...register('name')}
+            sx={{
+              width: '100%',
+              '& label': {
+                color: '#ffffff',
+              },
+              '& fieldset': {
+                borderColor: 'white',
+              },
+              '&:hover fieldset': {
+                borderColor: '#349af8',
+              },
+              '& input': {
+                color: 'white',
+              },
+            }}
+          />
+        </Box>
+        <Box
+          component="form"
           sx={{
-            width: '100%',
-            '& label': {
-              color: '#ffffff',
-            },
-            '& fieldset': {
-              borderColor: 'white',
-            },
-            '&:hover fieldset': {
-              borderColor: '#349af8',
-            },
-            '& input': {
-              color: 'white',
-            },
+            '& > :not(style)': { m: 1, width: '24vw' },
           }}
-        />
-      </Box>
-      <Button
-        variant="contained"
-        sx={{ mt: 2, width: '24.2vw' }}
-        onClick={() => SignUp(jsonData)}
-      >
-        SIGN UP
-      </Button>
+          noValidate
+          autoComplete="off"
+        >
+          <TextField
+            id="outlined-basic"
+            label="NICKNAME"
+            variant="outlined"
+            {...register('nickname')}
+            sx={{
+              width: '100%',
+              '& label': {
+                color: '#ffffff',
+              },
+              '& fieldset': {
+                borderColor: 'white',
+              },
+              '&:hover fieldset': {
+                borderColor: '#349af8',
+              },
+              '& input': {
+                color: 'white',
+              },
+            }}
+          />
+        </Box>
+        <Button
+          variant="contained"
+          sx={{ mt: 2, width: '24.2vw' }}
+          onClick={() => SignUp(form.getValues())}
+        >
+          SIGN UP
+        </Button>
+      </FormProvider>
     </SignupContainer>
   );
 };
