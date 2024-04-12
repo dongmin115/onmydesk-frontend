@@ -10,9 +10,10 @@ import bar from '../assets/image/mypage/bar.svg';
 import textbox from '../assets/image/mypage/text.svg';
 import plusbox from '../assets/image/mypage/plusbox.svg';
 import sumbox from '../assets/image/mypage/sum.svg';
-import Heart from '../assets/Heart.png';
 import chat from '../assets/image/mypage/chat.svg';
 import Navbar from '../components/Navbar.tsx';
+
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -256,7 +257,9 @@ function Mypage() {
                     <Text>작성자</Text>
                   </Postdetail>
                   <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <img src={Heart} style={{ width: '1.3vw' }} />
+                    <FavoriteBorderIcon
+                      style={{ width: '1.3vw', color: 'red' }}
+                    />
                     <Text>24</Text>
                     <img
                       src={chat}
@@ -277,7 +280,9 @@ function Mypage() {
                     <Text>작성자</Text>
                   </Postdetail>
                   <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <img src={Heart} style={{ width: '1.3vw' }} />{' '}
+                    <FavoriteBorderIcon
+                      style={{ width: '1.3vw', color: 'red' }}
+                    />
                     <Text>24</Text>
                     <img
                       src={chat}
@@ -301,7 +306,9 @@ function Mypage() {
                     <Text>작성자</Text>
                   </Postdetail>
                   <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <img src={Heart} style={{ width: '1.3vw' }} />{' '}
+                    <FavoriteBorderIcon
+                      style={{ width: '1.3vw', color: 'red' }}
+                    />
                     <Text>24</Text>
                     <img
                       src={chat}
@@ -323,7 +330,9 @@ function Mypage() {
                     <Text>작성자</Text>
                   </Postdetail>
                   <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <img src={Heart} style={{ width: '1.3vw' }} />{' '}
+                    <FavoriteBorderIcon
+                      style={{ width: '1.3vw', color: 'red' }}
+                    />
                     <Text>24</Text>
                     <img
                       src={chat}

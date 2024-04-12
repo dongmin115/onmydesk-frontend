@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../components/Header';
@@ -8,7 +9,10 @@ import thumbnail from '../assets/image/Post_registration/thumbnail.svg';
 import extraimage from '../assets/image/Post_registration/extraimage.svg';
 import mouse from '../assets/image/Post_registration/mouse.svg';
 
-import { TextField, TextareaAutosize, Button } from '@mui/material';
+import { TextField } from '@mui/material';
+
+const token =
+  'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrbnIwMDEzQGdtYWlsLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE3MTMwNDM4NzR9.ZVILqrQ2pRQcLgSy8TQ142cuEJq_YVWAUXybAQh_Yv2vB7q2mC-lMq2fc8QGMhoTYKpa9DuDlmK_tbi1EwgHLA';
 
 const Centerdiv = styled.div`
   display: flex;
@@ -135,6 +139,47 @@ const Finbutton = styled.button`
 `;
 
 function Post_reg() {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+
+  const titlehandle = (event) => {
+    setTitle(event.target.value);
+  };
+
+  const contenthandle = (event) => {
+    setContent(event.target.value);
+  };
+
+  useEffect(() => {
+    console.log(`제목변경:${title}`);
+  }, [title]);
+
+  useEffect(() => {
+    console.log(`내용 변경:${content}`), [content];
+  });
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/posts`,
+        {
+          title: `${title}`,
+          content: `${content}`,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      alert('게시글이 등록되었습니다.');
+    } catch (error) {
+      console.log('에러');
+      alert('게시글 등록에 실패했습니다.');
+    }
+  };
+
   return (
     <div
       style={{
@@ -169,6 +214,8 @@ function Post_reg() {
               backgroundColor: '#3c3c3c',
               color: 'white',
             }}
+            value={title}
+            onChange={titlehandle}
           />
           <div style={{ display: 'flex' }}>
             <div>
@@ -201,8 +248,9 @@ function Post_reg() {
 
         <Centerdiv>
           <Main_text_field
-            type="text"
             placeholder="셋업을 소개하는 글을 작성해보세요."
+            value={content}
+            onChange={contenthandle}
           />
         </Centerdiv>
         <div style={{ display: 'flex' }}>
@@ -272,8 +320,10 @@ function Post_reg() {
                 돌아가기
               </Finbutton>
             </Link>
+
             <Finbutton
               style={{ marginRight: '1vw', backgroundColor: '#0085FF' }}
+              onClick={handleSubmit}
             >
               등록하기
             </Finbutton>

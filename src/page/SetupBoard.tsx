@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
@@ -10,7 +12,7 @@ import {
 } from '@mui/material';
 import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { KeyboardArrowDown } from '@mui/icons-material';
 
 // 컨테이너 스타일
@@ -69,6 +71,33 @@ const SetupBoardImage = styled.img`
 `;
 
 export default function SetupBoard() {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const response = await axios.get(
+          'http://localhost:8080/api/posts?page=1&limit=9&criteria=1'
+        );
+        setPosts(response.data.data);
+        console.log('목록 불러오기 성공:', response.data.data);
+      } catch (error) {
+        console.log('목록 불러오기 실패:', error);
+      }
+    }
+
+    fetchPosts();
+  }, []);
+
+  const renderPosts = () => {
+    return posts.map((post) => (
+      <SetupBoardImage
+        key={post.id}
+        src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
+        alt={post.title}
+      />
+    ));
+  };
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -77,6 +106,7 @@ export default function SetupBoard() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <Container>
       <Navbar />
@@ -128,17 +158,7 @@ export default function SetupBoard() {
           </Menu>
         </div>
       </SetupBoardMenu>
-      <SetupBoardContainer>
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-      </SetupBoardContainer>
+      <SetupBoardContainer>{renderPosts()}</SetupBoardContainer>
     </Container>
   );
 }
