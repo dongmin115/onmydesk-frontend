@@ -6,6 +6,7 @@ import { SignUp } from '../api/User';
 import { z } from 'zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router-dom';
 
 const SignupContainer = styled.div`
   height: 100vh;
@@ -23,6 +24,7 @@ const Title = styled.div`
 `;
 
 const Signup = () => {
+  const navigate = useNavigate();
   // zod를 사용하여 회원가입 폼의 유효성 검사
   const signUpFormSchema = z
     .object({
@@ -65,7 +67,6 @@ const Signup = () => {
   const {
     register,
     formState: { errors },
-    trigger,
   } = form;
 
   return (
@@ -75,7 +76,10 @@ const Signup = () => {
         <Box
           component="form"
           sx={{
-            '& > :not(style)': { m: 1, width: '24vw' },
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            '& > :not(style)': { width: '24vw' },
           }}
           noValidate
           autoComplete="off"
@@ -85,10 +89,11 @@ const Signup = () => {
             label="Email"
             variant="outlined"
             inputMode="email"
+            margin="dense"
             error={!!errors.email}
             {...register('email')}
             helperText={
-              <span style={{ color: errors.email ? 'red' : '#349af8' }}>
+              <span style={{ color: errors.email ? '#FF0040' : '#349af8' }}>
                 {errors.email
                   ? errors.email.message
                   : '사용가능한 이메일입니다.'}
@@ -100,29 +105,23 @@ const Signup = () => {
                 color: '#ffffff',
               },
               '& fieldset': {
-                borderColor: errors.email ? 'red' : '#349af8',
+                borderColor: errors.email ? '#FF0040' : '#349af8',
               },
               '& input': {
                 color: 'white',
               },
             }}
           />
-        </Box>
-        <Box
-          component="form"
-          sx={{
-            '& > :not(style)': { m: 1, width: '24vw' },
-          }}
-          noValidate
-          autoComplete="off"
-        >
           <TextField
             id="outlined-basic"
             label="PASSWORD"
             variant="outlined"
+            margin="dense"
+            type="password"
+            error={!!errors.password}
             {...register('password')}
             helperText={
-              <span style={{ color: errors.password ? 'red' : '#349af8' }}>
+              <span style={{ color: errors.password ? '#FF0040' : '#349af8' }}>
                 {errors.password
                   ? errors.password.message
                   : '사용가능한 비밀번호입니다.'}
@@ -134,30 +133,26 @@ const Signup = () => {
                 color: '#ffffff',
               },
               '& fieldset': {
-                borderColor: errors.password ? 'red' : '#349af8',
+                borderColor: errors.password ? '#FF0040' : '#349af8',
               },
               '& input': {
                 color: 'white',
               },
             }}
           />
-        </Box>
-        <Box
-          component="form"
-          sx={{
-            '& > :not(style)': { m: 1, width: '24vw' },
-          }}
-          noValidate
-          autoComplete="off"
-        >
           <TextField
             id="outlined-basic"
             label="CONFIRM PASSWORD"
             variant="outlined"
+            margin="dense"
+            type="password"
+            error={!!errors.confirmPassword}
             {...register('confirmPassword')}
             helperText={
               <span
-                style={{ color: errors.confirmPassword ? 'red' : '#349af8' }}
+                style={{
+                  color: errors.confirmPassword ? '#FF0040' : '#349af8',
+                }}
               >
                 {errors.confirmPassword
                   ? errors.confirmPassword.message
@@ -170,29 +165,22 @@ const Signup = () => {
                 color: '#ffffff',
               },
               '& fieldset': {
-                borderColor: errors.confirmPassword ? 'red' : '#349af8',
+                borderColor: errors.confirmPassword ? '#FF0040' : '#349af8',
               },
               '& input': {
                 color: 'white',
               },
             }}
           />
-        </Box>
-        <Box
-          component="form"
-          sx={{
-            '& > :not(style)': { m: 1, width: '24vw' },
-          }}
-          noValidate
-          autoComplete="off"
-        >
           <TextField
             id="outlined-basic"
             label="USERNAME"
             variant="outlined"
+            margin="dense"
+            error={!!errors.name}
             {...register('name')}
             helperText={
-              <span style={{ color: errors.name ? 'red' : '#349af8' }}>
+              <span style={{ color: errors.name ? '#FF0040' : '#349af8' }}>
                 {errors.name ? errors.name.message : '사용가능한 이름입니다.'}
               </span>
             }
@@ -202,29 +190,22 @@ const Signup = () => {
                 color: '#ffffff',
               },
               '& fieldset': {
-                borderColor: errors.name ? 'red' : '#349af8',
+                borderColor: errors.name ? '#FF0040' : '#349af8',
               },
               '& input': {
                 color: 'white',
               },
             }}
           />
-        </Box>
-        <Box
-          component="form"
-          sx={{
-            '& > :not(style)': { m: 1, width: '24vw' },
-          }}
-          noValidate
-          autoComplete="off"
-        >
           <TextField
             id="outlined-basic"
             label="NICKNAME"
             variant="outlined"
+            margin="dense"
+            error={!!errors.nickname}
             {...register('nickname')}
             helperText={
-              <span style={{ color: errors.nickname ? 'red' : '#349af8' }}>
+              <span style={{ color: errors.nickname ? '#FF0040' : '#349af8' }}>
                 {errors.nickname
                   ? errors.nickname.message
                   : '사용가능한 별명입니다.'}
@@ -236,7 +217,7 @@ const Signup = () => {
                 color: '#ffffff',
               },
               '& fieldset': {
-                borderColor: errors.nickname ? 'red' : '#349af8',
+                borderColor: errors.nickname ? '#FF0040' : '#349af8',
               },
               '& input': {
                 color: 'white',
@@ -247,7 +228,10 @@ const Signup = () => {
         <Button
           variant="contained"
           sx={{ mt: 2, width: '24.2vw' }}
-          onClick={() => SignUp(form.getValues())}
+          onClick={() => {
+            SignUp(form.getValues());
+            navigate('/login');
+          }}
         >
           SIGN UP
         </Button>
