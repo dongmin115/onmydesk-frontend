@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import gif from '../assets/image/gif.gif';
 
 // 이미지 컨테이너 스타일
 const ImageContainer = styled.div`
@@ -22,6 +23,7 @@ const TextOverlay = styled.div`
 // 텍스트 스타일
 const Text = styled.p`
   margin: 0; /* 기본 마진 제거 */
+  margin-bottom: 8vw;
 `;
 
 // 메뉴 스타일
@@ -55,7 +57,7 @@ export default function Navbar() {
     <>
       <ImageContainer>
         <img
-          src="https://i.ibb.co/6tdC60g/Get-the-We-Heart-It-app.gif"
+          src={gif}
           alt="main-image"
           style={{ width: '100%', height: '100%' }}
         />

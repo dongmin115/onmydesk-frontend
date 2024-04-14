@@ -125,300 +125,273 @@ function Mypage() {
   `;
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: '3vw',
-      }}
-    >
-      <style>
-        {`
-          body {
-            overflow: hidden;
-          }
-        `}
-      </style>
-
-      <div className="profile">
-        <ProfileContainer>
-          <img
-            src={profile}
-            alt="프로필 사진"
-            style={{ width: '7vw', pointerEvents: 'none' }}
-          />
-          <Name>한승철</Name>
-
-          <div>
-            <div>
-              <Button
-                variant="contained"
-                size="large"
-                style={{
-                  background: 'rgba(52, 154, 248, 1)',
-                  margin: '0.5vw',
-                  fontSize: '1.2vw',
-                  width: '9vw',
-                  height: '2.5vw',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                이름 변경
-              </Button>
-            </div>
-            <div>
-              <Button
-                variant="contained"
-                color="secondary"
-                size="large"
-                style={{
-                  background: 'rgba(52, 154, 248, 1)',
-                  margin: '0.5vw',
-                  fontSize: '1.2vw',
-                  width: '9vw',
-                  height: '2.5vw',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                사진 변경
-              </Button>
-            </div>
-          </div>
-          <div>
-            <div>
-              <Link to="/">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  style={{
-                    background: 'rgba(52, 154, 248, 1)',
-                    margin: '0.5vw',
-                    fontSize: '1.2vw',
-                    width: '9vw',
-                    height: '2.5vw',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  홈으로
-                </Button>
-              </Link>
-            </div>
-            <div>
-              <Link to="/login">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  style={{
-                    background: 'rgba(52, 154, 248, 1)',
-                    margin: '0.5vw',
-                    fontSize: '1.2vw',
-                    width: '9vw',
-                    height: '2.5vw',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  로그아웃
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </ProfileContainer>
-      </div>
-
-      <div style={{ display: 'flex' }}>
-        <div
-          style={{
-            backgroundColor: ' #414141',
-            borderRadius: '1vw',
-            margin: '1vw',
-            marginRight: '1vw',
-            boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
-            padding: '1vw',
-            height: '31vw',
-          }}
-        >
-          <div style={{ fontSize: '1.4vw', color: 'white' }}>
-            최근 좋아요 누른 게시물
-            <Link to="/mypage/favoriteboard">
-              <Button style={{ fontSize: '1vw' }}>전체보기</Button>
-            </Link>
-          </div>
-          <div>
-            <Setupbutton>
-              <PostImage src={textbox} />
-              <Postinfo>
-                <PostTitle>Setup Title</PostTitle>
-                <PostItem>
-                  <Postdetail style={{ marginLeft: '0.5vw' }}>
-                    <img src={profile} style={{ width: '1.3vw' }} />
-                    <Text>작성자</Text>
-                  </Postdetail>
-                  <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <FavoriteBorderIcon
-                      style={{ width: '1.3vw', color: 'red' }}
-                    />
-                    <Text>24</Text>
-                    <img
-                      src={chat}
-                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                    />{' '}
-                    <Text>5</Text>
-                  </Postdetail>
-                </PostItem>
-              </Postinfo>
-            </Setupbutton>
-            <Setupbutton>
-              <PostImage src={textbox} />
-              <Postinfo>
-                <PostTitle>Setup Title</PostTitle>
-                <PostItem>
-                  <Postdetail style={{ marginLeft: '0.5vw' }}>
-                    <img src={profile} style={{ width: '1.3vw' }} />
-                    <Text>작성자</Text>
-                  </Postdetail>
-                  <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <FavoriteBorderIcon
-                      style={{ width: '1.3vw', color: 'red' }}
-                    />
-                    <Text>24</Text>
-                    <img
-                      src={chat}
-                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                    />{' '}
-                    <Text>5</Text>
-                  </Postdetail>
-                </PostItem>
-              </Postinfo>
-            </Setupbutton>
-          </div>
-          <div>
-            <Setupbutton>
-              <PostImage src={textbox} />
-
-              <Postinfo>
-                <PostTitle>Setup Title</PostTitle>
-                <PostItem>
-                  <Postdetail style={{ marginLeft: '0.5vw' }}>
-                    <img src={profile} style={{ width: '1.3vw' }} />
-                    <Text>작성자</Text>
-                  </Postdetail>
-                  <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <FavoriteBorderIcon
-                      style={{ width: '1.3vw', color: 'red' }}
-                    />
-                    <Text>24</Text>
-                    <img
-                      src={chat}
-                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                    />{' '}
-                    <Text>5</Text>
-                  </Postdetail>
-                </PostItem>
-              </Postinfo>
-            </Setupbutton>
-            <Setupbutton>
-              <PostImage src={textbox} />
-
-              <Postinfo>
-                <PostTitle>Setup Title</PostTitle>
-                <PostItem>
-                  <Postdetail style={{ marginLeft: '0.5vw' }}>
-                    <img src={profile} style={{ width: '1.3vw' }} />
-                    <Text>작성자</Text>
-                  </Postdetail>
-                  <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <FavoriteBorderIcon
-                      style={{ width: '1.3vw', color: 'red' }}
-                    />
-                    <Text>24</Text>
-                    <img
-                      src={chat}
-                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                    />{' '}
-                    <Text>5</Text>
-                  </Postdetail>
-                </PostItem>
-              </Postinfo>
-            </Setupbutton>
-          </div>
-        </div>
-
-        <div
-          style={{
-            backgroundColor: '#414141',
-            borderRadius: '1vw',
-            display: 'flex',
-            boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
-            padding: '1vw',
-            marginTop: '1vw',
-            height: '31vw',
-          }}
-        >
-          <div>
-            <div
-              style={{
-                fontSize: '1.4vw',
-                color: 'white',
-                display: 'flex',
-              }}
-            >
-              나만의 데스크탑 만들기
-              <Dropdown />
-            </div>
-            <div style={{ marginRight: '1vw' }}>
-              <Flexdiv>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-              </Flexdiv>
-              <Flexdiv>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-              </Flexdiv>
-
-              <Flexdiv>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-
-                <Modal isOpen={IsModalOpen} onClose={closeModal} />
-              </Flexdiv>
-            </div>
-          </div>
-          <div>
+    <>
+      <Navbar />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: '2vw',
+        }}
+      >
+        <div className="profile">
+          <ProfileContainer>
+            <img src={bar} style={{ marginRight: '1vw' }} />
             <img
-              src={sumbox}
-              style={{
-                width: '16vw',
-                pointerEvents: 'none',
-              }}
+              src={profile}
+              alt="프로필 사진"
+              style={{ width: '3.5vw', pointerEvents: 'none' }}
             />
+            <Name>한승철</Name>
+
+            <div>
+              <div>
+                <Button
+                  variant="contained"
+                  size="large"
+                  style={{
+                    background: 'rgba(52, 154, 248, 1)',
+                    margin: '0.5vw',
+                    fontSize: '1vw',
+                    width: '6vw',
+                    height: '2.5vw',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  이름 변경
+                </Button>
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  style={{
+                    background: 'rgba(52, 154, 248, 1)',
+                    margin: '0.5vw',
+                    fontSize: '1vw',
+                    width: '6vw',
+                    height: '2.5vw',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  사진 변경
+                </Button>
+                <Link to="/login">
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    size="large"
+                    style={{
+                      background: 'rgba(52, 154, 248, 1)',
+                      margin: '0.5vw',
+                      fontSize: '1vw',
+                      width: '6vw',
+                      height: '2.5vw',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    로그아웃
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            <img src={bar} style={{ marginLeft: '1vw' }} />
+          </ProfileContainer>
+        </div>
+
+        <div style={{ display: 'flex' }}>
+          <div
+            style={{
+              backgroundColor: ' #414141',
+              borderRadius: '1vw',
+              margin: '1vw',
+              marginRight: '1vw',
+              boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
+              padding: '1vw',
+              height: '31vw',
+            }}
+          >
+            <div style={{ fontSize: '1.4vw', color: 'white' }}>
+              최근 좋아요 누른 게시물
+              <Link to="/mypage/favoriteboard">
+                <Button style={{ fontSize: '1vw' }}>전체보기</Button>
+              </Link>
+            </div>
+            <div>
+              <Setupbutton>
+                <PostImage src={textbox} />
+                <Postinfo>
+                  <PostTitle>Setup Title</PostTitle>
+                  <PostItem>
+                    <Postdetail style={{ marginLeft: '0.5vw' }}>
+                      <img src={profile} style={{ width: '1.3vw' }} />
+                      <Text>작성자</Text>
+                    </Postdetail>
+                    <Postdetail style={{ marginRight: '0.5vw' }}>
+                      <FavoriteBorderIcon
+                        style={{ width: '1.3vw', color: 'red' }}
+                      />
+                      <Text>24</Text>
+                      <img
+                        src={chat}
+                        style={{ width: '1.3vw', marginLeft: '0.5vw' }}
+                      />{' '}
+                      <Text>5</Text>
+                    </Postdetail>
+                  </PostItem>
+                </Postinfo>
+              </Setupbutton>
+              <Setupbutton>
+                <PostImage src={textbox} />
+                <Postinfo>
+                  <PostTitle>Setup Title</PostTitle>
+                  <PostItem>
+                    <Postdetail style={{ marginLeft: '0.5vw' }}>
+                      <img src={profile} style={{ width: '1.3vw' }} />
+                      <Text>작성자</Text>
+                    </Postdetail>
+                    <Postdetail style={{ marginRight: '0.5vw' }}>
+                      <FavoriteBorderIcon
+                        style={{ width: '1.3vw', color: 'red' }}
+                      />
+                      <Text>24</Text>
+                      <img
+                        src={chat}
+                        style={{ width: '1.3vw', marginLeft: '0.5vw' }}
+                      />{' '}
+                      <Text>5</Text>
+                    </Postdetail>
+                  </PostItem>
+                </Postinfo>
+              </Setupbutton>
+            </div>
+            <div>
+              <Setupbutton>
+                <PostImage src={textbox} />
+
+                <Postinfo>
+                  <PostTitle>Setup Title</PostTitle>
+                  <PostItem>
+                    <Postdetail style={{ marginLeft: '0.5vw' }}>
+                      <img src={profile} style={{ width: '1.3vw' }} />
+                      <Text>작성자</Text>
+                    </Postdetail>
+                    <Postdetail style={{ marginRight: '0.5vw' }}>
+                      <FavoriteBorderIcon
+                        style={{ width: '1.3vw', color: 'red' }}
+                      />
+                      <Text>24</Text>
+                      <img
+                        src={chat}
+                        style={{ width: '1.3vw', marginLeft: '0.5vw' }}
+                      />{' '}
+                      <Text>5</Text>
+                    </Postdetail>
+                  </PostItem>
+                </Postinfo>
+              </Setupbutton>
+              <Setupbutton>
+                <PostImage src={textbox} />
+
+                <Postinfo>
+                  <PostTitle>Setup Title</PostTitle>
+                  <PostItem>
+                    <Postdetail style={{ marginLeft: '0.5vw' }}>
+                      <img src={profile} style={{ width: '1.3vw' }} />
+                      <Text>작성자</Text>
+                    </Postdetail>
+                    <Postdetail style={{ marginRight: '0.5vw' }}>
+                      <FavoriteBorderIcon
+                        style={{ width: '1.3vw', color: 'red' }}
+                      />
+                      <Text>24</Text>
+                      <img
+                        src={chat}
+                        style={{ width: '1.3vw', marginLeft: '0.5vw' }}
+                      />{' '}
+                      <Text>5</Text>
+                    </Postdetail>
+                  </PostItem>
+                </Postinfo>
+              </Setupbutton>
+            </div>
+          </div>
+
+          <div
+            style={{
+              backgroundColor: '#414141',
+              borderRadius: '1vw',
+              display: 'flex',
+              boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
+              padding: '1vw',
+              marginTop: '1vw',
+              height: '31vw',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontSize: '1.4vw',
+                  color: 'white',
+                  display: 'flex',
+                }}
+              >
+                나만의 데스크탑 만들기
+                <Dropdown />
+              </div>
+              <div style={{ marginRight: '1vw' }}>
+                <Flexdiv>
+                  <Plusbutton onClick={openModal}>
+                    <PlusImage src={plusbox} />
+                  </Plusbutton>
+                  <Plusbutton onClick={openModal}>
+                    <PlusImage src={plusbox} />
+                  </Plusbutton>
+                  <Plusbutton onClick={openModal}>
+                    <PlusImage src={plusbox} />
+                  </Plusbutton>
+                </Flexdiv>
+                <Flexdiv>
+                  <Plusbutton onClick={openModal}>
+                    <PlusImage src={plusbox} />
+                  </Plusbutton>
+                  <Plusbutton onClick={openModal}>
+                    <PlusImage src={plusbox} />
+                  </Plusbutton>
+                  <Plusbutton onClick={openModal}>
+                    <PlusImage src={plusbox} />
+                  </Plusbutton>
+                </Flexdiv>
+
+                <Flexdiv>
+                  <Plusbutton onClick={openModal}>
+                    <PlusImage src={plusbox} />
+                  </Plusbutton>
+                  <Plusbutton onClick={openModal}>
+                    <PlusImage src={plusbox} />
+                  </Plusbutton>
+                  <Plusbutton onClick={openModal}>
+                    <PlusImage src={plusbox} />
+                  </Plusbutton>
+
+                  <Modal isOpen={IsModalOpen} onClose={closeModal} />
+                </Flexdiv>
+              </div>
+            </div>
+            <div>
+              <img
+                src={sumbox}
+                style={{
+                  width: '16vw',
+                  pointerEvents: 'none',
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

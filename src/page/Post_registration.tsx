@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Header from '../components/Header';
-import test from '../assets/image/mypage/sum.svg';
+import Navbar from '../components/Navbar';
 import logo from '../assets/logo.svg';
 import thumbnail from '../assets/image/Post_registration/thumbnail.svg';
 import extraimage from '../assets/image/Post_registration/extraimage.svg';
@@ -182,156 +181,161 @@ function Post_reg() {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      <Centerdiv>
-        <img src={logo} style={{ width: '30vw', pointerEvents: 'none' }} />
-      </Centerdiv>
+    <>
+      <Navbar />
       <div
         style={{
-          background: 'linear-gradient(to left, #515151, #808080be)',
-          padding: '1vw',
-          height: '87vw',
-          borderRadius: '1vw',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          marginTop: '3vw',
         }}
       >
-        <ForText>셋업 등록하기</ForText>
+        <div
+          style={{
+            background: 'linear-gradient(to left, #515151, #808080be)',
+            padding: '1vw',
+            height: '87vw',
+            borderRadius: '1vw',
+          }}
+        >
+          <ForText>셋업 등록하기</ForText>
 
-        <Centerdiv style={{ marginTop: '1vw' }}>
-          <InputTextField
-            sx={{
-              input: { color: 'white', fontSize: '1.3vw', marginTop: '0.5vw' },
-            }}
-            id="filled-basic"
-            label="Title"
-            variant="filled"
-            style={{
-              width: '68vw',
-              backgroundColor: '#3c3c3c',
-              color: 'white',
-            }}
-            value={title}
-            onChange={titlehandle}
-          />
-          <div style={{ display: 'flex' }}>
-            <div>
-              <Thumbnailbutton>
-                <Thumbnail_image src={thumbnail} />
-              </Thumbnailbutton>
-            </div>
-            <div>
-              <div style={{ display: 'flex' }}>
-                <Thumbnailbutton>
-                  <Extra_image src={extraimage} />
-                </Thumbnailbutton>
-                <Thumbnailbutton>
-                  <Extra_image src={extraimage} />
-                </Thumbnailbutton>
-              </div>
-              <div style={{ display: 'flex' }}>
-                <Thumbnailbutton>
-                  <Extra_image src={extraimage} />
-                </Thumbnailbutton>
-                <Thumbnailbutton>
-                  <Extra_image src={extraimage} />
-                </Thumbnailbutton>
-              </div>
-            </div>
-          </div>
-        </Centerdiv>
-
-        <ForText style={{ marginTop: '4vw' }}>글 작성하기</ForText>
-
-        <Centerdiv>
-          <Main_text_field
-            placeholder="셋업을 소개하는 글을 작성해보세요."
-            value={content}
-            onChange={contenthandle}
-          />
-        </Centerdiv>
-        <div style={{ display: 'flex' }}>
-          <ForText style={{ marginTop: '2vw' }}>상품 등록</ForText>
-          <Item_button
-            style={{
-              color: '#349af8',
-              marginTop: '2.3vw',
-              marginLeft: '1vw',
-            }}
-          >
-            추가
-          </Item_button>
-        </div>
-
-        <Centerdiv>
-          <Item_box>
-            <img
-              src={mouse}
-              style={{
-                width: '4.5vw',
-                marginLeft: '2vw',
-                pointerEvents: 'none',
+          <Centerdiv style={{ marginTop: '1vw' }}>
+            <InputTextField
+              sx={{
+                input: {
+                  color: 'white',
+                  fontSize: '1.3vw',
+                  marginTop: '0.5vw',
+                },
               }}
+              id="filled-basic"
+              label="Title"
+              variant="filled"
+              style={{
+                width: '68vw',
+                backgroundColor: '#3c3c3c',
+                color: 'white',
+              }}
+              value={title}
+              onChange={titlehandle}
             />
-            <div
-              style={{
-                color: 'white',
-                width: '20vw',
-                fontSize: '1.5vw',
-                marginLeft: '2vw',
-              }}
-            >
-              <Item_text>상품명</Item_text>:Magic Mouse
+            <div style={{ display: 'flex' }}>
+              <div>
+                <Thumbnailbutton>
+                  <Thumbnail_image src={thumbnail} />
+                </Thumbnailbutton>
+              </div>
+              <div>
+                <div style={{ display: 'flex' }}>
+                  <Thumbnailbutton>
+                    <Extra_image src={extraimage} />
+                  </Thumbnailbutton>
+                  <Thumbnailbutton>
+                    <Extra_image src={extraimage} />
+                  </Thumbnailbutton>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <Thumbnailbutton>
+                    <Extra_image src={extraimage} />
+                  </Thumbnailbutton>
+                  <Thumbnailbutton>
+                    <Extra_image src={extraimage} />
+                  </Thumbnailbutton>
+                </div>
+              </div>
             </div>
-            <div
+          </Centerdiv>
+
+          <ForText style={{ marginTop: '4vw' }}>글 작성하기</ForText>
+
+          <Centerdiv>
+            <Main_text_field
+              placeholder="셋업을 소개하는 글을 작성해보세요."
+              value={content}
+              onChange={contenthandle}
+            />
+          </Centerdiv>
+          <div style={{ display: 'flex' }}>
+            <ForText style={{ marginTop: '2vw' }}>상품 등록</ForText>
+            <Item_button
               style={{
-                color: 'white',
-                width: '20vw',
-                fontSize: '1.5vw',
-                marginLeft: '6vw',
+                color: '#349af8',
+                marginTop: '2.3vw',
+                marginLeft: '1vw',
               }}
             >
-              <Item_text>가격</Item_text>: 900,0000 KRW
-            </div>
-            <div
-              style={{
-                color: 'white',
-                fontSize: '2vw',
-                marginLeft: 'auto',
-                marginRight: '1vw',
-              }}
-            >
-              <Item_button
+              추가
+            </Item_button>
+          </div>
+
+          <Centerdiv>
+            <Item_box>
+              <img
+                src={mouse}
                 style={{
-                  color: 'red',
+                  width: '4.5vw',
+                  marginLeft: '2vw',
+                  pointerEvents: 'none',
+                }}
+              />
+              <div
+                style={{
+                  color: 'white',
+                  width: '20vw',
+                  fontSize: '1.5vw',
+                  marginLeft: '2vw',
                 }}
               >
-                삭제
-              </Item_button>
-            </div>
-          </Item_box>
+                <Item_text>상품명</Item_text>:Magic Mouse
+              </div>
+              <div
+                style={{
+                  color: 'white',
+                  width: '20vw',
+                  fontSize: '1.5vw',
+                  marginLeft: '6vw',
+                }}
+              >
+                <Item_text>가격</Item_text>: 900,0000 KRW
+              </div>
+              <div
+                style={{
+                  color: 'white',
+                  fontSize: '2vw',
+                  marginLeft: 'auto',
+                  marginRight: '1vw',
+                }}
+              >
+                <Item_button
+                  style={{
+                    color: 'red',
+                  }}
+                >
+                  삭제
+                </Item_button>
+              </div>
+            </Item_box>
 
-          <Finbuttonbox>
-            <Link to="/setupboard">
-              <Finbutton style={{ backgroundColor: '#3C3C3C' }}>
-                돌아가기
+            <Finbuttonbox>
+              <Link to="/setupboard">
+                <Finbutton style={{ backgroundColor: '#3C3C3C' }}>
+                  돌아가기
+                </Finbutton>
+              </Link>
+
+              <Finbutton
+                style={{ marginRight: '1vw', backgroundColor: '#0085FF' }}
+                onClick={handleSubmit}
+              >
+                등록하기
               </Finbutton>
-            </Link>
-
-            <Finbutton
-              style={{ marginRight: '1vw', backgroundColor: '#0085FF' }}
-              onClick={handleSubmit}
-            >
-              등록하기
-            </Finbutton>
-          </Finbuttonbox>
-        </Centerdiv>
+            </Finbuttonbox>
+          </Centerdiv>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
