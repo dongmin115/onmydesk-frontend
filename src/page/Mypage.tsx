@@ -10,7 +10,7 @@ import bar from '../assets/image/mypage/bar.svg';
 import textbox from '../assets/image/mypage/text.svg';
 import plusbox from '../assets/image/mypage/plusbox.svg';
 import sumbox from '../assets/image/mypage/sum.svg';
-import Heart from '../assets/Heart.png';
+
 import chat from '../assets/image/mypage/chat.svg';
 import Navbar from '../components/Navbar.tsx';
 
