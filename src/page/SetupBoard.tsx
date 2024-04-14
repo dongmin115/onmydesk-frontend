@@ -18,7 +18,7 @@ import axios from 'axios';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  item-align: center;
+  align-items: center;
   width: 100wh;
 `;
 
@@ -71,12 +71,40 @@ const SetupBoardImage = styled.img`
 
 export default function SetupBoard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [posts, setPosts] = useState([]);
   const open = Boolean(anchorEl);
+  const [currentSortOption, setCurrentSortOption] = useState('정렬기준');
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const searchPosts = async (criteria: number): Promise<void> => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/posts', {
+        params: {
+          page: 1,
+          limit: 10,
+          criteria: criteria,
+        },
+      });
+      setPosts(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
+
+  const handleSortOptionClick = (
+    sortOption: number,
+    sortText: string
+  ): void => {
+    handleClose();
+    searchPosts(sortOption);
+    setCurrentSortOption(sortText);
   };
   return (
     <Container>
@@ -112,7 +140,7 @@ export default function SetupBoard() {
             style={{ color: '#d3d3d3', fontSize: '1rem' }}
             endIcon={<KeyboardArrowDown />}
           >
-            정렬기준
+            {currentSortOption}
           </Button>
           <Menu
             id="basic-menu"
@@ -123,9 +151,17 @@ export default function SetupBoard() {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>최신순</MenuItem>
-            <MenuItem onClick={handleClose}>인기순</MenuItem>
-            <MenuItem onClick={handleClose}>가격순</MenuItem>
+            <MenuItem onClick={() => handleSortOptionClick(1, '최신순')}>
+              최신순
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleSortOptionClick(2, '좋아요 많은 순')}
+            >
+              좋아요 많은 순
+            </MenuItem>
+            <MenuItem onClick={() => handleSortOptionClick(3, '조회순')}>
+              조회순
+            </MenuItem>
           </Menu>
         </div>
       </SetupBoardMenu>
