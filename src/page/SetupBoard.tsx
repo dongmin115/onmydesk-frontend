@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   Button,
   InputAdornment,
@@ -91,11 +91,15 @@ export default function SetupBoard() {
 
   const renderPosts = () => {
     return posts.map((post) => (
-      <SetupBoardImage
-        key={post.id}
-        src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
-        alt={post.title}
-      />
+      <Link to={`/PostDetail/${post.id}`}>
+        <button style={{ border: 'none', background: 'transparent' }}>
+          <SetupBoardImage
+            key={post.id}
+            src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
+            alt={post.title}
+          />
+        </button>
+      </Link>
     ));
   };
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

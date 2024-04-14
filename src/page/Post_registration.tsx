@@ -11,8 +11,7 @@ import mouse from '../assets/image/Post_registration/mouse.svg';
 
 import { TextField } from '@mui/material';
 
-const token =
-  'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJrbnIwMDEzQGdtYWlsLmNvbSIsImF1dGgiOiJST0xFX1VTRVIiLCJleHAiOjE3MTMwNDM4NzR9.ZVILqrQ2pRQcLgSy8TQ142cuEJq_YVWAUXybAQh_Yv2vB7q2mC-lMq2fc8QGMhoTYKpa9DuDlmK_tbi1EwgHLA';
+const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMTg4NDI2fQ.qlAK2U2-OKadyTY460jjkmbk7JrqF15jHsCbTYhy4WZdXjf9XEHzdeBSQddbQRigZHGK4aSPBoivI8lYhpEGCg`;
 
 const Centerdiv = styled.div`
   display: flex;
@@ -173,7 +172,9 @@ function Post_reg() {
         }
       );
       console.log(response.data);
+
       alert('게시글이 등록되었습니다.');
+      window.history.back();
     } catch (error) {
       console.log('에러');
       alert('게시글 등록에 실패했습니다.');
