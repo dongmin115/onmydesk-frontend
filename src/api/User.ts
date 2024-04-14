@@ -32,7 +32,8 @@ export const Login = async (jsonData: { email: string; password: string }) => {
         },
       }
     );
-    console.log(response.data);
+    // 세션스토리지에 토큰 저장
+    sessionStorage.setItem('token', response.data.data.token);
     return response.data;
   } catch (error) {
     return error;

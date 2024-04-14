@@ -7,7 +7,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Login } from '../api/User';
-import { useState } from 'react';
 
 const LoginContainer = styled.div`
   height: 100vh;
@@ -59,7 +58,6 @@ const StyledLink1 = styled(Link)`
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState<string>(''); // 토큰 상태값
   // zod를 사용하여 회원가입 폼의 유효성 검사
   const signUpFormSchema = z.object({
     email: z.string().email({ message: '이메일 형식이 아닙니다.' }), // 이메일 형식 지정
@@ -174,7 +172,6 @@ const LoginPage = () => {
           const response = await Login(form.getValues());
           if (response.status === 'success') {
             alert('로그인 성공');
-            setToken(response.data.token);
             navigate('/');
           } else if (response.status === 'fail') {
             alert('이메일 또는 비밀번호가 틀렸습니다.');
