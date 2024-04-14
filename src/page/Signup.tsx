@@ -17,30 +17,6 @@ const Title = styled.div`
   font-size: 6rem;
 `;
 
-const Input = styled.input`
-  font-size: 1rem;
-  padding: 1.1%;
-  margin: 1% 0;
-  border: none;
-  border-radius: 0.3rem;
-  outline: none;
-  width: 22vw;
-  height: 2vh;
-`;
-
-const LoginButton = styled.button`
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 0.3rem;
-  margin-top: 1%;
-  width: 24.3vw;
-  height: 6vh;
-  cursor: pointer;
-  font-family: 'Kiwi Maru';
-  font-size: 1rem;
-`;
-
 const Signup = () => {
   return (
     <SignupContainer>

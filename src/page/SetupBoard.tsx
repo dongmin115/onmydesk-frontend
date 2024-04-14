@@ -12,6 +12,7 @@ import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import { KeyboardArrowDown } from '@mui/icons-material';
+import axios from 'axios';
 
 // 컨테이너 스타일
 const Container = styled.div`
