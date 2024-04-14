@@ -10,6 +10,7 @@ import GoodsBoard from './page/GoodsBoard';
 import Signup from './page/Signup';
 import Login from './page/Login';
 import FavoriteBoard from './page/FavoriteBoard';
+import Post_fix from './page/Post_fix';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/mypage/favoriteboard" element={<FavoriteBoard />} />
+      <Route path="/Post_fix/:id" element={<Post_fix />} />
     </Routes>
   );
 }

@@ -328,18 +328,27 @@ const PostDetail = () => {
     }
   }, []);
 
+  const Fixbutton = () => {
+    const { id } = useParams();
+
+    return (
+      <Link to={`/Post_fix/${id}`}>
+        <Button>수정</Button>
+      </Link>
+    );
+  };
+
   return (
     <>
       <Navbar />
       <SetupTitleContainer>
         <SetupTitle>{posts.title}</SetupTitle>
       </SetupTitleContainer>
-
       <DeskInfoContainer>
         <AccountCircleIcon sx={{ fontSize: 50, mb: 2, mr: 2 }} />
         <DeskInfo>{posts.nickname}</DeskInfo>
         <EditDeleteContainer>
-          <Button href="#text-buttons">수정</Button>
+          {Fixbutton()}
           <Button onClick={postDelCallback}>삭제</Button>
         </EditDeleteContainer>
         <DateInfo>{posts.updatedAt}</DateInfo>
