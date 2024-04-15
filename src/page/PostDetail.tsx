@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import SetupImage from '../assets/SetupImage.png';
@@ -7,6 +9,13 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ShareIcon from '@mui/icons-material/Share';
+
+import { Link, useParams } from 'react-router-dom';
+
+import SetupBoard from './SetupBoard';
+import { useState, useEffect, useCallback } from 'react';
+
+const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMTg4NDI2fQ.qlAK2U2-OKadyTY460jjkmbk7JrqF15jHsCbTYhy4WZdXjf9XEHzdeBSQddbQRigZHGK4aSPBoivI8lYhpEGCg`;
 
 const SetupTitleContainer = styled.div`
   width: 100%;
@@ -273,20 +282,76 @@ const TextArea = styled.textarea`
 `;
 
 const PostDetail = () => {
+  const { id } = useParams();
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/posts/${id}`
+        );
+        setPosts(response.data.data);
+        console.log('목록 불러오기 성공:', response.data.data);
+      } catch (error) {
+        console.log('목록 불러오기 실패:', error);
+      }
+    }
+
+    fetchPosts();
+  }, []);
+
+  const PostDel = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/posts/${id}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert('게시글이 삭제되었습니다.');
+      window.history.back();
+    } catch (error) {
+      console.log('에러');
+      alert('권한이 없습니다.');
+    }
+  };
+
+  const postDelCallback = useCallback(() => {
+    const confirmed = window.confirm('게시글을 삭제하시겠습니까?');
+
+    if (confirmed) {
+      PostDel();
+    }
+  }, []);
+
+  const Fixbutton = () => {
+    const { id } = useParams();
+
+    return (
+      <Link to={`/Post_fix/${id}`}>
+        <Button>수정</Button>
+      </Link>
+    );
+  };
+
   return (
     <>
       <Navbar />
       <SetupTitleContainer>
-        <SetupTitle>Setup Title</SetupTitle>
+        <SetupTitle>{posts.title}</SetupTitle>
       </SetupTitleContainer>
       <DeskInfoContainer>
         <AccountCircleIcon sx={{ fontSize: 50, mb: 2, mr: 2 }} />
-        <DeskInfo>Sumin Lee's desk</DeskInfo>
+        <DeskInfo>{posts.nickname}</DeskInfo>
         <EditDeleteContainer>
-          <Button href="#text-buttons">수정</Button>
-          <Button href="#text-buttons">삭제</Button>
+          {Fixbutton()}
+          <Button onClick={postDelCallback}>삭제</Button>
         </EditDeleteContainer>
-        <DateInfo>2024.03.15</DateInfo>
+        <DateInfo>{posts.updatedAt}</DateInfo>
       </DeskInfoContainer>
       <Image src={SetupImage} />
       <RightBox>
@@ -343,13 +408,7 @@ const PostDetail = () => {
         </Circle>
       </RightBox>
       <TextContainer>
-        <Text>
-          안녕하세요! 이제 막 시작한 초보 개발자입니다. 현재 프론트엔드를
-          공부중이에요. 최근에 제 스타일대로 책상을 꾸며 보았어요. 저는
-          개인적으로 흰색이 깔끔한거 같아서 전체적으로 화이트 톤으로 데스크
-          셋업을 구성해 보았어요. 확실히 데스크 셋업을 해놓으니까 공부 할 맛이
-          나는것 같아요. 자세한 구성이랑 금액은 밑에 남겨놓겠습니다!
-        </Text>
+        <Text>{posts.content}</Text>
       </TextContainer>
       <SetupItemContainer>
         <SetupItem>Setup Item</SetupItem>

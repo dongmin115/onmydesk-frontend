@@ -1,6 +1,8 @@
+import axios from 'axios';
+
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import {
   Button,
   InputAdornment,
@@ -10,9 +12,8 @@ import {
 } from '@mui/material';
 import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { KeyboardArrowDown } from '@mui/icons-material';
-import axios from 'axios';
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -70,10 +71,15 @@ const SetupBoardImage = styled.img`
 `;
 
 export default function SetupBoard() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [posts, setPosts] = useState([]);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [currentSortOption, setCurrentSortOption] = useState('정렬기준');
+  const [currentSortOption, setCurrentSortOption] = useState('최신순');
+
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 최신순으로 포스트를 검색하여 가져오기
+    searchPosts(1); // criteria를 1로 설정하여 최신순으로 검색
+  }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때 한 번만 호출
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -87,12 +93,12 @@ export default function SetupBoard() {
       const response = await axios.get('http://localhost:8080/api/posts', {
         params: {
           page: 1,
-          limit: 10,
+          limit: 9,
           criteria: criteria,
         },
       });
-      setPosts(response.data);
-      console.log(response.data);
+      setPosts(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       console.log('Error', error);
     }
@@ -106,6 +112,21 @@ export default function SetupBoard() {
     searchPosts(sortOption);
     setCurrentSortOption(sortText);
   };
+
+  const renderPosts = () => {
+    return posts.map((post) => (
+      <Link to={`/PostDetail/${post.id}`}>
+        <button style={{ border: 'none', background: 'transparent' }}>
+          <SetupBoardImage
+            key={post.id}
+            src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
+            alt={post.title}
+          />
+        </button>
+      </Link>
+    ));
+  };
+
   return (
     <Container>
       <Navbar />
@@ -165,17 +186,7 @@ export default function SetupBoard() {
           </Menu>
         </div>
       </SetupBoardMenu>
-      <SetupBoardContainer>
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-      </SetupBoardContainer>
+      <SetupBoardContainer>{renderPosts()}</SetupBoardContainer>
     </Container>
   );
 }
