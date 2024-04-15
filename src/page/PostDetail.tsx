@@ -15,7 +15,7 @@ import { Link, useParams } from 'react-router-dom';
 import SetupBoard from './SetupBoard';
 import { useState, useEffect, useCallback } from 'react';
 
-const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMTg4NDI2fQ.qlAK2U2-OKadyTY460jjkmbk7JrqF15jHsCbTYhy4WZdXjf9XEHzdeBSQddbQRigZHGK4aSPBoivI8lYhpEGCg`;
+const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMjg5NTgyfQ.RHsbFOr9rsSCdRnrTZOwDX_BRXa7Cu_nsblSOxWTSxmJRbM5WCVZYSsvaxATlBxOlwT-pc4GvFWRAwCLDZaKHg`;
 
 const SetupTitleContainer = styled.div`
   width: 100%;
@@ -291,8 +291,8 @@ const PostDetail = () => {
         const response = await axios.get(
           `http://localhost:8080/api/posts/${id}`
         );
-        setPosts(response.data.data);
-        console.log('목록 불러오기 성공:', response.data.data);
+        setPosts(response.data.data.post);
+        console.log('목록 불러오기 성공:', response.data.data.post);
       } catch (error) {
         console.log('목록 불러오기 실패:', error);
       }

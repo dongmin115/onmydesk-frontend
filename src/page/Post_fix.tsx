@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Navbar from '../components/Navbar';
@@ -10,7 +10,7 @@ import mouse from '../assets/image/Post_registration/mouse.svg';
 
 import { TextField } from '@mui/material';
 
-const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMTg4NDI2fQ.qlAK2U2-OKadyTY460jjkmbk7JrqF15jHsCbTYhy4WZdXjf9XEHzdeBSQddbQRigZHGK4aSPBoivI8lYhpEGCg`;
+const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMjg5NTgyfQ.RHsbFOr9rsSCdRnrTZOwDX_BRXa7Cu_nsblSOxWTSxmJRbM5WCVZYSsvaxATlBxOlwT-pc4GvFWRAwCLDZaKHg`;
 
 const Centerdiv = styled.div`
   display: flex;
@@ -156,7 +156,30 @@ function Post_fix() {
         {
           title: `${title}`,
           content: `${content}`,
+          products: [
+            {
+              productName:
+                'Apple <b>아이패드</b> 에어 5세대 M1 WIFI 64G 스페이스 그레이 (MM9C3KH/A)',
+              img: 'https://shopping-phinf.pstatic.net/main_3153084/31530843620.20220705164247.jpg',
+              productCode: '31530843620',
+              lprice: 828490,
+              brand: 'Apple',
+              maker: 'Apple',
+              category1: '디지털/가전',
+              category2: '태블릿PC',
+              category3: 'string',
+              category4: 'string',
+              pages: [
+                {
+                  price: 829690,
+                  link: 'https://search.shopping.naver.com/gate.nhn?id=31530843620',
+                  storeName: '네이버',
+                },
+              ],
+            },
+          ],
         },
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
