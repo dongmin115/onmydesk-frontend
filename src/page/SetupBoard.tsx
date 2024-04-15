@@ -19,7 +19,7 @@ import { KeyboardArrowDown } from '@mui/icons-material';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  item-align: center;
+  align-items: center;
   width: 100wh;
 `;
 
@@ -72,22 +72,46 @@ const SetupBoardImage = styled.img`
 
 export default function SetupBoard() {
   const [posts, setPosts] = useState([]);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const [currentSortOption, setCurrentSortOption] = useState('최신순');
 
   useEffect(() => {
-    async function fetchPosts() {
-      try {
-        const response = await axios.get(
-          'http://localhost:8080/api/posts?page=1&limit=9&criteria=1'
-        );
-        setPosts(response.data.data);
-        console.log('목록 불러오기 성공:', response.data.data);
-      } catch (error) {
-        console.log('목록 불러오기 실패:', error);
-      }
-    }
+    // 컴포넌트가 마운트될 때 최신순으로 포스트를 검색하여 가져오기
+    searchPosts(1); // criteria를 1로 설정하여 최신순으로 검색
+  }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때 한 번만 호출
 
-    fetchPosts();
-  }, []);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const searchPosts = async (criteria: number): Promise<void> => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/posts', {
+        params: {
+          page: 1,
+          limit: 9,
+          criteria: criteria,
+        },
+      });
+      setPosts(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
+
+  const handleSortOptionClick = (
+    sortOption: number,
+    sortText: string
+  ): void => {
+    handleClose();
+    searchPosts(sortOption);
+    setCurrentSortOption(sortText);
+  };
 
   const renderPosts = () => {
     return posts.map((post) => (
@@ -101,14 +125,6 @@ export default function SetupBoard() {
         </button>
       </Link>
     ));
-  };
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
   };
 
   return (
@@ -145,7 +161,7 @@ export default function SetupBoard() {
             style={{ color: '#d3d3d3', fontSize: '1rem' }}
             endIcon={<KeyboardArrowDown />}
           >
-            정렬기준
+            {currentSortOption}
           </Button>
           <Menu
             id="basic-menu"
@@ -156,9 +172,17 @@ export default function SetupBoard() {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>최신순</MenuItem>
-            <MenuItem onClick={handleClose}>인기순</MenuItem>
-            <MenuItem onClick={handleClose}>가격순</MenuItem>
+            <MenuItem onClick={() => handleSortOptionClick(1, '최신순')}>
+              최신순
+            </MenuItem>
+            <MenuItem
+              onClick={() => handleSortOptionClick(2, '좋아요 많은 순')}
+            >
+              좋아요 많은 순
+            </MenuItem>
+            <MenuItem onClick={() => handleSortOptionClick(3, '조회순')}>
+              조회순
+            </MenuItem>
           </Menu>
         </div>
       </SetupBoardMenu>
