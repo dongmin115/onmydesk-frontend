@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 import Modal from '../components/Modal.tsx';
-import Header from '../components/Header.tsx';
 import Dropdown from '../components/Dropdown.tsx';
 
 import profile from '../assets/image/mypage/profile-image.svg';
