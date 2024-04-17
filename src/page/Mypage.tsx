@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-// import Modal from '../components/Modal.tsx';
+import CustomModal from '../components/Modal.tsx';
 import Dropdown from '../components/Dropdown.tsx';
 
 import profile from '../assets/image/mypage/profile-image.svg';
@@ -11,7 +11,7 @@ import sumbox from '../assets/image/mypage/sum.svg';
 import chat from '../assets/image/mypage/chat.svg';
 import Navbar from '../components/Navbar.tsx';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import { Box, Button, Modal, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { userStore } from '../store.ts';
 import { putUserInfo } from '../api/User.ts';
@@ -112,7 +112,6 @@ function Mypage() {
   const [newNickname, setNewNickname] = useState('');
 
   const [IsModalOpen, setIsModalOpen] = useState(false);
-  const [isUserInfoModalOpen, setIsUserInfoModalOpen] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -120,6 +119,8 @@ function Mypage() {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  // 닉네임 수정 모달 핸들러
+  const [isUserInfoModalOpen, setIsUserInfoModalOpen] = useState(false);
   const putUserInfoModalOpen = () => {
     setIsUserInfoModalOpen(true);
   };
@@ -431,7 +432,7 @@ function Mypage() {
                     <PlusImage src={plusbox} />
                   </Plusbutton>
 
-                  {/* <Modal isOpen={IsModalOpen} onClose={closeModal} /> */}
+                  <CustomModal isOpen={IsModalOpen} onClose={closeModal} />
                 </Flexdiv>
               </div>
             </div>
