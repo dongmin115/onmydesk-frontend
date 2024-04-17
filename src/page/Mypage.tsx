@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import Modal from '../components/Modal.tsx';
+// import Modal from '../components/Modal.tsx';
 import Dropdown from '../components/Dropdown.tsx';
 
 import profile from '../assets/image/mypage/profile-image.svg';
@@ -10,11 +10,11 @@ import plusbox from '../assets/image/mypage/plusbox.svg';
 import sumbox from '../assets/image/mypage/sum.svg';
 import chat from '../assets/image/mypage/chat.svg';
 import Navbar from '../components/Navbar.tsx';
-
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Button } from '@mui/material';
+import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { userStore } from '../store.ts';
+import { putUserInfo } from '../api/User.ts';
 
 // 스타일드 컴포넌트 생성
 const ProfileContainer = styled.div`
@@ -108,15 +108,23 @@ const PlusImage = styled.img`
 `;
 
 function Mypage() {
-  const { name, nickname } = userStore();
+  const { name, nickname, setNickname } = userStore();
+  const [newNickname, setNewNickname] = useState('');
 
   const [IsModalOpen, setIsModalOpen] = useState(false);
+  const [isUserInfoModalOpen, setIsUserInfoModalOpen] = useState(false);
 
   const openModal = () => {
     setIsModalOpen(true);
   };
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+  const putUserInfoModalOpen = () => {
+    setIsUserInfoModalOpen(true);
+  };
+  const putUserInfoModalClose = () => {
+    setIsUserInfoModalOpen(false);
   };
 
   const Flexdiv = styled.div`
@@ -143,7 +151,7 @@ function Mypage() {
               style={{ width: '3.5vw', pointerEvents: 'none' }}
             />
             <Name>{name ? name : '비회원'}</Name>
-            <Name>{nickname ? name : null}</Name>
+            <Name>{nickname ? nickname : null}</Name>
 
             <div>
               <div>
@@ -158,9 +166,53 @@ function Mypage() {
                     height: '2.5vw',
                     whiteSpace: 'nowrap',
                   }}
+                  onClick={putUserInfoModalOpen}
                 >
                   이름 변경
                 </Button>
+                <Modal
+                  open={isUserInfoModalOpen}
+                  onClose={putUserInfoModalClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      width: 400,
+                      bgcolor: '#262626',
+                      border: 'none',
+                      borderRadius: 2,
+                      boxShadow: 24,
+                      p: 4,
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <TextField
+                      label="변경할 이름을 입력하세요"
+                      variant="outlined"
+                      inputMode="email"
+                      margin="dense"
+                      InputProps={{ style: { color: 'white' } }}
+                      value={newNickname}
+                      onChange={(e) => setNewNickname(e.target.value)}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={async () => {
+                        const response = await putUserInfo(name, newNickname);
+                        setNickname(response.data.nickname);
+                        putUserInfoModalClose();
+                      }}
+                    >
+                      수정
+                    </Button>
+                  </Box>
+                </Modal>
 
                 <Button
                   variant="contained"
@@ -379,7 +431,7 @@ function Mypage() {
                     <PlusImage src={plusbox} />
                   </Plusbutton>
 
-                  <Modal isOpen={IsModalOpen} onClose={closeModal} />
+                  {/* <Modal isOpen={IsModalOpen} onClose={closeModal} /> */}
                 </Flexdiv>
               </div>
             </div>

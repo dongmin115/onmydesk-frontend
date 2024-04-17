@@ -55,14 +55,11 @@ export const getUserInfo = async () => {
   }
 };
 
-export const putUserInfo = async (jsonData: {
-  email: string;
-  password: string;
-}) => {
+export const putUserInfo = async (name: string, nickname: string) => {
   try {
     const response = await axios.put(
       'http://localhost:8080/api/user',
-      jsonData,
+      { name: name, nickname: nickname },
       {
         headers: {
           'Content-Type': 'application/json',
@@ -70,6 +67,7 @@ export const putUserInfo = async (jsonData: {
         },
       }
     );
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
