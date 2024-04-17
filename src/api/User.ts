@@ -39,3 +39,19 @@ export const Login = async (jsonData: { email: string; password: string }) => {
     return error;
   }
 };
+
+export const getUserInfo = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/user', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};

@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
+import { useEffect } from 'react';
+import { getUserInfo } from '../api/User';
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -232,6 +234,9 @@ const HotGoods = () => {
 };
 
 export default function Home() {
+  useEffect(() => {
+    getUserInfo();
+  }, []);
   return (
     <Container>
       <Navbar />
