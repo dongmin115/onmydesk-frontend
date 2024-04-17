@@ -54,3 +54,25 @@ export const getUserInfo = async () => {
     return error;
   }
 };
+
+export const putUserInfo = async (jsonData: {
+  email: string;
+  password: string;
+}) => {
+  try {
+    const response = await axios.put(
+      'http://localhost:8080/api/user',
+      jsonData,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
