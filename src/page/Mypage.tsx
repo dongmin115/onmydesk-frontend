@@ -145,8 +145,8 @@ function Mypage() {
               alt="프로필 사진"
               style={{ width: '3.5vw', pointerEvents: 'none' }}
             />
-            <Name>{name}</Name>
-            <Name>{nickname}</Name>
+            <Name>{name ? name : '비회원'}</Name>
+            <Name>{nickname ? name : null}</Name>
 
             <div>
               <div>
@@ -195,7 +195,7 @@ function Mypage() {
                     }}
                     onClick={() => sessionStorage.removeItem('token')}
                   >
-                    로그아웃
+                    {name ? '로그아웃' : '로그인'}
                   </Button>
                 </Link>
               </div>
