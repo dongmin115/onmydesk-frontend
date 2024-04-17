@@ -16,6 +16,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { userStore } from '../store.ts';
 
 // 스타일드 컴포넌트 생성
 const ProfileContainer = styled.div`
@@ -109,6 +110,8 @@ const PlusImage = styled.img`
 `;
 
 function Mypage() {
+  const { name, nickname } = userStore();
+
   const [IsModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -142,7 +145,8 @@ function Mypage() {
               alt="프로필 사진"
               style={{ width: '3.5vw', pointerEvents: 'none' }}
             />
-            <Name>한승철</Name>
+            <Name>{name}</Name>
+            <Name>{nickname}</Name>
 
             <div>
               <div>

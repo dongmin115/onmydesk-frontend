@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import { useEffect } from 'react';
 import { getUserInfo } from '../api/User';
+import { userStore } from '../store';
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -234,8 +235,21 @@ const HotGoods = () => {
 };
 
 export default function Home() {
+  const { setName, setNickname } = userStore();
+
   useEffect(() => {
-    getUserInfo();
+    // 로그인 후 홈페이지로 이동하면 유저 정보를 가져옴
+    const fetchUserInfo = async () => {
+      try {
+        const response = await getUserInfo();
+        setName(response.data.name);
+        setNickname(response.data.nickname);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserInfo();
   }, []);
   return (
     <Container>
