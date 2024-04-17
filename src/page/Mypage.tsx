@@ -5,7 +5,6 @@ import Modal from '../components/Modal.tsx';
 import Dropdown from '../components/Dropdown.tsx';
 
 import profile from '../assets/image/mypage/profile-image.svg';
-import bar from '../assets/image/mypage/bar.svg';
 import textbox from '../assets/image/mypage/text.svg';
 import plusbox from '../assets/image/mypage/plusbox.svg';
 import sumbox from '../assets/image/mypage/sum.svg';
@@ -13,7 +12,6 @@ import chat from '../assets/image/mypage/chat.svg';
 import Navbar from '../components/Navbar.tsx';
 
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { userStore } from '../store.ts';
@@ -139,7 +137,6 @@ function Mypage() {
       >
         <div className="profile">
           <ProfileContainer>
-            <img src={bar} style={{ marginRight: '1vw' }} />
             <img
               src={profile}
               alt="프로필 사진"
@@ -200,7 +197,6 @@ function Mypage() {
                 </Link>
               </div>
             </div>
-            <img src={bar} style={{ marginLeft: '1vw' }} />
           </ProfileContainer>
         </div>
 
@@ -216,7 +212,9 @@ function Mypage() {
               height: '31vw',
             }}
           >
-            <div style={{ fontSize: '1.4vw', color: 'white' }}>
+            <div
+              style={{ fontSize: '1.4vw', color: 'white', marginLeft: '1vw' }}
+            >
               최근 좋아요 누른 게시물
               <Link to="/mypage/favoriteboard">
                 <Button style={{ fontSize: '1vw' }}>전체보기</Button>
@@ -339,6 +337,8 @@ function Mypage() {
                   fontSize: '1.4vw',
                   color: 'white',
                   display: 'flex',
+                  alignItems: 'center',
+                  marginLeft: '0.5vw',
                 }}
               >
                 나만의 데스크탑 만들기
