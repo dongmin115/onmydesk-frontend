@@ -193,6 +193,7 @@ function Mypage() {
                       height: '2.5vw',
                       whiteSpace: 'nowrap',
                     }}
+                    onClick={() => sessionStorage.removeItem('token')}
                   >
                     로그아웃
                   </Button>
