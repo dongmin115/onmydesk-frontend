@@ -248,6 +248,21 @@ function Mypage() {
                     {name ? '로그아웃' : '로그인'}
                   </Button>
                 </Link>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="large"
+                  style={{
+                    margin: '0.5vw',
+                    fontSize: '1vw',
+                    width: '6vw',
+                    height: '2.5vw',
+                    whiteSpace: 'nowrap',
+                  }}
+                  onClick={() => sessionStorage.removeItem('token')}
+                >
+                  회원탈퇴
+                </Button>
               </div>
             </div>
           </ProfileContainer>
