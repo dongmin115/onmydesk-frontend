@@ -7,6 +7,7 @@ import logo from '../assets/logo.svg';
 import thumbnail from '../assets/image/Post_registration/thumbnail.svg';
 import extraimage from '../assets/image/Post_registration/extraimage.svg';
 import mouse from '../assets/image/Post_registration/mouse.svg';
+import { Editor, EditorState, RichUtils } from 'draft-js';
 
 import { TextField } from '@mui/material';
 
@@ -139,9 +140,20 @@ const Finbutton = styled.button`
 function Post_reg() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+
+  const handleEditorChange = (newEditorState) => {
+    setEditorState(newEditorState);
+  };
 
   const titlehandle = (event) => {
     setTitle(event.target.value);
+  };
+
+  const toggleInlineStyle = (style) => {
+    handleEditorChange(RichUtils.toggleInlineStyle(editorState, style));
   };
 
   const contenthandle = (event) => {
@@ -243,42 +255,16 @@ function Post_reg() {
               value={title}
               onChange={titlehandle}
             />
-            <div style={{ display: 'flex' }}>
-              <div>
-                <Thumbnailbutton>
-                  <Thumbnail_image src={thumbnail} />
-                </Thumbnailbutton>
-              </div>
-              <div>
-                <div style={{ display: 'flex' }}>
-                  <Thumbnailbutton>
-                    <Extra_image src={extraimage} />
-                  </Thumbnailbutton>
-                  <Thumbnailbutton>
-                    <Extra_image src={extraimage} />
-                  </Thumbnailbutton>
-                </div>
-                <div style={{ display: 'flex' }}>
-                  <Thumbnailbutton>
-                    <Extra_image src={extraimage} />
-                  </Thumbnailbutton>
-                  <Thumbnailbutton>
-                    <Extra_image src={extraimage} />
-                  </Thumbnailbutton>
-                </div>
-              </div>
-            </div>
           </Centerdiv>
 
           <ForText style={{ marginTop: '4vw' }}>글 작성하기</ForText>
 
-          <Centerdiv>
-            <Main_text_field
-              placeholder="셋업을 소개하는 글을 작성해보세요."
-              value={content}
-              onChange={contenthandle}
-            />
-          </Centerdiv>
+          <Editor
+            editorState={editorState}
+            onChange={handleEditorChange}
+            placeholder="내용을 입력하세요..."
+          />
+
           <div style={{ display: 'flex' }}>
             <ForText style={{ marginTop: '2vw' }}>상품 등록</ForText>
             <Item_button
