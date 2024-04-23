@@ -19,16 +19,52 @@ import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 // 스타일드 컴포넌트 생성
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 10%;
+  padding-right: 10%;
+`;
+
+const TitleText = styled.p`
+  font-size: 1.5rem;
+  color: #d3d3d3;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-right: auto;
+`;
+
 const ProfileContainer = styled.div`
   display: flex;
   align-items: center;
   color: white;
+  width: 100%;
+  height: 13vh;
+  background: #3d3d3d;
+  border-radius: 1vw;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  justify-content: space-between;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 5%;
 `;
 
 const Name = styled.span`
-  margin-right: 3vw; // 이름과 프로필 사진 사이의 간격 조정
-  margin-left: 0.5vw;
-  font-size: 1.5vw; // 임시 이름의 글꼴 크기
+  font-size: 1rem; // 임시 이름의 글꼴 크기
+  text-align: center;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-left: 1vw;
+  padding-right: 5%;
 `;
 
 const Setupbutton = styled.button`
@@ -90,22 +126,22 @@ const Plusbutton = styled.button`
   //나만의 데스크탑 아이템 추가 버튼
   margin: 0.5vw;
   border: none;
-  background-color: transparent;
+  background-color: #3d3d3d;
   padding: 0%;
   border-radius: 2.5vw;
-  transition: all 0.5s;
   cursor: pointer;
-
-  box-shadow: 0 0 0 0 transparent;
+  border-radius: 1rem;
+  drop-shadow: 0 0 0.5rem #000000;
 
   &:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+    transition: transform 0.5s;
   }
 `;
 
 const PlusImage = styled.img`
   // 아이템 추가 이미지
-  width: 8vw;
+  width: full;
   pointer-events: none;
 `;
 
@@ -127,78 +163,67 @@ function Mypage() {
   return (
     <>
       <Navbar />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          marginTop: '2vw',
-        }}
-      >
-        <div className="profile">
-          <ProfileContainer>
-            <img src={bar} style={{ marginRight: '1vw' }} />
+      <Container>
+        <TitleText>회원 정보</TitleText>
+        <ProfileContainer>
+          <InfoContainer>
             <img
               src={profile}
               alt="프로필 사진"
               style={{ width: '3.5vw', pointerEvents: 'none' }}
             />
             <Name>한승철</Name>
+          </InfoContainer>
+          <ButtonContainer>
+            <Button
+              variant="contained"
+              size="large"
+              style={{
+                background: 'rgba(52, 154, 248, 1)',
+                margin: '0.5vw',
+                fontSize: '1vw',
+                width: '6vw',
+                height: '2.5vw',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              이름 변경
+            </Button>
 
-            <div>
-              <div>
-                <Button
-                  variant="contained"
-                  size="large"
-                  style={{
-                    background: 'rgba(52, 154, 248, 1)',
-                    margin: '0.5vw',
-                    fontSize: '1vw',
-                    width: '6vw',
-                    height: '2.5vw',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  이름 변경
-                </Button>
-
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  style={{
-                    background: 'rgba(52, 154, 248, 1)',
-                    margin: '0.5vw',
-                    fontSize: '1vw',
-                    width: '6vw',
-                    height: '2.5vw',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  사진 변경
-                </Button>
-                <Link to="/login">
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    size="large"
-                    style={{
-                      background: 'rgba(52, 154, 248, 1)',
-                      margin: '0.5vw',
-                      fontSize: '1vw',
-                      width: '6vw',
-                      height: '2.5vw',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    로그아웃
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <img src={bar} style={{ marginLeft: '1vw' }} />
-          </ProfileContainer>
-        </div>
+            <Button
+              variant="contained"
+              color="secondary"
+              size="large"
+              style={{
+                background: 'rgba(52, 154, 248, 1)',
+                margin: '0.5vw',
+                fontSize: '1vw',
+                width: '6vw',
+                height: '2.5vw',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              사진 변경
+            </Button>
+            <Link to="/login">
+              <Button
+                variant="contained"
+                color="secondary"
+                size="large"
+                style={{
+                  background: 'rgba(52, 154, 248, 1)',
+                  margin: '0.5vw',
+                  fontSize: '1vw',
+                  width: '6vw',
+                  height: '2.5vw',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                로그아웃
+              </Button>
+            </Link>
+          </ButtonContainer>
+        </ProfileContainer>
 
         <div style={{ display: 'flex' }}>
           <div
@@ -390,7 +415,7 @@ function Mypage() {
             </div>
           </div>
         </div>
-      </div>
+      </Container>
     </>
   );
 }
