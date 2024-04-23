@@ -7,7 +7,6 @@ import Dropdown from '../components/Dropdown.tsx';
 import profile from '../assets/image/mypage/profile-image.svg';
 import textbox from '../assets/image/mypage/text.svg';
 import plusbox from '../assets/image/mypage/plusbox.svg';
-import sumbox from '../assets/image/mypage/sum.svg';
 import chat from '../assets/image/mypage/chat.svg';
 import Navbar from '../components/Navbar.tsx';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -309,123 +308,6 @@ function Mypage() {
             </Button>
           </ButtonContainer>
         </ProfileContainer>
-
-        <div
-          style={{
-            backgroundColor: ' #414141',
-            borderRadius: '1vw',
-            margin: '1vw',
-            marginRight: '1vw',
-            boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
-            padding: '1vw',
-            height: '31vw',
-          }}
-        >
-          <div style={{ fontSize: '1.4vw', color: 'white', marginLeft: '1vw' }}>
-            최근 좋아요 누른 게시물
-            <Link to="/mypage/favoriteboard">
-              <Button style={{ fontSize: '1vw' }}>전체보기</Button>
-            </Link>
-          </div>
-          <div>
-            <Setupbutton>
-              <PostImage src={textbox} />
-              <Postinfo>
-                <PostTitle>Setup Title</PostTitle>
-                <PostItem>
-                  <Postdetail style={{ marginLeft: '0.5vw' }}>
-                    <img src={profile} style={{ width: '1.3vw' }} />
-                    <Text>작성자</Text>
-                  </Postdetail>
-                  <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <FavoriteBorderIcon
-                      style={{ width: '1.3vw', color: 'red' }}
-                    />
-                    <Text>24</Text>
-                    <img
-                      src={chat}
-                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                    />{' '}
-                    <Text>5</Text>
-                  </Postdetail>
-                </PostItem>
-              </Postinfo>
-            </Setupbutton>
-            <Setupbutton>
-              <PostImage src={textbox} />
-              <Postinfo>
-                <PostTitle>Setup Title</PostTitle>
-                <PostItem>
-                  <Postdetail style={{ marginLeft: '0.5vw' }}>
-                    <img src={profile} style={{ width: '1.3vw' }} />
-                    <Text>작성자</Text>
-                  </Postdetail>
-                  <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <FavoriteBorderIcon
-                      style={{ width: '1.3vw', color: 'red' }}
-                    />
-                    <Text>24</Text>
-                    <img
-                      src={chat}
-                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                    />{' '}
-                    <Text>5</Text>
-                  </Postdetail>
-                </PostItem>
-              </Postinfo>
-            </Setupbutton>
-          </div>
-          <div>
-            <Setupbutton>
-              <PostImage src={textbox} />
-
-              <Postinfo>
-                <PostTitle>Setup Title</PostTitle>
-                <PostItem>
-                  <Postdetail style={{ marginLeft: '0.5vw' }}>
-                    <img src={profile} style={{ width: '1.3vw' }} />
-                    <Text>작성자</Text>
-                  </Postdetail>
-                  <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <FavoriteBorderIcon
-                      style={{ width: '1.3vw', color: 'red' }}
-                    />
-                    <Text>24</Text>
-                    <img
-                      src={chat}
-                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                    />{' '}
-                    <Text>5</Text>
-                  </Postdetail>
-                </PostItem>
-              </Postinfo>
-            </Setupbutton>
-            <Setupbutton>
-              <PostImage src={textbox} />
-
-              <Postinfo>
-                <PostTitle>Setup Title</PostTitle>
-                <PostItem>
-                  <Postdetail style={{ marginLeft: '0.5vw' }}>
-                    <img src={profile} style={{ width: '1.3vw' }} />
-                    <Text>작성자</Text>
-                  </Postdetail>
-                  <Postdetail style={{ marginRight: '0.5vw' }}>
-                    <FavoriteBorderIcon
-                      style={{ width: '1.3vw', color: 'red' }}
-                    />
-                    <Text>24</Text>
-                    <img
-                      src={chat}
-                      style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                    />{' '}
-                    <Text>5</Text>
-                  </Postdetail>
-                </PostItem>
-              </Postinfo>
-            </Setupbutton>
-          </div>
-        </div>
 
         <TitleContainer>
           <TitleText>최근 좋아요 누른 게시물</TitleText>
