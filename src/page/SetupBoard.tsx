@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Button,
   InputAdornment,
