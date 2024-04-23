@@ -243,6 +243,8 @@ function Mypage() {
             borderRadius: '1vw',
             boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
             width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
           }}
         >
           <Setupbutton>
@@ -351,6 +353,7 @@ function Mypage() {
             display: 'flex',
             boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
             width: '100%',
+            justifyContent: 'center',
           }}
         >
           <div>
