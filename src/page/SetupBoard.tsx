@@ -47,6 +47,15 @@ const SetupBoardParagraph = styled.p`
   margin: 0;
 `;
 
+const Title = styled.h1`
+  font-size: 2rem;
+  font-weight: 200;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: 0;
+`;
+
 const SetupBoardContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -63,10 +72,10 @@ const SetupBoardImage = styled.img`
   height: 100%;
   border-radius: 1rem;
   drop-shadow: 0 0 0.5rem #000000;
+  transition: transform 0.5s;
 
   &:hover {
     transform: scale(1.05);
-    transition: transform 0.5s;
   }
 `;
 
@@ -115,7 +124,7 @@ export default function SetupBoard() {
 
   const renderPosts = () => {
     return posts.map((post) => (
-      <Link to={`/PostDetail/${post.id}`}>
+      <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
         <button style={{ border: 'none', background: 'transparent' }}>
           <SetupBoardImage
             key={post.id}
@@ -123,6 +132,7 @@ export default function SetupBoard() {
             alt={post.title}
           />
         </button>
+        <Title>{post.title}</Title>
       </Link>
     ));
   };

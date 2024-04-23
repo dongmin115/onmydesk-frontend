@@ -51,7 +51,7 @@ const ProfileContainer = styled.div`
   border-radius: 1vw;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 3rem;
 `;
 
 const InfoContainer = styled.div`
@@ -86,7 +86,7 @@ const SetupContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 3rem;
   gap: 2rem;
 `;
 
