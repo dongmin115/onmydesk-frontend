@@ -23,6 +23,8 @@ const Container = styled.div`
   justify-content: center;
   padding-left: 10%;
   padding-right: 10%;
+  padding-top: 2%;
+  padding-bottom: 2%;
 `;
 const TitleContainer = styled.div`
   display: flex;
@@ -78,8 +80,18 @@ const ButtonContainer = styled.div`
   padding-right: 5%;
 `;
 
+const SetupContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1rem;
+  gap: 2rem;
+`;
+
 const Setupbutton = styled.button`
-  margin: 1vw;
+  flex: 1;
   border: none;
   background-color: transparent;
   padding: 0%;
@@ -95,14 +107,13 @@ const Setupbutton = styled.button`
 
 const PostImage = styled.img`
   //좋아요 게시물 이미지
-  width: 15vw;
   pointer-events: none;
   border-radius: 1vw 1vw 0 0;
+  width: 100%;
 `;
 
 const Postinfo = styled.div`
   background: #3d3d3d;
-  width: 15vw;
   height: 5vw;
   border-radius: 0 0 1vw 1vw;
 `;
@@ -335,16 +346,7 @@ function Mypage() {
             <Button style={{ fontSize: '1vw' }}>전체보기</Button>
           </Link>
         </TitleContainer>
-        <div
-          style={{
-            backgroundColor: ' #414141',
-            borderRadius: '1vw',
-            boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
+        <SetupContainer>
           <Setupbutton>
             <PostImage src={textbox} />
             <Postinfo>
@@ -439,7 +441,7 @@ function Mypage() {
               </PostItem>
             </Postinfo>
           </Setupbutton>
-        </div>
+        </SetupContainer>
         <TitleContainer>
           <TitleText>나만의 데스크탑</TitleText>
           <Dropdown />
