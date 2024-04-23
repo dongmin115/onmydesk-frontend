@@ -39,3 +39,54 @@ export const Login = async (jsonData: { email: string; password: string }) => {
     return error;
   }
 };
+
+export const getUserInfo = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/user', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
+export const putUserInfo = async (name: string, nickname: string) => {
+  try {
+    const response = await axios.put(
+      'http://localhost:8080/api/user',
+      { name: name, nickname: nickname },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
+export const deleteUser = async () => {
+  try {
+    const response = await axios.delete('http://localhost:8080/api/user', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
