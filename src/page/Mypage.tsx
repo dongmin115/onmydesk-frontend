@@ -54,14 +54,21 @@ const ProfileContainer = styled.div`
 
 const InfoContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   padding-left: 5%;
+  width: 30%;
 `;
 
 const Name = styled.span`
-  font-size: 1rem; // 임시 이름의 글꼴 크기
+  font-size: 1.5rem; // 임시 이름의 글꼴 크기
   text-align: center;
+`;
+
+const Email = styled.span`
+  font-size: 1rem;
+  text-align: center;
+  color: #7b7878;
 `;
 
 const ButtonContainer = styled.div`
@@ -149,10 +156,22 @@ const PlusImage = styled.img`
   pointer-events: none;
 `;
 
+const Flexdiv = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const Flexdiv2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+`;
+
 function Mypage() {
   const navigate = useNavigate();
 
-  const { name, nickname, setNickname } = userStore();
+  const { name, nickname, email, setNickname } = userStore();
   const [newNickname, setNewNickname] = useState('');
 
   const [IsModalOpen, setIsModalOpen] = useState(false);
@@ -172,11 +191,6 @@ function Mypage() {
     setIsUserInfoModalOpen(false);
   };
 
-  const Flexdiv = styled.div`
-    display: flex;
-    flex-direction: row;
-  `;
-
   return (
     <>
       <Navbar />
@@ -189,10 +203,16 @@ function Mypage() {
             <img
               src={profile}
               alt="프로필 사진"
-              style={{ width: '3.5vw', pointerEvents: 'none' }}
+              style={{
+                width: '20%',
+                pointerEvents: 'none',
+                marginRight: '2rem',
+              }}
             />
-            <Name>{name ? name : '비회원'}</Name>
-            <Name>{nickname ? nickname : null}</Name>
+            <Flexdiv2>
+              <Name>{nickname ? nickname : '비회원'}</Name>
+              <Email>{email ? email : null}</Email>
+            </Flexdiv2>
           </InfoContainer>
           <ButtonContainer>
             <Button
