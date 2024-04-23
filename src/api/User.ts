@@ -74,3 +74,19 @@ export const putUserInfo = async (name: string, nickname: string) => {
     return error;
   }
 };
+
+export const deleteUser = async () => {
+  try {
+    const response = await axios.delete('http://localhost:8080/api/user', {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};

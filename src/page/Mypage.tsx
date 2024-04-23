@@ -12,9 +12,9 @@ import chat from '../assets/image/mypage/chat.svg';
 import Navbar from '../components/Navbar.tsx';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Box, Button, Modal, TextField } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../store.ts';
-import { putUserInfo } from '../api/User.ts';
+import { deleteUser, putUserInfo } from '../api/User.ts';
 
 // 스타일드 컴포넌트 생성
 const ProfileContainer = styled.div`
@@ -108,6 +108,8 @@ const PlusImage = styled.img`
 `;
 
 function Mypage() {
+  const navigate = useNavigate();
+
   const { name, nickname, setNickname } = userStore();
   const [newNickname, setNewNickname] = useState('');
 
@@ -259,7 +261,11 @@ function Mypage() {
                     height: '2.5vw',
                     whiteSpace: 'nowrap',
                   }}
-                  onClick={() => sessionStorage.removeItem('token')}
+                  onClick={() => {
+                    deleteUser();
+                    sessionStorage.removeItem('token');
+                    navigate('/login');
+                  }}
                 >
                   회원탈퇴
                 </Button>
