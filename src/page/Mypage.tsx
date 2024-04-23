@@ -25,6 +25,8 @@ const Container = styled.div`
   padding-right: 10%;
   padding-top: 2%;
   padding-bottom: 2%;
+  max-width: 1440px;
+  margin: 0 auto; /* 화면 가운데 정렬 */
 `;
 const TitleContainer = styled.div`
   display: flex;
