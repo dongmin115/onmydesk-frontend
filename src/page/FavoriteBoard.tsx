@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import { Button, Menu, MenuItem } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { KeyboardArrowDown } from '@mui/icons-material';
+import { getFavorite } from '../api/Favorite';
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -69,6 +70,9 @@ export default function FavoriteBoard() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  useEffect(() => {
+    getFavorite();
+  }, []);
   return (
     <Container>
       <Navbar />

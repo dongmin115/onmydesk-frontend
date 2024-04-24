@@ -23,7 +23,6 @@ const TextOverlay = styled.div`
 // 텍스트 스타일
 const Text = styled.p`
   margin: 0; /* 기본 마진 제거 */
-  margin-bottom: 8vw;
 `;
 
 // 메뉴 스타일

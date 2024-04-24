@@ -59,7 +59,7 @@ const ProfileContainer = styled.div`
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: start;
   padding-left: 5%;
   width: 30%;
 `;
