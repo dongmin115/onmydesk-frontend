@@ -14,6 +14,15 @@ const Container = styled.div`
   justify-content: center;
 `;
 
+const Title = styled.h1`
+  font-size: 2rem;
+  font-weight: 200;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: 0;
+`;
+
 const SetupBoardMenu = styled.div`
   display: flex;
   flex-direction: row;
@@ -121,8 +130,9 @@ export default function FavoriteBoard() {
       </SetupBoardMenu>
       <SetupBoardContainer>
         {favorite.map((e) => (
-          <Link to={`/PostDetail/${e.id}`}>
+          <Link to={`/PostDetail/${e.id}`} style={{ textDecoration: 'none' }}>
             <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+            <Title>{e.title}</Title>
           </Link>
         ))}
       </SetupBoardContainer>
