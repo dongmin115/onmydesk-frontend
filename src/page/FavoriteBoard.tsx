@@ -4,6 +4,7 @@ import { Button, Menu, MenuItem } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import { getFavorite } from '../api/Favorite';
+import { Link } from 'react-router-dom';
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -64,6 +65,9 @@ const ButtonContainer = styled.div`
 export default function FavoriteBoard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const [favorite, setFavorite] = useState([]);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -71,7 +75,16 @@ export default function FavoriteBoard() {
     setAnchorEl(null);
   };
   useEffect(() => {
-    getFavorite();
+    const fetchFavorite = async () => {
+      try {
+        const response = await getFavorite();
+        setFavorite(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchFavorite();
   }, []);
   return (
     <Container>
@@ -107,15 +120,11 @@ export default function FavoriteBoard() {
         </ButtonContainer>
       </SetupBoardMenu>
       <SetupBoardContainer>
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        {favorite.map((e) => (
+          <Link to={`/PostDetail/${e.id}`}>
+            <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+          </Link>
+        ))}
       </SetupBoardContainer>
     </Container>
   );
