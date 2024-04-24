@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import { Button, Menu, MenuItem } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { KeyboardArrowDown } from '@mui/icons-material';
+import { getFavorite } from '../api/Favorite';
+import { Link } from 'react-router-dom';
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -10,6 +12,15 @@ const Container = styled.div`
   flex-direction: column;
   item-align: center;
   justify-content: center;
+`;
+
+const Title = styled.h1`
+  font-size: 2rem;
+  font-weight: 200;
+  color: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: 0;
 `;
 
 const SetupBoardMenu = styled.div`
@@ -63,12 +74,27 @@ const ButtonContainer = styled.div`
 export default function FavoriteBoard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const [favorite, setFavorite] = useState([]);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  useEffect(() => {
+    const fetchFavorite = async () => {
+      try {
+        const response = await getFavorite();
+        setFavorite(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchFavorite();
+  }, []);
   return (
     <Container>
       <Navbar />
@@ -103,15 +129,12 @@ export default function FavoriteBoard() {
         </ButtonContainer>
       </SetupBoardMenu>
       <SetupBoardContainer>
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-        <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+        {favorite.map((e) => (
+          <Link to={`/PostDetail/${e.id}`} style={{ textDecoration: 'none' }}>
+            <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+            <Title>{e.title}</Title>
+          </Link>
+        ))}
       </SetupBoardContainer>
     </Container>
   );

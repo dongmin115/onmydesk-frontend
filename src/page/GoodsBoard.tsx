@@ -25,7 +25,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   item-align: center;
-  width: 100wh;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-bottom: 5vh;
 `;
 
 const GoodsBoardMenu = styled.div`
@@ -34,7 +36,7 @@ const GoodsBoardMenu = styled.div`
   justify-content: space-between;
   align-items: center;
   height: fit-content;
-  padding: 0 5% 2% 5%;
+  padding: 0;
 `;
 
 const GoodsBoardTitle = styled.h1`
@@ -53,7 +55,7 @@ const SetupBoardContainer = styled.div`
   gap: 3vh;
   text-align: center;
   align-items: center;
-  padding: 0% 5% 10vh 5%;
+  padding: 0;
   height: fit-content;
 `;
 
@@ -66,14 +68,14 @@ const Flexbox = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: 80vw;
+  width: 100%;
+  margin-bottom: 2rem;
 `;
 
 const Flexbox2 = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
-  width: fit-content;
   justify-content: end;
 `;
 
@@ -157,7 +159,7 @@ const Categoray = function () {
           variant="contained"
           color="primary"
           size="large"
-          style={{ width: '18%' }}
+          style={{ flex: 1 }}
         >
           전체
         </Button>
@@ -165,7 +167,7 @@ const Categoray = function () {
           variant="contained"
           color="secondary"
           size="large"
-          style={{ width: '18%' }}
+          style={{ flex: 1 }}
         >
           키보드
         </Button>
@@ -173,7 +175,7 @@ const Categoray = function () {
           variant="contained"
           color="secondary"
           size="large"
-          style={{ width: '18%' }}
+          style={{ flex: 1 }}
         >
           마우스
         </Button>
@@ -181,7 +183,7 @@ const Categoray = function () {
           variant="contained"
           color="secondary"
           size="large"
-          style={{ width: '18%' }}
+          style={{ flex: 1 }}
         >
           노트북
         </Button>
@@ -189,7 +191,7 @@ const Categoray = function () {
           variant="contained"
           color="secondary"
           size="large"
-          style={{ width: '18%' }}
+          style={{ flex: 1 }}
         >
           모니터
         </Button>
@@ -197,7 +199,7 @@ const Categoray = function () {
           variant="contained"
           color="secondary"
           size="large"
-          style={{ width: '18%' }}
+          style={{ flex: 1 }}
         >
           데스크
         </Button>
@@ -205,7 +207,7 @@ const Categoray = function () {
           variant="contained"
           color="secondary"
           size="large"
-          style={{ width: '18%' }}
+          style={{ flex: 1 }}
         >
           스피커
         </Button>
@@ -213,45 +215,45 @@ const Categoray = function () {
           variant="contained"
           color="secondary"
           size="large"
-          style={{ width: '18%' }}
+          style={{ flex: 1 }}
         >
           기타
         </Button>
+        <Flexbox2>
+          <Button
+            id="basic-button"
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+            size="large"
+            style={{ color: '#d3d3d3', fontSize: '1rem' }}
+            endIcon={<KeyboardArrowDown />}
+          >
+            정렬기준
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={handleClose}>인기순</MenuItem>
+            <MenuItem onClick={handleClose}>가격순</MenuItem>
+          </Menu>
+        </Flexbox2>
       </Flexbox>
-      <Flexbox2>
-        <Button
-          id="basic-button"
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-          size="large"
-          style={{ color: '#d3d3d3', fontSize: '1rem' }}
-          endIcon={<KeyboardArrowDown />}
-        >
-          정렬기준
-        </Button>
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <MenuItem onClick={handleClose}>인기순</MenuItem>
-          <MenuItem onClick={handleClose}>가격순</MenuItem>
-        </Menu>
-      </Flexbox2>
     </GoodsBoardMenu>
   );
 };
 export default function GoodsBoard() {
   return (
     <ThemeProvider theme={theme}>
+      <Navbar />
       <Container>
-        <Navbar />
         <GoodsBoardTitle>셋업에 사용된 상품을 둘러보세요!</GoodsBoardTitle>
         <Categoray />
         <SetupBoardContainer>

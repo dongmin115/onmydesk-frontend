@@ -235,7 +235,7 @@ const HotGoods = () => {
 };
 
 export default function Home() {
-  const { setName, setNickname } = userStore();
+  const { setName, setNickname, setEmail } = userStore();
 
   useEffect(() => {
     // 로그인 후 홈페이지로 이동하면 유저 정보를 가져옴
@@ -244,6 +244,7 @@ export default function Home() {
         const response = await getUserInfo();
         setName(response.data.name);
         setNickname(response.data.nickname);
+        setEmail(response.data.email);
       } catch (error) {
         console.error(error);
       }
