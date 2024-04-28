@@ -227,7 +227,7 @@ function Post_reg() {
               },
               ' .ql-toolbar': {
                 backgroundColor: '#aeaaaa',
-                border: 'none',
+                border: `none`,
               },
               ' .ql-container': {
                 borderColor: `#aeaaaa`,

@@ -14,6 +14,7 @@ import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
 import { KeyboardArrowDown } from '@mui/icons-material';
+import { Pagination } from '@mui/material';
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -73,6 +74,7 @@ const SetupBoardImage = styled.img`
 export default function SetupBoard() {
   const [posts, setPosts] = useState([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [pagenation, setPagenation] = useState(1);
   const open = Boolean(anchorEl);
   const [currentSortOption, setCurrentSortOption] = useState('최신순');
 
@@ -88,11 +90,11 @@ export default function SetupBoard() {
     setAnchorEl(null);
   };
 
-  const searchPosts = async (criteria: number): Promise<void> => {
+  const searchPosts = async (page: number, criteria: number): Promise<void> => {
     try {
       const response = await axios.get('http://localhost:8080/api/posts', {
         params: {
-          page: 1,
+          page: page,
           limit: 9,
           criteria: criteria,
         },
@@ -102,6 +104,11 @@ export default function SetupBoard() {
     } catch (error) {
       console.log('Error', error);
     }
+  };
+
+  const handlePageChange = (event, page, criteria) => {
+    setPagenation(page);
+    searchPosts(page, criteria);
   };
 
   const handleSortOptionClick = (
@@ -187,6 +194,17 @@ export default function SetupBoard() {
         </div>
       </SetupBoardMenu>
       <SetupBoardContainer>{renderPosts()}</SetupBoardContainer>
+      <Pagination
+        count={10} // 전체 페이지 수
+        page={pagenation} // 현재 페이지
+        color="primary"
+        onChange={handlePageChange}
+        sx={{
+          '& .MuiPaginationItem-root': { color: 'white', fontSize: '1vw' },
+        }}
+        style={{ marginBottom: '3vw' }}
+        // 페이지 변경 핸들러
+      />
     </Container>
   );
 }
