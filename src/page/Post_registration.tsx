@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+
 import Navbar from '../components/Navbar';
 import mouse from '../assets/image/Post_registration/mouse.svg';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { TextField } from '@mui/material';
+import { TextField, Box } from '@mui/material';
 
 const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzE0NDAzNzYyfQ.NyL8U7JNACzHpIM7dB9jV1Y8E-S9alwwlr1zhZVFR7Opc0R-39URxVuvob7PDjpD5ZL-fev2UqpZu8HX7yfvsg`;
 
@@ -17,17 +18,10 @@ const Centerdiv = styled.div`
   align-items: center;
 `;
 
-const ForText = styled.div`
-  //상단 텍스트
-  color: white;
-  font-size: 1.7vw;
-  margin-left: 1vw;
-`;
-
 const InputTextField = styled(TextField)({
   '& label': {
     // placeholder text color
-    color: 'grey',
+    color: '#aeaaaa',
     fontSize: '1.4vw',
   },
 });
@@ -92,6 +86,8 @@ function Post_reg() {
 
   const modules = {
     toolbar: [
+      [{ font: [] }],
+      [{ size: ['small', false, 'large', 'huge'] }],
       [{ header: [1, 2, false] }],
       ['bold', 'italic', 'underline', 'strike'],
       [
@@ -107,6 +103,8 @@ function Post_reg() {
   };
 
   const formats = [
+    'font',
+    'size',
     'header',
     'bold',
     'italic',
@@ -189,59 +187,70 @@ function Post_reg() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginTop: '3vw',
         }}
       >
-        <div
-          style={{
-            background: 'linear-gradient(to left, #515151, #808080be)',
-            padding: '1vw',
-            height: '87vw',
-            borderRadius: '1vw',
-          }}
-        >
-          <ForText>셋업 등록하기</ForText>
-
-          <Centerdiv style={{ marginTop: '1vw' }}>
-            <InputTextField
-              sx={{
-                input: {
-                  color: 'white',
-                  fontSize: '1.3vw',
-                  marginTop: '0.5vw',
-                },
-              }}
-              id="filled-basic"
-              label="Title"
-              variant="filled"
+        <div>
+          <Centerdiv style={{ marginTop: '2vw' }}>
+            <div
               style={{
-                width: '68vw',
-                backgroundColor: '#3c3c3c',
-                color: 'white',
+                background: '#3c3c3c',
+                borderRadius: '10px',
               }}
-              value={title}
-              onChange={titlehandle}
-            />
+            >
+              <InputTextField
+                sx={{
+                  input: {
+                    color: 'white',
+                    fontSize: '1.3vw',
+                    marginTop: '0.5vw',
+                  },
+                }}
+                size="small"
+                id="filled-basic"
+                label="Title"
+                variant="filled"
+                style={{
+                  width: '68vw',
+                }}
+                value={title}
+                onChange={titlehandle}
+              />
+            </div>
           </Centerdiv>
-
-          <ReactQuill
-            style={{ height: `500px`, marginTop: '1vw' }}
-            theme="snow"
-            modules={modules}
-            formats={formats}
-            onChange={handleQuillChange}
-          />
+          <Box
+            sx={{
+              '  .ql-editor': {
+                margin: '2px',
+                backgroundColor: '#3c3c3c',
+                fontSize: '20px',
+                color: 'white',
+              },
+              ' .ql-toolbar': {
+                backgroundColor: '#aeaaaa',
+                border: 'none',
+              },
+              ' .ql-container': {
+                borderColor: `#aeaaaa`,
+              },
+            }}
+          >
+            <ReactQuill
+              style={{ height: `600px`, marginTop: '1vw', marginBottom: '1vw' }}
+              theme="snow"
+              modules={modules}
+              formats={formats}
+              onChange={handleQuillChange}
+            />
+          </Box>
 
           <div style={{ display: 'flex' }}>
-            <ForText style={{ marginTop: '2vw' }}>상품 등록</ForText>
             <Item_button
               style={{
                 color: '#349af8',
-                marginTop: '2.3vw',
-                marginLeft: '1vw',
+                marginTop: '3vw',
               }}
             >
-              추가
+              게시글 상품 추가
             </Item_button>
           </div>
 
