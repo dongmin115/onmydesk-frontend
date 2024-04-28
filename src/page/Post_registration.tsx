@@ -3,15 +3,13 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import logo from '../assets/logo.svg';
-import thumbnail from '../assets/image/Post_registration/thumbnail.svg';
-import extraimage from '../assets/image/Post_registration/extraimage.svg';
 import mouse from '../assets/image/Post_registration/mouse.svg';
-import { Editor, EditorState, RichUtils } from 'draft-js';
+import ReactQuill, { Quill } from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 import { TextField } from '@mui/material';
 
-const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMjg5NTgyfQ.RHsbFOr9rsSCdRnrTZOwDX_BRXa7Cu_nsblSOxWTSxmJRbM5WCVZYSsvaxATlBxOlwT-pc4GvFWRAwCLDZaKHg`;
+const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzE0NDAzNzYyfQ.NyL8U7JNACzHpIM7dB9jV1Y8E-S9alwwlr1zhZVFR7Opc0R-39URxVuvob7PDjpD5ZL-fev2UqpZu8HX7yfvsg`;
 
 const Centerdiv = styled.div`
   display: flex;
@@ -33,59 +31,6 @@ const InputTextField = styled(TextField)({
     fontSize: '1.4vw',
   },
 });
-
-const Main_text_field = styled.textarea`
-  //본문 작성 필드
-  background-color: #3c3c3c;
-  color: white;
-  border: 2px solid #424242;
-  margin: 1vw;
-  width: 68vw;
-  height: 30vw;
-  font-size: 1.2vw;
-  padding: 0.5vw;
-  outline: none;
-  resize: none;
-  transition: 0.3s;
-
-  ::placeholder {
-    color: #aaaaaa;
-  }
-
-  &:focus {
-    border-color: #349af8;
-  }
-`;
-
-const Thumbnailbutton = styled.button`
-  //사진 추가 버튼
-  margin: 1vw;
-  border: none;
-  background-color: transparent;
-  padding: 0%;
-  border-radius: 2.5vw;
-  cursor: pointer;
-
-  box-shadow: 0 0 0 0 transparent;
-
-  &:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5);
-  }
-`;
-
-const Thumbnail_image = styled.img`
-  //썸네일 이미지
-  border-radius: 2.5vw;
-  width: 30vw;
-  pointer-events: none;
-`;
-
-const Extra_image = styled.img`
-  //추가 이미지
-  border-radius: 2.5vw;
-  width: 13.5vw;
-  pointer-events: none;
-`;
 
 const Item_box = styled.div`
   //상품 등록 박스
@@ -140,24 +85,46 @@ const Finbutton = styled.button`
 function Post_reg() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
 
-  const handleEditorChange = (newEditorState) => {
-    setEditorState(newEditorState);
+  const handleQuillChange = (content, delta, source, editor) => {
+    setContent(editor.getContents());
   };
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      [{ align: [] }, { color: [] }, { background: [] }], // dropdown with defaults from theme
+      ['clean'],
+    ],
+  };
+
+  const formats = [
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'align',
+    'color',
+    'background',
+  ];
 
   const titlehandle = (event) => {
     setTitle(event.target.value);
-  };
-
-  const toggleInlineStyle = (style) => {
-    handleEditorChange(RichUtils.toggleInlineStyle(editorState, style));
-  };
-
-  const contenthandle = (event) => {
-    setContent(event.target.value);
   };
 
   useEffect(() => {
@@ -257,12 +224,12 @@ function Post_reg() {
             />
           </Centerdiv>
 
-          <ForText style={{ marginTop: '4vw' }}>글 작성하기</ForText>
-
-          <Editor
-            editorState={editorState}
-            onChange={handleEditorChange}
-            placeholder="내용을 입력하세요..."
+          <ReactQuill
+            style={{ height: `500px`, marginTop: '1vw' }}
+            theme="snow"
+            modules={modules}
+            formats={formats}
+            onChange={handleQuillChange}
           />
 
           <div style={{ display: 'flex' }}>
