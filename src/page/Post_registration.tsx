@@ -81,7 +81,7 @@ function Post_reg() {
   const [content, setContent] = useState('');
 
   const handleQuillChange = (content, delta, source, editor) => {
-    setContent(editor.getContents());
+    setContent(content);
   };
 
   const modules = {

@@ -81,8 +81,8 @@ function Post_fix() {
   const [content, setContent] = useState('');
   const { id } = useParams();
 
-  const handleQuillChange = (content, delta, source, editor) => {
-    setContent(editor.getContents());
+  const handleQuillChange = (content) => {
+    setContent(content);
   };
 
   const modules = {
@@ -241,11 +241,10 @@ function Post_fix() {
             <Item_button
               style={{
                 color: '#349af8',
-                marginTop: '2.3vw',
-                marginLeft: '1vw',
+                marginTop: '3vw',
               }}
             >
-              추가
+              게시글 상품 추가
             </Item_button>
           </div>
 

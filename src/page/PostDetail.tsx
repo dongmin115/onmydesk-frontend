@@ -407,8 +407,8 @@ const PostDetail = () => {
           </Button>
         </Circle>
       </RightBox>
-      <TextContainer>
-        <Text>{posts.content}</Text>
+      <TextContainer style={{ display: 'flex', justifyContent: 'center' }}>
+        <div dangerouslySetInnerHTML={{ __html: posts.content }} />
       </TextContainer>
       <SetupItemContainer>
         <SetupItem>Setup Item</SetupItem>
