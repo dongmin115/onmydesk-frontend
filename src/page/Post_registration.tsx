@@ -10,8 +10,6 @@ import 'react-quill/dist/quill.snow.css';
 
 import { TextField, Box } from '@mui/material';
 
-const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzE0NDAzNzYyfQ.NyL8U7JNACzHpIM7dB9jV1Y8E-S9alwwlr1zhZVFR7Opc0R-39URxVuvob7PDjpD5ZL-fev2UqpZu8HX7yfvsg`;
-
 const Centerdiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -165,7 +163,7 @@ function Post_reg() {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         }
       );
