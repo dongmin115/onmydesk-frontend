@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Navbar from '../components/Navbar';
-import thumbnail from '../assets/image/Post_registration/thumbnail.svg';
-import extraimage from '../assets/image/Post_registration/extraimage.svg';
 import mouse from '../assets/image/Post_registration/mouse.svg';
+import ReactQuill, { Quill } from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
-import { TextField } from '@mui/material';
+import { TextField, Box } from '@mui/material';
 
-const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMTg4NDI2fQ.qlAK2U2-OKadyTY460jjkmbk7JrqF15jHsCbTYhy4WZdXjf9XEHzdeBSQddbQRigZHGK4aSPBoivI8lYhpEGCg`;
+const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzE0NDAzNzYyfQ.NyL8U7JNACzHpIM7dB9jV1Y8E-S9alwwlr1zhZVFR7Opc0R-39URxVuvob7PDjpD5ZL-fev2UqpZu8HX7yfvsg`;
 
 const Centerdiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const ForText = styled.div`
-  //상단 텍스트
-  color: white;
-  font-size: 1.7vw;
-  margin-left: 1vw;
 `;
 
 const InputTextField = styled(TextField)({
@@ -32,59 +25,6 @@ const InputTextField = styled(TextField)({
     fontSize: '1.4vw',
   },
 });
-
-const Main_text_field = styled.textarea`
-  //본문 작성 필드
-  background-color: #3c3c3c;
-  color: white;
-  border: 2px solid #424242;
-  margin: 1vw;
-  width: 68vw;
-  height: 30vw;
-  font-size: 1.2vw;
-  padding: 0.5vw;
-  outline: none;
-  resize: none;
-  transition: 0.3s;
-
-  ::placeholder {
-    color: #aaaaaa;
-  }
-
-  &:focus {
-    border-color: #349af8;
-  }
-`;
-
-const Thumbnailbutton = styled.button`
-  //사진 추가 버튼
-  margin: 1vw;
-  border: none;
-  background-color: transparent;
-  padding: 0%;
-  border-radius: 2.5vw;
-  cursor: pointer;
-
-  box-shadow: 0 0 0 0 transparent;
-
-  &:hover {
-    box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.5);
-  }
-`;
-
-const Thumbnail_image = styled.img`
-  //썸네일 이미지
-  border-radius: 2.5vw;
-  width: 30vw;
-  pointer-events: none;
-`;
-
-const Extra_image = styled.img`
-  //추가 이미지
-  border-radius: 2.5vw;
-  width: 13.5vw;
-  pointer-events: none;
-`;
 
 const Item_box = styled.div`
   //상품 등록 박스
@@ -141,12 +81,49 @@ function Post_fix() {
   const [content, setContent] = useState('');
   const { id } = useParams();
 
-  const titlehandle = (event) => {
-    setTitle(event.target.value);
+  const handleQuillChange = (content) => {
+    setContent(content);
   };
 
-  const contenthandle = (event) => {
-    setContent(event.target.value);
+  const modules = {
+    toolbar: [
+      [{ font: [] }],
+      [{ size: ['small', false, 'large', 'huge'] }],
+      [{ header: [1, 2, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
+      ],
+      ['link', 'image'],
+      [{ align: [] }, { color: [] }, { background: [] }], // dropdown with defaults from theme
+      ['clean'],
+    ],
+  };
+
+  const formats = [
+    'font',
+    'size',
+    'header',
+    'bold',
+    'italic',
+    'underline',
+    'strike',
+    'blockquote',
+    'list',
+    'bullet',
+    'indent',
+    'link',
+    'image',
+    'align',
+    'color',
+    'background',
+  ];
+
+  const titlehandle = (event) => {
+    setTitle(event.target.value);
   };
 
   const Handlefix = async () => {
@@ -156,7 +133,30 @@ function Post_fix() {
         {
           title: `${title}`,
           content: `${content}`,
+          products: [
+            {
+              productName:
+                'Apple <b>아이패드</b> 에어 5세대 M1 WIFI 64G 스페이스 그레이 (MM9C3KH/A)',
+              img: 'https://shopping-phinf.pstatic.net/main_3153084/31530843620.20220705164247.jpg',
+              productCode: '31530843620',
+              lprice: 828490,
+              brand: 'Apple',
+              maker: 'Apple',
+              category1: '디지털/가전',
+              category2: '태블릿PC',
+              category3: 'string',
+              category4: 'string',
+              pages: [
+                {
+                  price: 829690,
+                  link: 'https://search.shopping.naver.com/gate.nhn?id=31530843620',
+                  storeName: '네이버',
+                },
+              ],
+            },
+          ],
         },
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -181,85 +181,70 @@ function Post_fix() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginTop: '3vw',
         }}
       >
-        <div
-          style={{
-            background: 'linear-gradient(to left, #515151, #808080be)',
-            padding: '1vw',
-            height: '87vw',
-            borderRadius: '1vw',
-          }}
-        >
-          <ForText>셋업 등록하기</ForText>
-
-          <Centerdiv style={{ marginTop: '1vw' }}>
-            <InputTextField
-              sx={{
-                input: {
-                  color: 'white',
-                  fontSize: '1.3vw',
-                  marginTop: '0.5vw',
-                },
-              }}
-              id="filled-basic"
-              label="Title"
-              variant="filled"
+        <div>
+          <Centerdiv style={{ marginTop: '2vw' }}>
+            <div
               style={{
-                width: '68vw',
-                backgroundColor: '#3c3c3c',
-                color: 'white',
+                background: '#3c3c3c',
+                borderRadius: '10px',
               }}
-              value={title}
-              onChange={titlehandle}
-            />
-            <div style={{ display: 'flex' }}>
-              <div>
-                <Thumbnailbutton>
-                  <Thumbnail_image src={thumbnail} />
-                </Thumbnailbutton>
-              </div>
-              <div>
-                <div style={{ display: 'flex' }}>
-                  <Thumbnailbutton>
-                    <Extra_image src={extraimage} />
-                  </Thumbnailbutton>
-                  <Thumbnailbutton>
-                    <Extra_image src={extraimage} />
-                  </Thumbnailbutton>
-                </div>
-                <div style={{ display: 'flex' }}>
-                  <Thumbnailbutton>
-                    <Extra_image src={extraimage} />
-                  </Thumbnailbutton>
-                  <Thumbnailbutton>
-                    <Extra_image src={extraimage} />
-                  </Thumbnailbutton>
-                </div>
-              </div>
+            >
+              <InputTextField
+                sx={{
+                  input: {
+                    color: 'white',
+                    fontSize: '1.3vw',
+                    marginTop: '0.5vw',
+                  },
+                }}
+                size="small"
+                id="filled-basic"
+                label="Title"
+                variant="filled"
+                style={{
+                  width: '68vw',
+                }}
+                value={title}
+                onChange={titlehandle}
+              />
             </div>
           </Centerdiv>
-
-          <ForText style={{ marginTop: '4vw' }}>글 작성하기</ForText>
-
-          <Centerdiv>
-            <Main_text_field
-              placeholder="셋업을 소개하는 글을 작성해보세요."
-              value={content}
-              onChange={contenthandle}
+          <Box
+            sx={{
+              '  .ql-editor': {
+                margin: '2px',
+                backgroundColor: '#3c3c3c',
+                fontSize: '20px',
+                color: 'white',
+              },
+              ' .ql-toolbar': {
+                backgroundColor: '#aeaaaa',
+                border: 'none',
+              },
+              ' .ql-container': {
+                borderColor: `#aeaaaa`,
+              },
+            }}
+          >
+            <ReactQuill
+              style={{ height: `600px`, marginTop: '1vw', marginBottom: '1vw' }}
+              theme="snow"
+              modules={modules}
+              formats={formats}
+              onChange={handleQuillChange}
             />
-          </Centerdiv>
+          </Box>
+
           <div style={{ display: 'flex' }}>
-            <ForText style={{ marginTop: '2vw' }}>상품 등록</ForText>
             <Item_button
               style={{
                 color: '#349af8',
-                marginTop: '2.3vw',
-                marginLeft: '1vw',
+                marginTop: '3vw',
               }}
             >
-              추가
+              게시글 상품 추가
             </Item_button>
           </div>
 
