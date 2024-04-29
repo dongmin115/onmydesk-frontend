@@ -15,8 +15,6 @@ import { Link, useParams } from 'react-router-dom';
 import SetupBoard from './SetupBoard';
 import { useState, useEffect, useCallback } from 'react';
 
-const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMjg5NTgyfQ.RHsbFOr9rsSCdRnrTZOwDX_BRXa7Cu_nsblSOxWTSxmJRbM5WCVZYSsvaxATlBxOlwT-pc4GvFWRAwCLDZaKHg`;
-
 const SetupTitleContainer = styled.div`
   width: 100%;
   height: 12vh;
@@ -308,7 +306,7 @@ const PostDetail = () => {
 
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         }
       );
