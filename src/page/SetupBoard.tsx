@@ -73,10 +73,12 @@ const SetupBoardImage = styled.img`
   height: 100%;
   border-radius: 1rem;
   drop-shadow: 0 0 0.5rem #000000;
-  transition: transform 0.5s;
+  transition-duration: 0.5s;
 
+  /* 이미지 위에 마우스를 올렸을 때 약간 확대합니다 */
   &:hover {
     transform: scale(1.05);
+    filter: brightness(0.3);
   }
 `;
 
@@ -132,13 +134,11 @@ export default function SetupBoard() {
   const renderPosts = () => {
     return posts.map((post) => (
       <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
-        <button style={{ border: 'none', background: 'transparent' }}>
-          <SetupBoardImage
-            key={post.id}
-            src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
-            alt={post.title}
-          />
-        </button>
+        <SetupBoardImage
+          key={post.id}
+          src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
+          alt={post.title}
+        />
         <Title>{post.title}</Title>
       </Link>
     ));
