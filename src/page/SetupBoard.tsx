@@ -5,6 +5,7 @@ import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
 import {
   Button,
+  IconButton,
   InputAdornment,
   Menu,
   MenuItem,
@@ -14,9 +15,10 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
-import { ChatBubbleOutline, KeyboardArrowDown } from '@mui/icons-material';
+import { KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
 import { Pagination } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
+import { favorite } from '../api/Favorite';
 
 const theme = createTheme({
   palette: {
@@ -200,7 +202,15 @@ export default function SetupBoard() {
                   gap: '0.5rem',
                 }}
               >
-                <FavoriteBorder color="success" />
+                <IconButton
+                  onClick={(e) => {
+                    e.preventDefault(); // Link의 기본 동작을 막음
+                    e.stopPropagation(); // 이벤트 전파를 막음
+                    favorite(post.id);
+                  }}
+                >
+                  <FavoriteBorder color="success" />
+                </IconButton>
                 <p>{post.heartCount}</p>
               </div>
               <div
@@ -212,7 +222,7 @@ export default function SetupBoard() {
                   gap: '0.5rem',
                 }}
               >
-                <ChatBubbleOutline />
+                <RemoveRedEye />
                 <p>{post.viewCount}</p>
               </div>
             </div>
