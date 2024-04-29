@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserInfo } from '../api/User';
 import { userStore } from '../store';
+import axios from 'axios';
 
 // 컨테이너 스타일
 const Container = styled.div`
@@ -128,7 +129,7 @@ const HotGoodsImage = styled.img`
   }
 `;
 
-const HotDesk = () => {
+const HotDesk = (props) => {
   return (
     <>
       <HotDeskTitle>Today Hot Desk</HotDeskTitle>
@@ -137,30 +138,35 @@ const HotDesk = () => {
       </HotDeskDescription>
       <HotDeskImageContainer>
         <HotDeskImageLayer>
+          {/* src={props.hotDesk[3].thumbnail} */}
           <HotDeskImage
             src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
             alt="hot-desk"
           />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
+          {/* src={props.hotDesk[1].thumbnail} */}
           <HotDeskImage
             src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
             alt="hot-desk"
           />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
+          {/* src={props.hotDesk[0].thumbnail} */}
           <HotDeskImage
             src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
             alt="hot-desk"
           />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
+          {/* src={props.hotDesk[2].thumbnail} */}
           <HotDeskImage
             src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
             alt="hot-desk"
           />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
+          {/* src={props.hotDesk[4].thumbnail} */}
           <HotDeskImage
             src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
             alt="hot-desk"
@@ -236,6 +242,7 @@ const HotGoods = () => {
 
 export default function Home() {
   const { setName, setNickname, setEmail } = userStore();
+  const [hotDesk, setHotDesk] = useState([]);
 
   useEffect(() => {
     // 로그인 후 홈페이지로 이동하면 유저 정보를 가져옴
@@ -249,14 +256,28 @@ export default function Home() {
         console.error(error);
       }
     };
-
+    const fetchHotDesk = async (): Promise<void> => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/posts', {
+          params: {
+            page: 1,
+            limit: 5,
+            criteria: 2,
+          },
+        });
+        setHotDesk(response.data.data);
+      } catch (error) {
+        console.log('Error', error);
+      }
+    };
+    fetchHotDesk();
     fetchUserInfo();
   }, []);
   return (
     <Container>
       <Navbar />
       <SectionContainer>
-        <HotDesk />
+        <HotDesk hotDesk={hotDesk} />
       </SectionContainer>
       <SectionContainer>
         <HotGoods />
