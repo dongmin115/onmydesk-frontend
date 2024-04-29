@@ -22,6 +22,7 @@ export const favorite = async (postId: number) => {
   try {
     const response = await axios.post(
       `http://localhost:8080/api/posts/hearts/${postId}`,
+      {},
       {
         headers: {
           'Content-Type': 'application/json',
