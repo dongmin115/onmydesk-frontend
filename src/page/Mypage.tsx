@@ -5,12 +5,34 @@ import Dropdown from '../components/Dropdown.tsx';
 import profile from '../assets/image/mypage/profile-image.svg';
 import plusbox from '../assets/image/mypage/plusbox.svg';
 import Navbar from '../components/Navbar.tsx';
-import { Box, Button, IconButton, Modal, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Modal,
+  TextField,
+  ThemeProvider,
+  createTheme,
+} from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../store.ts';
 import { deleteUser, putUserInfo } from '../api/User.ts';
 import { FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
 import { favorite, getFavorite } from '../api/Favorite.ts';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#0085FF',
+    },
+    secondary: {
+      main: '#4F4F4F',
+    },
+    success: {
+      main: '#E24E4E',
+    },
+  },
+});
 
 // 스타일드 컴포넌트 생성
 const Container = styled.div`
@@ -187,16 +209,18 @@ function Mypage() {
   };
 
   useEffect(() => {
-    const fetchFavorite = async () => {
-      try {
-        const response = await getFavorite();
-        await setPosts(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    if (name) {
+      const fetchFavorite = async () => {
+        try {
+          const response = await getFavorite();
+          await setPosts(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
-    fetchFavorite();
+      fetchFavorite();
+    }
   }, []);
 
   const renderPosts = () => {
@@ -258,7 +282,7 @@ function Mypage() {
   };
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Navbar />
       <Container>
         <TitleContainer>
@@ -401,7 +425,9 @@ function Mypage() {
             <Button style={{ fontSize: '1vw' }}>전체보기</Button>
           </Link>
         </TitleContainer>
-        <SetupContainer>{renderPosts()}</SetupContainer>
+        <SetupContainer>
+          {posts.length > 0 ? renderPosts() : '좋아요한 게시물이 없습니다'}
+        </SetupContainer>
         <TitleContainer>
           <TitleText>나만의 데스크탑</TitleText>
           <Dropdown />
@@ -458,7 +484,7 @@ function Mypage() {
           </div>
         </div>
       </Container>
-    </>
+    </ThemeProvider>
   );
 }
 
