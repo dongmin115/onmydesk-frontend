@@ -1,19 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
 import CustomModal from '../components/Modal.tsx';
 import Dropdown from '../components/Dropdown.tsx';
-
 import profile from '../assets/image/mypage/profile-image.svg';
-import textbox from '../assets/image/mypage/text.svg';
 import plusbox from '../assets/image/mypage/plusbox.svg';
-import chat from '../assets/image/mypage/chat.svg';
 import Navbar from '../components/Navbar.tsx';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { Box, Button, Modal, TextField } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Modal,
+  TextField,
+  ThemeProvider,
+  createTheme,
+} from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../store.ts';
 import { deleteUser, putUserInfo } from '../api/User.ts';
+import { FavoriteBorder, RemoveRedEye, Title } from '@mui/icons-material';
+import { favorite, getFavorite } from '../api/Favorite.ts';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#0085FF',
+    },
+    secondary: {
+      main: '#4F4F4F',
+    },
+    success: {
+      main: '#E24E4E',
+    },
+  },
+});
 
 // 스타일드 컴포넌트 생성
 const Container = styled.div`
@@ -92,60 +111,6 @@ const SetupContainer = styled.div`
   gap: 2rem;
 `;
 
-const Setupbutton = styled.button`
-  flex: 1;
-  border: none;
-  background-color: transparent;
-  padding: 0%;
-  border-radius: 1vw;
-  cursor: pointer;
-  transition: 0.5s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
-
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-
-const PostImage = styled.img`
-  //좋아요 게시물 이미지
-  pointer-events: none;
-  border-radius: 1vw 1vw 0 0;
-  width: 100%;
-`;
-
-const Postinfo = styled.div`
-  background: #3d3d3d;
-  height: 5vw;
-  border-radius: 0 0 1vw 1vw;
-`;
-
-const PostTitle = styled.div`
-  display: flex;
-  font-size: 1.2vw;
-  font-family: -moz-initial;
-  color: white;
-  padding: 0.5vw;
-  margin-left: 0.5vw;
-`;
-
-const PostItem = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Postdetail = styled.div`
-  display: flex;
-  align-items: center;
-  color: white;
-`;
-
-const Text = styled.div`
-  white-space: nowrap;
-  font-size: 0.9vw;
-  margin-left: 0.3vw;
-`;
-
 const Plusbutton = styled.button`
   //나만의 데스크탑 아이템 추가 버튼
   margin: 0.5vw;
@@ -181,12 +146,51 @@ const Flexdiv2 = styled.div`
   align-items: start;
 `;
 
+const ImageContainer = styled.div`
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+`;
+
+const SetupBoardImage = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  drop-shadow: 0 0 0.5rem #000000;
+  transition: transform 0.5s;
+
+  /* 이미지 위에 마우스를 올렸을 때 약간 확대합니다 */
+  ${ImageContainer}:hover & {
+    transform: scale(1.05);
+    filter: brightness(0.3);
+  }
+`;
+
+const Caption = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.3s;
+
+  /* 호버 시 투명도 변경 */
+  ${ImageContainer}:hover & {
+    opacity: 1;
+  }
+`;
+
 function Mypage() {
   const navigate = useNavigate();
 
   const { name, nickname, email, setNickname } = userStore();
   const [newNickname, setNewNickname] = useState('');
-
+  const [posts, setPosts] = useState([]);
   const [IsModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -204,8 +208,81 @@ function Mypage() {
     setIsUserInfoModalOpen(false);
   };
 
+  useEffect(() => {
+    if (name) {
+      const fetchFavorite = async () => {
+        try {
+          const response = await getFavorite();
+          await setPosts(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchFavorite();
+    }
+  }, []);
+
+  const renderPosts = () => {
+    return posts.map((post: any) => (
+      <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
+        <ImageContainer>
+          <SetupBoardImage
+            key={post.id}
+            src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
+            alt={post.title}
+          />
+          <Caption>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '1.5rem',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                }}
+              >
+                <IconButton
+                  onClick={(e) => {
+                    e.preventDefault(); // Link의 기본 동작을 막음
+                    e.stopPropagation(); // 이벤트 전파를 막음
+                    favorite(post.id);
+                  }}
+                >
+                  <FavoriteBorder color="success" />
+                </IconButton>
+                <p>{post.heartCount}</p>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '0.5rem',
+                }}
+              >
+                <RemoveRedEye />
+                <p>{post.viewCount}</p>
+              </div>
+            </div>
+          </Caption>
+        </ImageContainer>
+      </Link>
+    ));
+  };
+
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Navbar />
       <Container>
         <TitleContainer>
@@ -349,100 +426,20 @@ function Mypage() {
           </Link>
         </TitleContainer>
         <SetupContainer>
-          <Setupbutton>
-            <PostImage src={textbox} />
-            <Postinfo>
-              <PostTitle>Setup Title</PostTitle>
-              <PostItem>
-                <Postdetail style={{ marginLeft: '0.5vw' }}>
-                  <img src={profile} style={{ width: '1.3vw' }} />
-                  <Text>작성자</Text>
-                </Postdetail>
-                <Postdetail style={{ marginRight: '0.5vw' }}>
-                  <FavoriteBorderIcon
-                    style={{ width: '1.3vw', color: 'red' }}
-                  />
-                  <Text>24</Text>
-                  <img
-                    src={chat}
-                    style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                  />{' '}
-                  <Text>5</Text>
-                </Postdetail>
-              </PostItem>
-            </Postinfo>
-          </Setupbutton>
-          <Setupbutton>
-            <PostImage src={textbox} />
-            <Postinfo>
-              <PostTitle>Setup Title</PostTitle>
-              <PostItem>
-                <Postdetail style={{ marginLeft: '0.5vw' }}>
-                  <img src={profile} style={{ width: '1.3vw' }} />
-                  <Text>작성자</Text>
-                </Postdetail>
-                <Postdetail style={{ marginRight: '0.5vw' }}>
-                  <FavoriteBorderIcon
-                    style={{ width: '1.3vw', color: 'red' }}
-                  />
-                  <Text>24</Text>
-                  <img
-                    src={chat}
-                    style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                  />{' '}
-                  <Text>5</Text>
-                </Postdetail>
-              </PostItem>
-            </Postinfo>
-          </Setupbutton>
-          <Setupbutton>
-            <PostImage src={textbox} />
-
-            <Postinfo>
-              <PostTitle>Setup Title</PostTitle>
-              <PostItem>
-                <Postdetail style={{ marginLeft: '0.5vw' }}>
-                  <img src={profile} style={{ width: '1.3vw' }} />
-                  <Text>작성자</Text>
-                </Postdetail>
-                <Postdetail style={{ marginRight: '0.5vw' }}>
-                  <FavoriteBorderIcon
-                    style={{ width: '1.3vw', color: 'red' }}
-                  />
-                  <Text>24</Text>
-                  <img
-                    src={chat}
-                    style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                  />{' '}
-                  <Text>5</Text>
-                </Postdetail>
-              </PostItem>
-            </Postinfo>
-          </Setupbutton>
-          <Setupbutton>
-            <PostImage src={textbox} />
-
-            <Postinfo>
-              <PostTitle>Setup Title</PostTitle>
-              <PostItem>
-                <Postdetail style={{ marginLeft: '0.5vw' }}>
-                  <img src={profile} style={{ width: '1.3vw' }} />
-                  <Text>작성자</Text>
-                </Postdetail>
-                <Postdetail style={{ marginRight: '0.5vw' }}>
-                  <FavoriteBorderIcon
-                    style={{ width: '1.3vw', color: 'red' }}
-                  />
-                  <Text>24</Text>
-                  <img
-                    src={chat}
-                    style={{ width: '1.3vw', marginLeft: '0.5vw' }}
-                  />{' '}
-                  <Text>5</Text>
-                </Postdetail>
-              </PostItem>
-            </Postinfo>
-          </Setupbutton>
+          {posts.length > 0 ? (
+            renderPosts()
+          ) : (
+            <p
+              style={{
+                width: '100%',
+                textAlign: 'center',
+                color: 'white',
+                fontSize: '1.5rem',
+              }}
+            >
+              좋아요한 게시물이 없습니다
+            </p>
+          )}
         </SetupContainer>
         <TitleContainer>
           <TitleText>나만의 데스크탑</TitleText>
@@ -500,7 +497,7 @@ function Mypage() {
           </div>
         </div>
       </Container>
-    </>
+    </ThemeProvider>
   );
 }
 
