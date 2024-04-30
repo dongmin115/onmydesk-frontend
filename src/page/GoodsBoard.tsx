@@ -1,10 +1,20 @@
-import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import {
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  CircularProgress,
+  InputAdornment,
+  TextField,
+} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useState } from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
 
 const theme = createTheme({
   palette: {
@@ -121,29 +131,29 @@ const FavoriteButton = styled.div`
   align-items: center;
 `;
 
-const GoodsItem = function () {
+const GoodsItem = function ({ product }) {
   return (
     <GoodsBoardFlexbox>
-      <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
+      <SetupBoardImage src={product.img} alt={product.productName} />
       <GoodsBoardInfo>
         <GoodsBoardInfoFlexbox>
-          <p>맥북 프로 16인치 2021 M1 맥스</p>
+          <p>{product.productName}</p>
           <FavoriteButton>
             <IconButton>
               <FavoriteIcon color="success" />
             </IconButton>
-            <p>12</p>
+            <p>{product.price}</p>
           </FavoriteButton>
         </GoodsBoardInfoFlexbox>
         <GoodsBoardInfoFlexbox>
-          <p>최저가 19,000원</p>
+          <p>{`최저가 ${product.price}원`}</p>
         </GoodsBoardInfoFlexbox>
       </GoodsBoardInfo>
     </GoodsBoardFlexbox>
   );
 };
 
-const Categoray = function () {
+const Category = function () {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -250,23 +260,74 @@ const Categoray = function () {
   );
 };
 export default function GoodsBoard() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async (query = '') => {
+    console.log(`Fetching products with query: ${query}`);
+    setLoading(true);
+    try {
+      let url = 'http://localhost:8080/api/products';
+      const params = { display: 10 };
+      if (query) {
+        url += '/search'; // 검색어가 있을 때만 search endpoint 호출
+        params.query = query;
+      }
+      const response = await axios.get(url, { params });
+      console.log('Response data:', response.data);
+      setProducts(response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setError('상품을 불러오는데 실패했습니다.');
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = () => {
+    fetchProducts(searchQuery);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Navbar />
+      <TextField
+        id="standard-basic"
+        variant="standard"
+        placeholder="검색어를 입력해주세요."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        color="primary"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <IconButton onClick={handleSearch} style={{ padding: 0 }}>
+                <SearchIcon color="primary" style={{ cursor: 'pointer' }} />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
       <Container>
         <GoodsBoardTitle>셋업에 사용된 상품을 둘러보세요!</GoodsBoardTitle>
-        <Categoray />
-        <SetupBoardContainer>
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-        </SetupBoardContainer>
+        <Category />
+        {loading ? (
+          <CircularProgress />
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <SetupBoardContainer>
+            {products.map((product) => (
+              <GoodsItem key={product.id} product={product} />
+            ))}
+          </SetupBoardContainer>
+        )}
       </Container>
     </ThemeProvider>
   );
