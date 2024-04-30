@@ -131,22 +131,25 @@ const FavoriteButton = styled.div`
   align-items: center;
 `;
 
-const GoodsItem = function ({ product }) {
+const GoodsItem = function (props) {
   return (
     <GoodsBoardFlexbox>
-      <SetupBoardImage src={product.img} alt={product.productName} />
+      <SetupBoardImage
+        src={props.product.img}
+        alt={props.product.productName}
+      />
       <GoodsBoardInfo>
         <GoodsBoardInfoFlexbox>
-          <p>{product.productName}</p>
+          <p>{props.product.productName}</p>
           <FavoriteButton>
             <IconButton>
               <FavoriteIcon color="success" />
             </IconButton>
-            <p>{product.price}</p>
+            <p>{props.product.price}</p>
           </FavoriteButton>
         </GoodsBoardInfoFlexbox>
         <GoodsBoardInfoFlexbox>
-          <p>{`최저가 ${product.price}원`}</p>
+          <p>{`최저가 ${props.product.lprice}원`}</p>
         </GoodsBoardInfoFlexbox>
       </GoodsBoardInfo>
     </GoodsBoardFlexbox>
@@ -265,10 +268,6 @@ export default function GoodsBoard() {
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
   const fetchProducts = async (query = '') => {
     console.log(`Fetching products with query: ${query}`);
     setLoading(true);
@@ -281,7 +280,8 @@ export default function GoodsBoard() {
       }
       const response = await axios.get(url, { params });
       console.log('Response data:', response.data);
-      setProducts(response.data.data);
+      await setProducts(response.data);
+      console.log('Products:', products);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
