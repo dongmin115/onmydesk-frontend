@@ -17,7 +17,7 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../store.ts';
 import { deleteUser, putUserInfo } from '../api/User.ts';
-import { FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
+import { FavoriteBorder, RemoveRedEye, Title } from '@mui/icons-material';
 import { favorite, getFavorite } from '../api/Favorite.ts';
 
 const theme = createTheme({
@@ -426,7 +426,20 @@ function Mypage() {
           </Link>
         </TitleContainer>
         <SetupContainer>
-          {posts.length > 0 ? renderPosts() : '좋아요한 게시물이 없습니다'}
+          {posts.length > 0 ? (
+            renderPosts()
+          ) : (
+            <p
+              style={{
+                width: '100%',
+                textAlign: 'center',
+                color: 'white',
+                fontSize: '1.5rem',
+              }}
+            >
+              좋아요한 게시물이 없습니다
+            </p>
+          )}
         </SetupContainer>
         <TitleContainer>
           <TitleText>나만의 데스크탑</TitleText>
