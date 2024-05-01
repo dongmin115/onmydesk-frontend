@@ -30,7 +30,6 @@ export const favorite = async (postId: number) => {
         },
       }
     );
-    console.log(response);
     return response;
   } catch (error) {
     console.error(error);
@@ -49,7 +48,6 @@ export const disFavorite = async (postId: number) => {
         },
       }
     );
-    console.log(response);
     return response;
   } catch (error) {
     console.error(error);

@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
@@ -19,6 +18,7 @@ import { Favorite, KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
 import { Pagination } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import { disFavorite, favorite } from '../api/Favorite';
+import { Post } from '../types/type';
 
 const theme = createTheme({
   palette: {
@@ -125,10 +125,14 @@ const Caption = styled.div`
   }
 `;
 
+// likes 상태에 대한 타입 정의
+type LikesMap = { [key: number]: boolean };
+type LikeCountsMap = { [key: number]: number };
+
 export default function SetupBoard() {
-  const [posts, setPosts] = useState([]);
-  const [likes, setLikes] = useState({}); // 포스트의 좋아요 상태를 저장하는 객체
-  const [likeCounts, setLikeCounts] = useState({}); // 포스트의 좋아요 수를 저장하는 객체
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
+  const [likeCounts, setLikeCounts] = useState<LikeCountsMap>({}); // 포스트의 좋아요 수를 저장하는 객체
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [pagenation, setPagenation] = useState(1);
   const open = Boolean(anchorEl);
@@ -161,10 +165,10 @@ export default function SetupBoard() {
       });
       setPosts(response.data.data);
 
-      const initialLikes = {}; // 초기 좋아요 상태 설정
-      const initialLikeCounts = {}; // 초기 좋아요 개수 상태 설정
+      const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
+      const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
 
-      response.data.data.forEach((post) => {
+      response.data.data.forEach((post: Post) => {
         initialLikes[post.id] = post.liked;
         initialLikeCounts[post.id] = post.heartCount;
       });
@@ -175,7 +179,7 @@ export default function SetupBoard() {
     }
   };
 
-  const toggleLike = async (postId) => {
+  const toggleLike = async (postId: number) => {
     const currentLiked = likes[postId];
     try {
       if (currentLiked) {
@@ -214,7 +218,7 @@ export default function SetupBoard() {
   };
 
   const renderPosts = () => {
-    return posts.map((post: any) => (
+    return posts.map((post: Post) => (
       <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
         <ImageContainer>
           <SetupBoardImage
