@@ -15,8 +15,6 @@ import { Link, useParams } from 'react-router-dom';
 import SetupBoard from './SetupBoard';
 import { useState, useEffect, useCallback } from 'react';
 
-const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzEzMjg5NTgyfQ.RHsbFOr9rsSCdRnrTZOwDX_BRXa7Cu_nsblSOxWTSxmJRbM5WCVZYSsvaxATlBxOlwT-pc4GvFWRAwCLDZaKHg`;
-
 const SetupTitleContainer = styled.div`
   width: 100%;
   height: 12vh;
@@ -284,6 +282,8 @@ const TextArea = styled.textarea`
 const PostDetail = () => {
   const { id } = useParams();
   const [posts, setPosts] = useState([]);
+  const [comments, setComments] = useState([]); // 댓글 목록 상태 추가
+  const [comment, setComment] = useState('');
 
   useEffect(() => {
     async function fetchPosts() {
@@ -292,6 +292,11 @@ const PostDetail = () => {
           `http://localhost:8080/api/posts/${id}`
         );
         setPosts(response.data.data.post);
+
+        const commentsResponse = await axios.get(
+          `http://localhost:8080/api/posts/${id}/comments`
+        );
+        setComments(commentsResponse.data.data);
         console.log('목록 불러오기 성공:', response.data.data.post);
       } catch (error) {
         console.log('목록 불러오기 실패:', error);
@@ -299,7 +304,7 @@ const PostDetail = () => {
     }
 
     fetchPosts();
-  }, []);
+  }, [id]);
 
   const PostDel = async () => {
     try {
@@ -308,7 +313,7 @@ const PostDetail = () => {
 
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         }
       );
@@ -338,6 +343,30 @@ const PostDetail = () => {
     );
   };
 
+  const handleCommentSubmit = async () => {
+    if (!comment.trim()) return alert('댓글을 입력해주세요.');
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/posts/${id}/comments`,
+        { content: comment }, // 댓글 내용을 'content'로 변경해야 합니다.
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`, // 인증 토큰을 요청 헤더에 추가
+          },
+        }
+      );
+      alert('댓글이 성공적으로 작성되었습니다.');
+      setComment(''); // 댓글 입력창 초기화
+      setComments([...comments, response.data.data]); // 여기에서 응답 구조에 맞춰서 수정 필요
+    } catch (error) {
+      console.error(
+        '댓글 작성 실패:',
+        error.response ? error.response.data : error
+      );
+      alert('댓글 작성에 실패했습니다.');
+    }
+  };
   return (
     <>
       <Navbar />
@@ -447,12 +476,17 @@ const PostDetail = () => {
         <Total>89,000 KRW</Total>
       </TotalContainer>
       <CommentContainer>
-        <TextArea placeholder="댓글을 입력하세요" />
+        <TextArea
+          placeholder="댓글을 입력하세요"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
 
         <CommentButtonContainer>
           <Button
             variant="contained"
             color="success"
+            onClick={handleCommentSubmit}
             sx={{
               borderRadius: '9px',
               width: '7vw',
@@ -465,19 +499,21 @@ const PostDetail = () => {
         </CommentButtonContainer>
       </CommentContainer>
 
-      <CommentContainer>
-        <AccountCircleIcon sx={{ color: 'white', fontSize: 90, mt: 5 }} />
-        <UserName>임동민</UserName>
-        <CommentBox1>
-          <CommentBox2>
-            <Reply>좋습니다~!!!!</Reply>
-          </CommentBox2>
-        </CommentBox1>
-        <CommentEditContainer>
-          <Button href="#text-buttons">수정</Button>
-          <Button href="#text-buttons">삭제</Button>
-        </CommentEditContainer>
-      </CommentContainer>
+      {comments.map((comment, index) => (
+        <CommentContainer key={index}>
+          <AccountCircleIcon sx={{ color: 'white', fontSize: 90, mt: 5 }} />
+          <UserName>{comment.nickname || '익명'}</UserName>
+          <CommentBox1>
+            <CommentBox2>
+              <Reply>{comment.content}</Reply>
+            </CommentBox2>
+          </CommentBox1>
+          <CommentEditContainer>
+            <Button href="#text-buttons">수정</Button>
+            <Button href="#text-buttons">삭제</Button>
+          </CommentEditContainer>
+        </CommentContainer>
+      ))}
     </>
   );
 };
