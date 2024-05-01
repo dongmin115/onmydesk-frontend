@@ -15,10 +15,10 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
-import { KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
+import { Favorite, KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
 import { Pagination } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import { favorite } from '../api/Favorite';
+import { disFavorite, favorite } from '../api/Favorite';
 
 const theme = createTheme({
   palette: {
@@ -134,7 +134,7 @@ export default function SetupBoard() {
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 최신순으로 포스트를 검색하여 가져오기
-    searchPosts(1); // criteria를 1로 설정하여 최신순으로 검색
+    searchPosts(1, 1); // criteria를 1로 설정하여 최신순으로 검색
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때 한 번만 호출
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -152,6 +152,10 @@ export default function SetupBoard() {
           limit: 9,
           criteria: criteria,
         },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
       });
       setPosts(response.data.data);
       console.log(response.data.data);
@@ -160,17 +164,18 @@ export default function SetupBoard() {
     }
   };
 
-  const handlePageChange = (event, page, criteria) => {
+  const handlePageChange = (page, criteria) => {
     setPagenation(page);
     searchPosts(page, criteria);
   };
 
   const handleSortOptionClick = (
     sortOption: number,
-    sortText: string
+    sortText: string,
+    criteria: number
   ): void => {
     handleClose();
-    searchPosts(sortOption);
+    searchPosts(sortOption, criteria);
     setCurrentSortOption(sortText);
   };
 
@@ -202,15 +207,28 @@ export default function SetupBoard() {
                   gap: '0.5rem',
                 }}
               >
-                <IconButton
-                  onClick={(e) => {
-                    e.preventDefault(); // Link의 기본 동작을 막음
-                    e.stopPropagation(); // 이벤트 전파를 막음
-                    favorite(post.id);
-                  }}
-                >
-                  <FavoriteBorder color="success" />
-                </IconButton>
+                {post.liked ? (
+                  <IconButton
+                    onClick={(e) => {
+                      e.preventDefault(); // Link의 기본 동작을 막음
+                      e.stopPropagation(); // 이벤트 전파를 막음
+                      disFavorite(post.id);
+                    }}
+                  >
+                    <Favorite color="success" />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={(e) => {
+                      e.preventDefault(); // Link의 기본 동작을 막음
+                      e.stopPropagation(); // 이벤트 전파를 막음
+                      favorite(post.id);
+                    }}
+                  >
+                    <FavoriteBorder color="success" />
+                  </IconButton>
+                )}
+
                 <p>{post.heartCount}</p>
               </div>
               <div
