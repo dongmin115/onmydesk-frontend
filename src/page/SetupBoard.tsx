@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
@@ -15,10 +14,11 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
-import { KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
+import { Favorite, KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
 import { Pagination } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import { favorite } from '../api/Favorite';
+import { disFavorite, favorite } from '../api/Favorite';
+import { LikeCountsMap, LikesMap, Post } from '../types/type';
 
 const theme = createTheme({
   palette: {
@@ -126,7 +126,9 @@ const Caption = styled.div`
 `;
 
 export default function SetupBoard() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
+  const [likeCounts, setLikeCounts] = useState<LikeCountsMap>({}); // 포스트의 좋아요 수를 저장하는 객체
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [pagenation, setPagenation] = useState(1);
   const open = Boolean(anchorEl);
@@ -134,7 +136,7 @@ export default function SetupBoard() {
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 최신순으로 포스트를 검색하여 가져오기
-    searchPosts(1); // criteria를 1로 설정하여 최신순으로 검색
+    fetchPosts(1, 1); // criteria를 1로 설정하여 최신순으로 검색
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때 한 번만 호출
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -144,7 +146,7 @@ export default function SetupBoard() {
     setAnchorEl(null);
   };
 
-  const searchPosts = async (page: number, criteria: number): Promise<void> => {
+  const fetchPosts = async (page: number, criteria: number): Promise<void> => {
     try {
       const response = await axios.get('http://localhost:8080/api/posts', {
         params: {
@@ -152,30 +154,67 @@ export default function SetupBoard() {
           limit: 9,
           criteria: criteria,
         },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
       });
       setPosts(response.data.data);
-      console.log(response.data.data);
+
+      const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
+      const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
+
+      response.data.data.forEach((post: Post) => {
+        initialLikes[post.id] = post.liked;
+        initialLikeCounts[post.id] = post.heartCount;
+      });
+      setLikes(initialLikes);
+      setLikeCounts(initialLikeCounts);
     } catch (error) {
       console.log('Error', error);
     }
   };
 
-  const handlePageChange = (event, page, criteria) => {
+  const toggleLike = async (postId: number) => {
+    const currentLiked = likes[postId];
+    try {
+      if (currentLiked) {
+        disFavorite(postId);
+      } else {
+        favorite(postId);
+      }
+      // 상태 업데이트
+      setLikes((prev) => ({
+        ...prev,
+        [postId]: !currentLiked,
+      }));
+      // 좋아요 수 업데이트
+      setLikeCounts((prev) => ({
+        ...prev,
+        [postId]: currentLiked ? prev[postId] - 1 : prev[postId] + 1,
+      }));
+    } catch (error) {
+      console.error('Error updating like status:', error);
+    }
+  };
+
+  const handlePageChange = (page, criteria) => {
     setPagenation(page);
-    searchPosts(page, criteria);
+    fetchPosts(page, criteria);
   };
 
   const handleSortOptionClick = (
     sortOption: number,
-    sortText: string
+    sortText: string,
+    criteria: number
   ): void => {
     handleClose();
-    searchPosts(sortOption);
+    fetchPosts(sortOption, criteria);
     setCurrentSortOption(sortText);
   };
 
   const renderPosts = () => {
-    return posts.map((post: any) => (
+    return posts.map((post: Post) => (
       <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
         <ImageContainer>
           <SetupBoardImage
@@ -202,16 +241,28 @@ export default function SetupBoard() {
                   gap: '0.5rem',
                 }}
               >
-                <IconButton
-                  onClick={(e) => {
-                    e.preventDefault(); // Link의 기본 동작을 막음
-                    e.stopPropagation(); // 이벤트 전파를 막음
-                    favorite(post.id);
-                  }}
-                >
-                  <FavoriteBorder color="success" />
-                </IconButton>
-                <p>{post.heartCount}</p>
+                {likes[post.id] ? (
+                  <IconButton
+                    onClick={(e) => {
+                      e.preventDefault(); // Link의 기본 동작을 막음
+                      e.stopPropagation(); // 이벤트 전파를 막음
+                      toggleLike(post.id);
+                    }}
+                  >
+                    <Favorite color="success" />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={(e) => {
+                      e.preventDefault(); // Link의 기본 동작을 막음
+                      e.stopPropagation(); // 이벤트 전파를 막음
+                      toggleLike(post.id);
+                    }}
+                  >
+                    <FavoriteBorder color="success" />
+                  </IconButton>
+                )}
+                <p>{likeCounts[post.id]}</p>
               </div>
               <div
                 style={{
@@ -279,15 +330,15 @@ export default function SetupBoard() {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={() => handleSortOptionClick(1, '최신순')}>
+              <MenuItem onClick={() => handleSortOptionClick(1, '최신순', 1)}>
                 최신순
               </MenuItem>
               <MenuItem
-                onClick={() => handleSortOptionClick(2, '좋아요 많은 순')}
+                onClick={() => handleSortOptionClick(2, '좋아요 많은 순', 2)}
               >
                 좋아요 많은 순
               </MenuItem>
-              <MenuItem onClick={() => handleSortOptionClick(3, '조회순')}>
+              <MenuItem onClick={() => handleSortOptionClick(3, '조회순', 3)}>
                 조회순
               </MenuItem>
             </Menu>

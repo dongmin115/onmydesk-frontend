@@ -17,8 +17,9 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../store.ts';
 import { deleteUser, putUserInfo } from '../api/User.ts';
-import { FavoriteBorder, RemoveRedEye, Title } from '@mui/icons-material';
-import { favorite, getFavorite } from '../api/Favorite.ts';
+import { Favorite, FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
+import { disFavorite, favorite, getFavorite } from '../api/Favorite.ts';
+import { LikeCountsMap, LikesMap, Post } from '../types/type.ts';
 
 const theme = createTheme({
   palette: {
@@ -193,6 +194,9 @@ function Mypage() {
   const [posts, setPosts] = useState([]);
   const [IsModalOpen, setIsModalOpen] = useState(false);
 
+  const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
+  const [likeCounts, setLikeCounts] = useState<LikeCountsMap>({}); // 포스트의 좋아요 수를 저장하는 객체
+
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -208,12 +212,44 @@ function Mypage() {
     setIsUserInfoModalOpen(false);
   };
 
+  const toggleLike = async (postId: number) => {
+    const currentLiked = likes[postId];
+    try {
+      if (currentLiked) {
+        disFavorite(postId);
+      } else {
+        favorite(postId);
+      }
+      // 상태 업데이트
+      setLikes((prev) => ({
+        ...prev,
+        [postId]: !currentLiked,
+      }));
+      // 좋아요 수 업데이트
+      setLikeCounts((prev) => ({
+        ...prev,
+        [postId]: currentLiked ? prev[postId] - 1 : prev[postId] + 1,
+      }));
+    } catch (error) {
+      console.error('Error updating like status:', error);
+    }
+  };
+
   useEffect(() => {
     if (name) {
       const fetchFavorite = async () => {
         try {
           const response = await getFavorite();
           await setPosts(response.data);
+          const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
+          const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
+
+          response.data.forEach((post: Post) => {
+            initialLikes[post.id] = post.liked;
+            initialLikeCounts[post.id] = post.heartCount;
+          });
+          setLikes(initialLikes);
+          setLikeCounts(initialLikeCounts);
         } catch (error) {
           console.error(error);
         }
@@ -224,7 +260,7 @@ function Mypage() {
   }, []);
 
   const renderPosts = () => {
-    return posts.map((post: any) => (
+    return posts.map((post: Post) => (
       <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
         <ImageContainer>
           <SetupBoardImage
@@ -251,16 +287,28 @@ function Mypage() {
                   gap: '0.5rem',
                 }}
               >
-                <IconButton
-                  onClick={(e) => {
-                    e.preventDefault(); // Link의 기본 동작을 막음
-                    e.stopPropagation(); // 이벤트 전파를 막음
-                    favorite(post.id);
-                  }}
-                >
-                  <FavoriteBorder color="success" />
-                </IconButton>
-                <p>{post.heartCount}</p>
+                {likes[post.id] ? (
+                  <IconButton
+                    onClick={(e) => {
+                      e.preventDefault(); // Link의 기본 동작을 막음
+                      e.stopPropagation(); // 이벤트 전파를 막음
+                      toggleLike(post.id);
+                    }}
+                  >
+                    <Favorite color="success" />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={(e) => {
+                      e.preventDefault(); // Link의 기본 동작을 막음
+                      e.stopPropagation(); // 이벤트 전파를 막음
+                      toggleLike(post.id);
+                    }}
+                  >
+                    <FavoriteBorder color="success" />
+                  </IconButton>
+                )}
+                <p>{likeCounts[post.id]}</p>
               </div>
               <div
                 style={{

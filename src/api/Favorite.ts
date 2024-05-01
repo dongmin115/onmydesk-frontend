@@ -30,7 +30,24 @@ export const favorite = async (postId: number) => {
         },
       }
     );
-    console.log(response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
+export const disFavorite = async (postId: number) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:8080/api/posts/hearts/${postId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
     console.error(error);
