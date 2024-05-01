@@ -18,7 +18,7 @@ import { Favorite, KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
 import { Pagination } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import { disFavorite, favorite } from '../api/Favorite';
-import { Post } from '../types/type';
+import { LikeCountsMap, LikesMap, Post } from '../types/type';
 
 const theme = createTheme({
   palette: {
@@ -124,10 +124,6 @@ const Caption = styled.div`
     opacity: 1;
   }
 `;
-
-// likes 상태에 대한 타입 정의
-type LikesMap = { [key: number]: boolean };
-type LikeCountsMap = { [key: number]: number };
 
 export default function SetupBoard() {
   const [posts, setPosts] = useState<Post[]>([]);
