@@ -6,6 +6,11 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Button from '@mui/material/Button';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useParams } from 'react-router-dom';
+import { Product } from '../types/Product';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
 const ProductInfoContainer = styled.div`
   //상부 전체를 묶는 컨테이너
   display: flex;
@@ -174,14 +179,35 @@ const ObjectName = styled.span`
 `;
 
 const ProductDetail = () => {
+  const { id } = useParams();
+  const [productDetailData, setProductDetailData] = useState<Product>();
+
+  const fetchProductDetail = async () => {
+    try {
+      const response = await axios.get<Product>(
+        `http://localhost:8080/api/products/${id}`
+      );
+      console.log(response.data.data);
+      setProductDetailData(response.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductDetail();
+  }, []);
+
   return (
     <>
       <Navbar></Navbar>
       <ProductInfoContainer>
-        <ProductImage src={Keyboard} />
+        <ProductImage src={productDetailData?.data.product.img} />
         <ProductDetails>
           <TitleContainer>
-            <ProductName>Apple Magic Keyboard</ProductName>
+            <ProductName>
+              {productDetailData?.data.product.productName}
+            </ProductName>
             <Circle>
               <Button
                 variant="contained"
@@ -201,32 +227,17 @@ const ProductDetail = () => {
             </Circle>
           </TitleContainer>
           <ProductDetail1>
-            연결방식 : 무선 | 전송방식 : 블루투스 | 특수기능키 : 기능키,
-            멀티미디어키 | 단자 : 라이트닝, USB Type-C | 무게 : 243g | 케이블 :
-            분리형케이블 | 배터리 : 배터리내장
+            {productDetailData?.data.product.category1}
+            {productDetailData?.data.product.category2}
           </ProductDetail1>
           <ProductDetail2>
             <PriceList>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
+              {productDetailData?.data.pages.map((page) => (
+                <PriceItem>
+                  <ShopName>{page.storeName}</ShopName>
+                  <Price>{page.price}</Price>
+                </PriceItem>
+              ))}
             </PriceList>
           </ProductDetail2>
         </ProductDetails>

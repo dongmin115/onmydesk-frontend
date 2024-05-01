@@ -11,10 +11,10 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import { KeyboardArrowDown } from '@mui/icons-material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
+import GoodsItem from '../components/Goodsitem';
 
 const theme = createTheme({
   palette: {
@@ -69,11 +69,6 @@ const SetupBoardContainer = styled.div`
   height: fit-content;
 `;
 
-const SetupBoardImage = styled.img`
-  width: 100%;
-  height: 20vh;
-  border-radius: 1rem 1rem 0 0;
-`;
 const Flexbox = styled.div`
   display: flex;
   align-items: center;
@@ -88,73 +83,6 @@ const Flexbox2 = styled.div`
   gap: 1rem;
   justify-content: end;
 `;
-
-const GoodsBoardFlexbox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  drop-shadow: 0 0 0.5rem #000000;
-
-  &:hover {
-    transform: scale(1.05);
-    transition: transform 0.5s;
-  }
-`;
-
-const GoodsBoardInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: #3d3d3d;
-  border-radius: 0 0 1rem 1rem;
-  height: fit-content;
-  width: 100%;
-  color: #ffffff;
-  align-items: start;
-`;
-
-const GoodsBoardInfoFlexbox = styled.div`
-  width: 90%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  item-align: center;
-  text-align: center;
-  padding: 0 5% 0 5%;
-`;
-
-const FavoriteButton = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
-const GoodsItem = function (props) {
-  return (
-    <GoodsBoardFlexbox>
-      <SetupBoardImage
-        src={props.product.img}
-        alt={props.product.productName}
-      />
-      <GoodsBoardInfo>
-        <GoodsBoardInfoFlexbox>
-          <p>{props.product.productName}</p>
-          <FavoriteButton>
-            <IconButton>
-              <FavoriteIcon color="success" />
-            </IconButton>
-            <p>{props.product.price}</p>
-          </FavoriteButton>
-        </GoodsBoardInfoFlexbox>
-        <GoodsBoardInfoFlexbox>
-          <p>{`최저가 ${props.product.lprice}원`}</p>
-        </GoodsBoardInfoFlexbox>
-      </GoodsBoardInfo>
-    </GoodsBoardFlexbox>
-  );
-};
 
 const Category = function () {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -268,20 +196,25 @@ export default function GoodsBoard() {
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    fetchProducts(); // 초기 상품 목록 불러오기
+  }, []);
+
   const fetchProducts = async (query = '') => {
     console.log(`Fetching products with query: ${query}`);
     setLoading(true);
     try {
       let url = 'http://localhost:8080/api/products';
       const params = { display: 10 };
+
       if (query) {
         url += '/search'; // 검색어가 있을 때만 search endpoint 호출
         params.query = query;
       }
+
       const response = await axios.get(url, { params });
       console.log('Response data:', response.data);
-      await setProducts(response.data);
-      console.log('Products:', products);
+      await setProducts(response.data.data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -324,7 +257,7 @@ export default function GoodsBoard() {
         ) : (
           <SetupBoardContainer>
             {products.map((product) => (
-              <GoodsItem key={product.id} product={product} />
+              <GoodsItem key={product.id} product={product} id={product.id} />
             ))}
           </SetupBoardContainer>
         )}
