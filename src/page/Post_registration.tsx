@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
+import ProductModal from '../components/ProductModal';
 import Navbar from '../components/Navbar';
 import mouse from '../assets/image/Post_registration/mouse.svg';
 import ReactQuill, { Quill } from 'react-quill';
@@ -77,6 +77,15 @@ const Finbutton = styled.button`
 function Post_reg() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
+
+  const Modalopen = () => {
+    setIsModalopen(true);
+  };
+
+  const Modalclose = () => {
+    setIsModalopen(false);
+  };
 
   const handleQuillChange = (content, delta, source, editor) => {
     setContent(content);
@@ -247,6 +256,7 @@ function Post_reg() {
                 color: '#349af8',
                 marginTop: '3vw',
               }}
+              onClick={Modalopen}
             >
               게시글 상품 추가
             </Item_button>
@@ -314,6 +324,7 @@ function Post_reg() {
                 등록하기
               </Finbutton>
             </Finbuttonbox>
+            <ProductModal isOpen={IsModalopen} onClose={Modalclose} />
           </Centerdiv>
         </div>
       </div>

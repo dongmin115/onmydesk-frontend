@@ -167,7 +167,7 @@ function Post_fix() {
       window.history.back();
     } catch (error) {
       console.log('에러');
-      alert('게시글 수정에 실패했습니다.');
+      alert('게시글 수정 권한이 없습니다.');
     }
   };
 
