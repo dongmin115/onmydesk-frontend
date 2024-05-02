@@ -190,6 +190,37 @@ const Category = function () {
     </GoodsBoardMenu>
   );
 };
+// 상품 목록을 불러오는 함수
+const fetchProductList = async (setProducts, setLoading, setError) => {
+  setLoading(true);
+  try {
+    const response = await axios.get('http://localhost:8080/api/products', {});
+    setProducts(response.data.data);
+    setLoading(false);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    setError('상품을 불러오는데 실패했습니다.');
+    setLoading(false);
+  }
+};
+
+// 상품 검색을 처리하는 함수
+const searchProducts = async (query, setProducts, setLoading, setError) => {
+  setLoading(true);
+  try {
+    const response = await axios.get(
+      'http://localhost:8080/api/products/search',
+      { params: { query } }
+    );
+    setProducts(response.data);
+    setLoading(false);
+  } catch (error) {
+    console.error('Error searching products:', error);
+    setError('상품 검색에 실패했습니다.');
+    setLoading(false);
+  }
+};
+
 export default function GoodsBoard() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -197,41 +228,18 @@ export default function GoodsBoard() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetchProducts(); // 초기 상품 목록 불러오기
+    fetchProductList(setProducts, setLoading, setError); // 초기 상품 목록 불러오기
   }, []);
 
-  const fetchProducts = async (query = '') => {
-    console.log(`Fetching products with query: ${query}`);
-    setLoading(true);
-    try {
-      let url = 'http://localhost:8080/api/products';
-      const params = { display: 10 };
-
-      if (query) {
-        url += '/search'; // 검색어가 있을 때만 search endpoint 호출
-        params.query = query;
-      }
-
-      const response = await axios.get(url, { params });
-      console.log('Response data:', response.data);
-      await setProducts(response.data.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-      setError('상품을 불러오는데 실패했습니다.');
-      setLoading(false);
-    }
-  };
-
   const handleSearch = () => {
-    fetchProducts(searchQuery);
+    searchProducts(searchQuery, setProducts, setLoading, setError);
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Navbar />
       <TextField
-        id="standard-basic"
+        id="search-field"
         variant="standard"
         placeholder="검색어를 입력해주세요."
         value={searchQuery}
@@ -249,16 +257,16 @@ export default function GoodsBoard() {
       />
       <Container>
         <GoodsBoardTitle>셋업에 사용된 상품을 둘러보세요!</GoodsBoardTitle>
-        <Category />
         {loading ? (
           <CircularProgress />
         ) : error ? (
           <p>{error}</p>
         ) : (
           <SetupBoardContainer>
-            {products.map((product) => (
-              <GoodsItem key={product.id} product={product} id={product.id} />
-            ))}
+            {Array.isArray(products) &&
+              products.map((product) => (
+                <GoodsItem key={product.id} product={product} id={product.id} />
+              ))}
           </SetupBoardContainer>
         )}
       </Container>
