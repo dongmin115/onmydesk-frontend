@@ -45,10 +45,10 @@ const Container = styled.div`
 const SetupBoardMenu = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
   height: 18vh;
+  width: 90%;
 `;
 
 const SetupBoardTitle = styled.h1`
@@ -294,6 +294,7 @@ export default function SetupBoard() {
             variant="standard"
             placeholder="검색어를 입력해주세요."
             color="primary"
+            size="small"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
