@@ -1,5 +1,4 @@
 import axios from 'axios';
-
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import SetupImage from '../assets/SetupImage.png';
@@ -9,10 +8,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ShareIcon from '@mui/icons-material/Share';
-
 import { Link, useParams } from 'react-router-dom';
-
-import SetupBoard from './SetupBoard';
 import { useState, useEffect, useCallback } from 'react';
 
 const SetupTitleContainer = styled.div`
@@ -71,13 +67,6 @@ const TextContainer = styled.div`
   margin-left: 23%;
 `;
 
-const Text = styled.p`
-  font-family: 'Kantumruy';
-  font-size: 1.3rem;
-  padding: 1%;
-  text-align: center;
-  line-height: 3rem;
-`;
 const SetupItemContainer = styled.div`
   width: 100%;
   height: 7vh;
@@ -181,24 +170,6 @@ const CommentBox1 = styled.div`
   display: flex;
   justify-content: space-between;
   position: relative;
-  &::after {
-    content: '';
-    position: absolute;
-    top: 29%;
-    left: -30px;
-    border-style: solid;
-    border-width: 19px 31px 22px 0;
-    border-color: transparent #2f2d2d transparent transparent;
-  }
-`;
-const CommentBox2 = styled.div`
-  width: 40vw;
-  height: 16vh;
-  background-color: #3c3c3c;
-  margin-top: 4%;
-  margin-left: 6%;
-  border-radius: 1rem;
-  display: flex;
 `;
 
 const CommentButtonContainer = styled.div`
@@ -209,31 +180,13 @@ const CommentButtonContainer = styled.div`
   align-items: center;
 `;
 
-const Reply = styled.span`
-  font-family: 'Abhaya Libre ExtraBold';
-  font-size: 1rem;
-  color: #ffffff;
-  width: 30rem;
-  height: 14vh;
-  padding: 3%;
-  display: flex;
-`;
-
 const UserName = styled.span`
   position: absolute;
   color: #ffffff;
   font-family: 'Abhaya Libre ExtraBold';
   font-size: 1rem;
-  bottom: 23%;
-  left: 2.8%;
-`;
-
-const CommentEditContainer = styled.div`
-  position: absolute;
-  bottom: 3%;
-  left: 82%;
-  display: flex;
-  align-items: center;
+  bottom: -8%;
+  left: 4.3%;
 `;
 
 const RightBox = styled.div`
@@ -278,12 +231,20 @@ const TextArea = styled.textarea`
     border-color: #808080;
   }
 `;
+type Comment = {
+  id: number;
+  commentId: number;
+  content: string;
+  nickname: string;
+};
 
 const PostDetail = () => {
   const { id } = useParams();
   const [posts, setPosts] = useState([]);
-  const [comments, setComments] = useState([]); // 댓글 목록 상태 추가
+  const [comments, setComments] = useState<Comment[]>([]);
   const [comment, setComment] = useState('');
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editingContent, setEditingContent] = useState('');
 
   useEffect(() => {
     async function fetchPosts() {
@@ -349,24 +310,69 @@ const PostDetail = () => {
     try {
       const response = await axios.post(
         `http://localhost:8080/api/posts/${id}/comments`,
-        { content: comment }, // 댓글 내용을 'content'로 변경해야 합니다.
+        { content: comment },
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`, // 인증 토큰을 요청 헤더에 추가
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         }
       );
-      alert('댓글이 성공적으로 작성되었습니다.');
+
       setComment(''); // 댓글 입력창 초기화
-      setComments([...comments, response.data.data]); // 여기에서 응답 구조에 맞춰서 수정 필요
+      setComments((comments) => [...comments, response.data.data]);
+
+      alert('댓글이 작성되었습니다.');
+      window.location.reload();
     } catch (error) {
-      console.error(
-        '댓글 작성 실패:',
-        error.response ? error.response.data : error
-      );
       alert('댓글 작성에 실패했습니다.');
     }
   };
+
+  const updateComment = async (commentId, updatedContent) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/posts/${id}/comments/${commentId}`,
+        { content: updatedContent },
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        }
+      );
+      console.log('Response:', response.data);
+      setComments((currentComments) =>
+        currentComments.map((comment) =>
+          comment.commentId === commentId
+            ? { ...comment, content: updatedContent }
+            : comment
+        )
+      );
+      alert('댓글이 수정되었습니다.');
+      window.location.reload();
+    } catch (error) {
+      alert('댓글 수정에 실패했습니다.');
+    }
+  };
+
+  const deleteComment = async (commentId) => {
+    try {
+      await axios.delete(
+        `http://localhost:8080/api/posts/${id}/comments/${commentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        }
+      );
+      setComments((currentComments) =>
+        currentComments.filter((comment) => comment.commentId !== commentId)
+      );
+      alert('댓글이 삭제되었습니다.');
+    } catch (error) {
+      alert('댓글 삭제에 실패했습니다.');
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -484,8 +490,6 @@ const PostDetail = () => {
 
         <CommentButtonContainer>
           <Button
-            variant="contained"
-            color="success"
             onClick={handleCommentSubmit}
             sx={{
               borderRadius: '9px',
@@ -500,18 +504,69 @@ const PostDetail = () => {
       </CommentContainer>
 
       {comments.map((comment, index) => (
-        <CommentContainer key={index}>
+        <CommentContainer key={index} style={{ position: 'relative' }}>
           <AccountCircleIcon sx={{ color: 'white', fontSize: 90, mt: 5 }} />
           <UserName>{comment.nickname || '익명'}</UserName>
-          <CommentBox1>
-            <CommentBox2>
-              <Reply>{comment.content}</Reply>
-            </CommentBox2>
+          <CommentBox1
+            style={{
+              padding: '10px',
+              border: '1px solid #555',
+              borderRadius: '4px',
+              background: '#444',
+              marginBottom: '10px',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            {editingCommentId === comment.commentId ? (
+              <TextArea
+                value={editingContent}
+                onChange={(e) => setEditingContent(e.target.value)}
+                style={{
+                  flexGrow: 1,
+                  marginRight: '8px',
+                  marginBottom: '10px',
+                }}
+              />
+            ) : (
+              <div style={{ minHeight: '40px', color: 'white' }}>
+                {comment.content}
+              </div>
+            )}
+            <div style={{ alignSelf: 'flex-end', display: 'flex' }}>
+              {editingCommentId === comment.commentId ? (
+                <>
+                  <Button
+                    onClick={() =>
+                      updateComment(comment.commentId, editingContent)
+                    }
+                    sx={{ margin: '10px 10px 10px 0' }}
+                  >
+                    확인
+                  </Button>
+                  <Button onClick={() => setEditingCommentId(null)}>
+                    취소
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    sx={{ marginRight: 1 }}
+                    onClick={() => {
+                      setEditingCommentId(comment.commentId);
+                      setEditingContent(comment.content);
+                    }}
+                  >
+                    수정
+                  </Button>
+                  <Button onClick={() => deleteComment(comment.commentId)}>
+                    삭제
+                  </Button>
+                </>
+              )}
+            </div>
           </CommentBox1>
-          <CommentEditContainer>
-            <Button href="#text-buttons">수정</Button>
-            <Button href="#text-buttons">삭제</Button>
-          </CommentEditContainer>
         </CommentContainer>
       ))}
     </>
