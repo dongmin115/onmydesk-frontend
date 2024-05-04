@@ -29,8 +29,7 @@ const Item_box = styled.div`
   background-color: #3c3c3c;
   height: 6vw;
   width: 68vw;
-  margin-bottom: 3vw;
-  margin-top: 1vw;
+  margin-bottom: 1vw;
 
   display: flex;
   flex-direction: row;
@@ -78,10 +77,24 @@ function Post_reg() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
-  const [selectProduct, setSelectProduct] = useState({});
+  const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+
+  interface Product {
+    productName: string;
+    img: string;
+    productCode: string;
+    lprice: number;
+    brand: string;
+    maker: string;
+    category1: string;
+    category2: string;
+    category3?: string;
+    category4?: string;
+    pages: { price: number; link: string; storeName: string }[];
+  }
 
   const handleProductSelect = (product) => {
-    setSelectProduct(product);
+    setArrProduct([...ArrProduct, product]);
     setIsModalopen(false); // 모달 닫기
   };
 
@@ -153,28 +166,7 @@ function Post_reg() {
         {
           title: `${title}`,
           content: `${content}`,
-          products: [
-            {
-              productName:
-                'Apple <b>아이패드</b> 에어 5세대 M1 WIFI 64G 스페이스 그레이 (MM9C3KH/A)',
-              img: 'https://shopping-phinf.pstatic.net/main_3153084/31530843620.20220705164247.jpg',
-              productCode: '31530843620',
-              lprice: 828490,
-              brand: 'Apple',
-              maker: 'Apple',
-              category1: '디지털/가전',
-              category2: '태블릿PC',
-              category3: 'string',
-              category4: 'string',
-              pages: [
-                {
-                  price: 829690,
-                  link: 'https://search.shopping.naver.com/gate.nhn?id=31530843620',
-                  storeName: '네이버',
-                },
-              ],
-            },
-          ],
+          products: ArrProduct,
         },
         {
           headers: {
@@ -183,6 +175,7 @@ function Post_reg() {
         }
       );
       console.log(response.data);
+      console.log(ArrProduct);
 
       alert('게시글이 등록되었습니다.');
       window.history.back();
@@ -269,10 +262,10 @@ function Post_reg() {
           </div>
 
           <Centerdiv>
-            {selectProduct && Object.keys(selectProduct).length > 0 && (
+            {ArrProduct.map((product, index) => (
               <Item_box>
                 <img
-                  src={selectProduct.img}
+                  src={product.img}
                   style={{
                     width: '4.5vw',
                     marginLeft: '2vw',
@@ -290,7 +283,7 @@ function Post_reg() {
                   <Item_text>상품명</Item_text>:
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: selectProduct.productName,
+                      __html: product.productName,
                     }}
                   />
                 </div>
@@ -303,7 +296,7 @@ function Post_reg() {
                     marginLeft: '6vw',
                   }}
                 >
-                  <Item_text>가격</Item_text>: {selectProduct.lprice} KRW
+                  <Item_text>가격</Item_text>: {product.lprice} KRW
                 </div>
                 <div
                   style={{
@@ -323,7 +316,7 @@ function Post_reg() {
                   </Item_button>
                 </div>
               </Item_box>
-            )}
+            ))}
             <Finbuttonbox>
               <Link to="/setupboard">
                 <Finbutton style={{ backgroundColor: '#3C3C3C' }}>
