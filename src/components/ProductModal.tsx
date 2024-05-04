@@ -33,7 +33,7 @@ const ModalCloseButton = styled.button`
 
 const SearchInput = styled.input`
   height: 1vw;
-  width: 90%;
+  width: 92%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px 0 0 5px; /* 오른쪽 둥근 모서리만 적용 */
@@ -41,10 +41,10 @@ const SearchInput = styled.input`
 `;
 
 const SearchButton = styled.button`
-  height: 2.2vw;
-  border: 1px solid #ccc;
+  height: 2.5vw;
+  border: #0085ff;
   border-radius: 0 5px 5px 0; /* 오른쪽 둥근 모서리만 적용 */
-  background-color: #ffffff;
+  background-color: #0085ff;
   font-size: 16px;
   cursor: pointer;
 `;
@@ -126,7 +126,7 @@ function ProductModal({ isOpen, onClose }) {
               placeholder="제품을 검색해보세요"
               onChange={handleSearch}
             />
-            <SearchButton onClick={searchProduct}>검색확인</SearchButton>
+            <SearchButton onClick={searchProduct}>Search</SearchButton>
           </div>
 
           <div>
