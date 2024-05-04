@@ -98,11 +98,13 @@ function Post_reg() {
     setIsModalopen(false); // 모달 닫기
   };
 
-  const handleProuductDelete = (indexToRemove) => {
+  const handleProductDelete = (indexToRemove) => {
     const updatedProducts = ArrProduct.filter(
       (_, index) => index !== indexToRemove
     );
     setArrProduct(updatedProducts);
+
+    console.log(ArrProduct);
   };
 
   const Modalopen = () => {
@@ -317,7 +319,7 @@ function Post_reg() {
                     style={{
                       color: 'red',
                     }}
-                    onClick={handleProuductDelete}
+                    onClick={() => handleProductDelete(index)}
                   >
                     삭제
                   </Item_button>

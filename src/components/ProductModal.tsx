@@ -103,11 +103,11 @@ function ProductModal({ isOpen, onClose, onSelect }) {
 
   const ClickProduct = (product) => {
     onSelect(product);
-    onClose(); // 상품 선택 후 모달 닫기
+    onClose();
   };
 
   const handleSearch = (event) => {
-    event.preventDefault(); // 폼 제출 기본 동작 방지
+    event.preventDefault();
     setKeyword(event.target.value);
   };
 
@@ -141,7 +141,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
               placeholder="제품을 검색해보세요"
               onChange={handleSearch}
             />
-            <SearchButton onClick={searchProduct}>Search</SearchButton>
+            <SearchButton onClick={searchProduct}>검색</SearchButton>
           </div>
 
           <div>

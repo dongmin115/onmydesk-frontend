@@ -29,8 +29,7 @@ const Item_box = styled.div`
   background-color: #3c3c3c;
   height: 6vw;
   width: 68vw;
-  margin-bottom: 3vw;
-  margin-top: 1vw;
+  margin-bottom: 1vw;
 
   display: flex;
   flex-direction: row;
@@ -100,11 +99,13 @@ function Post_fix() {
     setIsModalopen(false); // 모달 닫기
   };
 
-  const handleProuductDelete = (indexToRemove) => {
+  const handleProductDelete = (indexToRemove) => {
     const updatedProducts = ArrProduct.filter(
       (_, index) => index !== indexToRemove
     );
     setArrProduct(updatedProducts);
+
+    console.log(ArrProduct);
   };
 
   const Modalopen = () => {
@@ -312,7 +313,7 @@ function Post_fix() {
                     style={{
                       color: 'red',
                     }}
-                    onClick={handleProuductDelete}
+                    onClick={() => handleProductDelete(index)}
                   >
                     삭제
                   </Item_button>
