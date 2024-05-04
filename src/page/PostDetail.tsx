@@ -82,7 +82,7 @@ const SetupItem = styled.span`
 `;
 
 const SetupObjectContainer = styled.div`
-  width: 55vw;
+  width: 54vw;
   height: 42vh;
   padding-top: 1vw;
   padding-bottom: 2vw;
@@ -113,8 +113,8 @@ const SetupObjectContainer = styled.div`
 `;
 
 const SetupObject = styled.div`
-  width: 31%; /* SetupObject의 고정된 너비 */
-  min-width: 31%; /* 최소 너비 지정 (선택 사항) */
+  width: 30%; /* SetupObject의 고정된 너비 */
+  min-width: 30%; /* 최소 너비 지정 (선택 사항) */
   margin-right: 20px; /* 각 SetupObject 사이의 간격 설정 (선택 사항) */
   border-radius: 1rem;
   background-color: #2f2d2d;
