@@ -11,6 +11,7 @@ const Container = styled.div`
   flex-direction: column;
   item-align: center;
   width: 100wh;
+  align-items: center;
 `;
 
 const SectionContainer = styled.div`
@@ -20,6 +21,7 @@ const SectionContainer = styled.div`
   width: 100%;
   height: 60vh;
   padding: 2% 0 2% 0;
+  max-width: 1440px;
 `;
 
 const HotDeskTitle = styled.h1`
