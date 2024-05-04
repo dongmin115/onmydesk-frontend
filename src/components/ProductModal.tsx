@@ -23,6 +23,20 @@ const ModalContent = styled.div`
   width: 60vw;
   height: 40vw;
   overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 10px; /* 스크롤바 너비 */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; /* 스크롤바 트랙 배경 */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #888; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 모양 */
+    transition: background-color 0.3s ease; /* 애니메이션 효과 */
+  }
 `;
 
 const ModalCloseButton = styled.button`
@@ -104,7 +118,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
         {
           params: {
             query: Keyword,
-            display: 1,
+            display: 10,
           },
         }
       );
