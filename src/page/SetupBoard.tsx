@@ -38,8 +38,10 @@ const theme = createTheme({
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100vw;
+  max-width: 1440px;
   align-items: center;
-  width: 100wh;
+  margin: 0 auto; // 가운데 정렬
 `;
 
 const SetupBoardMenu = styled.div`
@@ -48,7 +50,7 @@ const SetupBoardMenu = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 18vh;
-  width: 90%;
+  width: 100%;
 `;
 
 const SetupBoardTitle = styled.h1`
@@ -82,7 +84,7 @@ const SetupBoardContainer = styled.div`
   gap: 3vh;
   text-align: center;
   align-items: center;
-  padding: 0% 5% 10vh 5%;
+  padding: 0% 0% 10vh 0%;
   height: fit-content;
 `;
 
@@ -336,8 +338,8 @@ export default function SetupBoard() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Navbar />
       <Container>
-        <Navbar />
         <SetupBoardMenu>
           <CustomTextField
             id="standard-basic"

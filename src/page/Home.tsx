@@ -12,6 +12,7 @@ const Container = styled.div`
   item-align: center;
   width: 100wh;
   align-items: center;
+  margin: 0 auto; // 가운데 정렬
 `;
 
 const SectionContainer = styled.div`
