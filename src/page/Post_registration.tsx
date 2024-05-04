@@ -78,6 +78,12 @@ function Post_reg() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
+  const [selectProduct, setSelectProduct] = useState({});
+
+  const handleProductSelect = (product) => {
+    setSelectProduct(product);
+    setIsModalopen(false); // 모달 닫기
+  };
 
   const Modalopen = () => {
     setIsModalopen(true);
@@ -263,53 +269,61 @@ function Post_reg() {
           </div>
 
           <Centerdiv>
-            <Item_box>
-              <img
-                src={mouse}
-                style={{
-                  width: '4.5vw',
-                  marginLeft: '2vw',
-                  pointerEvents: 'none',
-                }}
-              />
-              <div
-                style={{
-                  color: 'white',
-                  width: '20vw',
-                  fontSize: '1.5vw',
-                  marginLeft: '2vw',
-                }}
-              >
-                <Item_text>상품명</Item_text>:Magic Mouse
-              </div>
-              <div
-                style={{
-                  color: 'white',
-                  width: '20vw',
-                  fontSize: '1.5vw',
-                  marginLeft: '6vw',
-                }}
-              >
-                <Item_text>가격</Item_text>: 900,0000 KRW
-              </div>
-              <div
-                style={{
-                  color: 'white',
-                  fontSize: '2vw',
-                  marginLeft: 'auto',
-                  marginRight: '1vw',
-                }}
-              >
-                <Item_button
+            {selectProduct && Object.keys(selectProduct).length > 0 && (
+              <Item_box>
+                <img
+                  src={selectProduct.img}
                   style={{
-                    color: 'red',
+                    width: '4.5vw',
+                    marginLeft: '2vw',
+                    pointerEvents: 'none',
+                  }}
+                />
+                <div
+                  style={{
+                    color: 'white',
+                    width: '20vw',
+                    fontSize: '1.5vw',
+                    marginLeft: '2vw',
                   }}
                 >
-                  삭제
-                </Item_button>
-              </div>
-            </Item_box>
+                  <Item_text>상품명</Item_text>:
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: selectProduct.productName,
+                    }}
+                  />
+                </div>
 
+                <div
+                  style={{
+                    color: 'white',
+                    width: '20vw',
+                    fontSize: '1.5vw',
+                    marginLeft: '6vw',
+                  }}
+                >
+                  <Item_text>가격</Item_text>: {selectProduct.lprice} KRW
+                </div>
+                <div
+                  style={{
+                    color: 'white',
+                    fontSize: '2vw',
+                    marginLeft: 'auto',
+                    marginRight: '1vw',
+                  }}
+                >
+                  <Item_button
+                    style={{
+                      color: 'red',
+                    }}
+                    onClick={() => setSelectProduct({})}
+                  >
+                    삭제
+                  </Item_button>
+                </div>
+              </Item_box>
+            )}
             <Finbuttonbox>
               <Link to="/setupboard">
                 <Finbutton style={{ backgroundColor: '#3C3C3C' }}>
@@ -324,7 +338,11 @@ function Post_reg() {
                 등록하기
               </Finbutton>
             </Finbuttonbox>
-            <ProductModal isOpen={IsModalopen} onClose={Modalclose} />
+            <ProductModal
+              isOpen={IsModalopen}
+              onClose={Modalclose}
+              onSelect={handleProductSelect}
+            />
           </Centerdiv>
         </div>
       </div>

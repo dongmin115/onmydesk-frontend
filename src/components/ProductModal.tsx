@@ -83,17 +83,18 @@ const Item_button = styled.button`
 `;
 
 // 모달 컴포넌트 정의
-function ProductModal({ isOpen, onClose }) {
+function ProductModal({ isOpen, onClose, onSelect }) {
   const [Keyword, setKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+
+  const ClickProduct = (product) => {
+    onSelect(product);
+    onClose(); // 상품 선택 후 모달 닫기
+  };
 
   const handleSearch = (event) => {
     event.preventDefault(); // 폼 제출 기본 동작 방지
     setKeyword(event.target.value);
-  };
-
-  const test = () => {
-    console.log('검색어:', Keyword);
   };
 
   const searchProduct = async () => {
@@ -103,7 +104,7 @@ function ProductModal({ isOpen, onClose }) {
         {
           params: {
             query: Keyword,
-            display: 10,
+            display: 1,
           },
         }
       );
@@ -131,11 +132,14 @@ function ProductModal({ isOpen, onClose }) {
 
           <div>
             {searchResults.map((product) => (
-              <Item_box>
+              <Item_box
+                key={product.productCode}
+                onClick={() => ClickProduct(product)}
+              >
                 <img
                   src={product.img}
                   style={{
-                    width: '8vw',
+                    width: '7.5vw',
                     borderRadius: '1vw 0 0 1vw',
                   }}
                 />
