@@ -3,9 +3,14 @@ import styled from 'styled-components';
 import Mouse from '../assets/Mouse.png';
 import Keyboard from '../assets/Keyboard.png';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import axios from 'axios';
+
 const ProductInfoContainer = styled.div`
   //상부 전체를 묶는 컨테이너
   display: flex;
@@ -174,6 +179,44 @@ const ObjectName = styled.span`
 `;
 
 const ProductDetail = () => {
+  const [LikeProduct, setLikeProduct] = useState(false);
+  const { id } = useParams();
+
+  const ClickLikeProduct = () => {
+    setLikeProduct(!LikeProduct);
+  };
+
+  const wishProduct = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/products/wish/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        }
+      );
+      alert('상품을 찜했습니다.');
+    } catch (error) {
+      console.log('에러');
+    }
+  };
+
+  const wishProductDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/products/wish/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log('에러');
+    }
+  };
+
   return (
     <>
       <Navbar></Navbar>
@@ -195,8 +238,9 @@ const ProductDetail = () => {
                     bgcolor: 'grey.700',
                   },
                 }}
+                onClick={ClickLikeProduct}
               >
-                <FavoriteBorderIcon />
+                {LikeProduct ? <FavoriteIcon /> : <FavoriteBorderIcon />}
               </Button>
             </Circle>
           </TitleContainer>
