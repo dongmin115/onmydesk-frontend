@@ -183,7 +183,7 @@ const ProductDetail = () => {
           },
         }
       );
-      setLikeProduct(true);
+      setLikeProduct(true); //아이콘 전환하려고 따로
       localStorage.setItem(`liked_${id}`, 'true');
     } catch (error) {
       console.log('에러', id);
