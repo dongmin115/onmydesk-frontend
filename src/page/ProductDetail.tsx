@@ -10,7 +10,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-
 const ProductInfoContainer = styled.div`
   //상부 전체를 묶는 컨테이너
   display: flex;
@@ -18,7 +17,6 @@ const ProductInfoContainer = styled.div`
   margin-left: 12.5%;
   margin-top: 6%;
 `;
-
 const ProductImage = styled.img`
   //상품 이미지
   background-size: cover;
@@ -27,7 +25,6 @@ const ProductImage = styled.img`
   border-radius: 5%;
   margin-top: 4.3%;
 `;
-
 const ProductDetails = styled.div`
   //상품의 판매처,가격,상세 정보를 묶는 컨테이너
   width: 40%;
@@ -39,7 +36,6 @@ const TitleContainer = styled.div`
   display: flex;
   align-items: center;
 `;
-
 const Circle = styled.div`
   //하트 이미지를 담는 원
   height: 6vh;
@@ -50,7 +46,6 @@ const Circle = styled.div`
   justify-content: center;
   cursor: pointer;
 `;
-
 const ProductName = styled.h1`
   //상품 이름
   font-size: 1.8em;
@@ -58,7 +53,6 @@ const ProductName = styled.h1`
   font-family: 'Kiwi Maru';
   margin-right: 20px;
 `;
-
 const ProductDetail1 = styled.p`
   //상품 스펙
   color: #ffffff;
@@ -67,7 +61,6 @@ const ProductDetail1 = styled.p`
   height: 3vh;
   margin-top: 4%;
 `;
-
 const ProductDetail2 = styled.div`
   display: flex;
   flex-direction: column;
@@ -82,26 +75,22 @@ const PriceList = styled.div`
   flex-direction: column;
   align-items: flex-start;
 `;
-
 const PriceItem = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 `;
-
 const ShopName = styled.span`
   margin-right: 5%;
   width: 7vw;
   height: 4vh;
   margin-top: 3%;
 `;
-
 const Price = styled.span`
   font-family: 'Kiwi Maru';
   margin-left: 6px;
   margin-bottom: 10%;
 `;
-
 const Line = styled.div`
   width: 55vw;
   height: 0.1vw;
@@ -109,7 +98,6 @@ const Line = styled.div`
   margin-left: 22%;
   margin-top: 6%;
 `;
-
 const SetupItem = styled.span`
   //You may also like
   margin-left: 18.5%;
@@ -119,13 +107,11 @@ const SetupItem = styled.span`
   font-family: 'Kiwi Maru';
   font-size: 1.4rem;
 `;
-
 const Recommend = styled.div`
   //You may also like를 묶는 컨테이너
   margin-top: 1%;
   margin-left: 5%;
 `;
-
 const RecommendProduct = styled.div`
   width: 100%;
   height: 35vh;
@@ -134,7 +120,6 @@ const RecommendProduct = styled.div`
   align-items: center;
   margin-top: 5%;
 `;
-
 const SetupObjectContainer = styled.div`
   //상품들을 묵는 컨테이너
   width: 55vw;
@@ -143,7 +128,6 @@ const SetupObjectContainer = styled.div`
   justify-content: space-between;
   margin-bottom: 3rem;
 `;
-
 const SetupObject = styled.div`
   height: 35vh;
   width: 26%;
@@ -151,7 +135,6 @@ const SetupObject = styled.div`
   border-radius: 1rem;
   transition: 0.5s ease;
   box-shadow: 0px 0px 10px 0px #000000;
-
   &:hover {
     transform: scale(1.1);
   }
@@ -177,31 +160,35 @@ const ObjectName = styled.span`
   margin-left: 26%;
   margin-top: 12%;
 `;
-
 const ProductDetail = () => {
-  const [LikeProduct, setLikeProduct] = useState(false);
   const { id } = useParams();
-
-  const ClickLikeProduct = () => {
-    setLikeProduct(!LikeProduct);
+  const [LikeProduct, setLikeProduct] = useState(
+    localStorage.getItem(`liked_${id}`) === 'true'
+  );
+  const clickLikeProduct = () => {
+    if (!LikeProduct) {
+      wishProduct();
+    } else {
+      wishProductDelete();
+    }
   };
-
   const wishProduct = async () => {
     try {
       const response = await axios.post(
         `http://localhost:8080/api/products/wish/${id}`,
+        null,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         }
       );
-      alert('상품을 찜했습니다.');
+      setLikeProduct(true);
+      localStorage.setItem(`liked_${id}`, 'true');
     } catch (error) {
-      console.log('에러');
+      console.log('에러', id);
     }
   };
-
   const wishProductDelete = async () => {
     try {
       const response = await axios.delete(
@@ -212,11 +199,12 @@ const ProductDetail = () => {
           },
         }
       );
+      setLikeProduct(false);
+      localStorage.setItem(`liked_${id}`, 'false');
     } catch (error) {
-      console.log('에러');
+      console.log('에러', id);
     }
   };
-
   return (
     <>
       <Navbar></Navbar>
@@ -238,7 +226,7 @@ const ProductDetail = () => {
                     bgcolor: 'grey.700',
                   },
                 }}
-                onClick={ClickLikeProduct}
+                onClick={clickLikeProduct}
               >
                 {LikeProduct ? <FavoriteIcon /> : <FavoriteBorderIcon />}
               </Button>
@@ -320,5 +308,4 @@ const ProductDetail = () => {
     </>
   );
 };
-
 export default ProductDetail;

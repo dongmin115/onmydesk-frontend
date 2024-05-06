@@ -477,17 +477,19 @@ const PostDetail = () => {
       </SetupItemContainer>
 
       <SetupObjectContainer>
-        {productPost.map((post, index) => (
+        {productPost.map((product, index) => (
           <SetupObject>
-            <ObjectImage src={post.img} />
-            <ObjectNameContainer>
-              <ObjectName
-                dangerouslySetInnerHTML={{ __html: post.productName }}
-              ></ObjectName>
-            </ObjectNameContainer>
-            <ObjectCostContainer>
-              <ObjectCost>{post.lprice} KRW</ObjectCost>
-            </ObjectCostContainer>
+            <Link to={`/productdetail/${product.id}`}>
+              <ObjectImage src={product.img} />
+              <ObjectNameContainer>
+                <ObjectName
+                  dangerouslySetInnerHTML={{ __html: product.productName }}
+                ></ObjectName>
+              </ObjectNameContainer>
+              <ObjectCostContainer>
+                <ObjectCost>{product.lprice} KRW</ObjectCost>
+              </ObjectCostContainer>
+            </Link>
           </SetupObject>
         ))}
       </SetupObjectContainer>
