@@ -82,23 +82,48 @@ const SetupItem = styled.span`
 `;
 
 const SetupObjectContainer = styled.div`
-  width: 55vw;
+  width: 54vw;
   height: 42vh;
+  padding-top: 1vw;
+  padding-bottom: 2vw;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
   margin-left: 23%;
   display: flex;
-  justify-content: space-between;
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  &::-webkit-scrollbar {
+    width: 8px; /* 스크롤바 너비 */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent; /* 스크롤바 트랙 배경 */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #888; /* 스크롤바 색상 */
+    border-radius: 10px; /* 스크롤바 모양 */
+    transition: background-color 0.3s ease; /* 애니메이션 효과 */
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* 마우스 호버 시 색상 변경 */
+  }
 `;
 
 const SetupObject = styled.div`
-  height: 42vh;
-  width: 30%;
+  width: 30%; /* SetupObject의 고정된 너비 */
+  min-width: 30%; /* 최소 너비 지정 (선택 사항) */
+  margin-right: 20px; /* 각 SetupObject 사이의 간격 설정 (선택 사항) */
   border-radius: 1rem;
   background-color: #2f2d2d;
   transition: 0.5s ease;
   box-shadow: 0px 0px 10px 0px #000000;
+  overflow: hidden; /* 내용이 넘칠 경우 숨김 처리 */
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
 `;
 const ObjectImage = styled.img`
@@ -114,7 +139,7 @@ const ObjectNameContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
-const ObjectName = styled.span`
+const ObjectName = styled.div`
   font-family: 'Kiwi Maru';
   font-size: 1rem;
   color: #ffffff;
@@ -241,6 +266,7 @@ type Comment = {
 const PostDetail = () => {
   const { id } = useParams();
   const [posts, setPosts] = useState([]);
+  const [productPost, setProductPost] = useState([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [comment, setComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
@@ -253,12 +279,13 @@ const PostDetail = () => {
           `http://localhost:8080/api/posts/${id}`
         );
         setPosts(response.data.data.post);
+        setProductPost(response.data.data.products);
 
         const commentsResponse = await axios.get(
           `http://localhost:8080/api/posts/${id}/comments`
         );
         setComments(commentsResponse.data.data);
-        console.log('목록 불러오기 성공:', response.data.data.post);
+        console.log('목록 불러오기 성공:', response.data.data);
       } catch (error) {
         console.log('목록 불러오기 실패:', error);
       }
@@ -448,38 +475,26 @@ const PostDetail = () => {
       <SetupItemContainer>
         <SetupItem>Setup Item</SetupItem>
       </SetupItemContainer>
+
       <SetupObjectContainer>
-        <SetupObject>
-          <ObjectImage src={Mouse} />
-          <ObjectNameContainer>
-            <ObjectName>Apple Mouse</ObjectName>
-          </ObjectNameContainer>
-          <ObjectCostContainer>
-            <ObjectCost>89,000 KRW</ObjectCost>
-          </ObjectCostContainer>
-        </SetupObject>
-        <SetupObject>
-          <ObjectImage src={Mouse} />
-          <ObjectNameContainer>
-            <ObjectName>Apple Mouse</ObjectName>
-          </ObjectNameContainer>
-          <ObjectCostContainer>
-            <ObjectCost>89,000 KRW</ObjectCost>
-          </ObjectCostContainer>
-        </SetupObject>
-        <SetupObject>
-          <ObjectImage src={Mouse} />
-          <ObjectNameContainer>
-            <ObjectName>Apple Mouse</ObjectName>
-          </ObjectNameContainer>
-          <ObjectCostContainer>
-            <ObjectCost>89,000 KRW</ObjectCost>
-          </ObjectCostContainer>
-        </SetupObject>
+        {productPost.map((post, index) => (
+          <SetupObject>
+            <ObjectImage src={post.img} />
+            <ObjectNameContainer>
+              <ObjectName
+                dangerouslySetInnerHTML={{ __html: post.productName }}
+              ></ObjectName>
+            </ObjectNameContainer>
+            <ObjectCostContainer>
+              <ObjectCost>{post.lprice} KRW</ObjectCost>
+            </ObjectCostContainer>
+          </SetupObject>
+        ))}
       </SetupObjectContainer>
+
       <Line></Line>
       <TotalContainer>
-        <Total>89,000 KRW</Total>
+        <Total>{posts.totalPrice} KRW</Total>
       </TotalContainer>
       <CommentContainer>
         <TextArea
