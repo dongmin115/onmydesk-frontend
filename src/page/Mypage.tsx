@@ -10,6 +10,7 @@ import {
   Button,
   IconButton,
   Modal,
+  Tab,
   TextField,
   ThemeProvider,
   createTheme,
@@ -20,6 +21,7 @@ import { deleteUser, putUserInfo } from '../api/User.ts';
 import { Favorite, FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
 import { disFavorite, favorite, getFavorite } from '../api/Favorite.ts';
 import { LikeCountsMap, LikesMap, Post } from '../types/type.ts';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 
 const theme = createTheme({
   palette: {
@@ -189,6 +191,12 @@ const Caption = styled.div`
 function Mypage() {
   const navigate = useNavigate();
 
+  const [value, setValue] = useState('1');
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
+
   const { name, nickname, email, setNickname } = userStore();
   const [newNickname, setNewNickname] = useState('');
   const [posts, setPosts] = useState([]);
@@ -240,7 +248,7 @@ function Mypage() {
       const fetchFavorite = async () => {
         try {
           const response = await getFavorite();
-          await setPosts(response.data);
+          setPosts(response.data);
           const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
           const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
 
@@ -495,54 +503,27 @@ function Mypage() {
         </TitleContainer>
         <div
           style={{
-            backgroundColor: '#414141',
-            borderRadius: '1vw',
-            display: 'flex',
-            boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
+            backgroundColor: '#3d3d3d',
             width: '100%',
-            justifyContent: 'center',
+            borderRadius: '1vw',
+            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
           }}
         >
-          <div>
-            <div style={{ marginRight: '1vw' }}>
-              <Flexdiv>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-              </Flexdiv>
-              <Flexdiv>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-              </Flexdiv>
-
-              <Flexdiv>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-
-                <CustomModal isOpen={IsModalOpen} onClose={closeModal} />
-              </Flexdiv>
-            </div>
-          </div>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab label="Item One" value="1" />
+                <Tab label="Item Two" value="2" />
+                <Tab label="Item Three" value="3" />
+              </TabList>
+            </Box>
+            <TabPanel value="1">Item One</TabPanel>
+            <TabPanel value="2">Item Two</TabPanel>
+            <TabPanel value="3">Item Three</TabPanel>
+          </TabContext>
         </div>
       </Container>
     </ThemeProvider>

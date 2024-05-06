@@ -250,7 +250,7 @@ export default function SetupBoard() {
     }
   };
 
-  const handlePageChange = (event, page, criteria) => {
+  const handlePageChange = (page, criteria) => {
     setPagenation(page);
     fetchPosts(page, criteria);
   };
