@@ -7,9 +7,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { boolean } from 'zod';
 const ProductInfoContainer = styled.div`
   //상부 전체를 묶는 컨테이너
   display: flex;
@@ -162,9 +163,7 @@ const ObjectName = styled.span`
 `;
 const ProductDetail = () => {
   const { id } = useParams();
-  const [LikeProduct, setLikeProduct] = useState(
-    localStorage.getItem(`liked_${id}`) === 'true'
-  );
+  const [LikeProduct, setLikeProduct] = useState(false);
   const clickLikeProduct = () => {
     if (!LikeProduct) {
       wishProduct();
@@ -172,6 +171,29 @@ const ProductDetail = () => {
       wishProductDelete();
     }
   };
+
+  const searchProduct = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/products/${id}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        }
+      );
+      console.log(response.data.data.product.wished);
+      setLikeProduct(response.data.data.product.wished);
+    } catch (error) {
+      console.log('에러');
+    }
+  };
+
+  useEffect(() => {
+    searchProduct(), [];
+  });
+
   const wishProduct = async () => {
     try {
       const response = await axios.post(
@@ -184,7 +206,6 @@ const ProductDetail = () => {
         }
       );
       setLikeProduct(true); //아이콘 전환하려고 따로
-      localStorage.setItem(`liked_${id}`, 'true');
     } catch (error) {
       console.log('에러', id);
     }
@@ -200,7 +221,6 @@ const ProductDetail = () => {
         }
       );
       setLikeProduct(false);
-      localStorage.setItem(`liked_${id}`, 'false');
     } catch (error) {
       console.log('에러', id);
     }
