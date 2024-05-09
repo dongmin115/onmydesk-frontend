@@ -89,11 +89,17 @@ const PriceItem = styled.div`
   margin-bottom: 10px;
 `;
 
-const ShopName = styled.span`
+const ShopName = styled.a`
+  // 스타일을 a 태그에 적용
   margin-right: 5%;
   width: 7vw;
   height: 4vh;
   margin-top: 3%;
+  color: #ffffff; // 링크 색상을 지정
+  text-decoration: none; // 밑줄 제거
+  &:hover {
+    text-decoration: underline; // 호버 시 밑줄 표시
+  }
 `;
 
 const Price = styled.span`
@@ -179,7 +185,7 @@ const ObjectName = styled.span`
 `;
 
 const ProductDetail = () => {
-  const { id } = useParams();
+  const { id, productCode } = useParams();
   const [productDetailData, setProductDetailData] = useState<Product>();
 
   const fetchProductDetail = async () => {
@@ -189,8 +195,8 @@ const ProductDetail = () => {
       );
       console.log(response.data.data);
       setProductDetailData(response.data);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -233,8 +239,14 @@ const ProductDetail = () => {
           <ProductDetail2>
             <PriceList>
               {productDetailData?.data.pages.map((page) => (
-                <PriceItem>
-                  <ShopName>{page.storeName}</ShopName>
+                <PriceItem key={page.id}>
+                  <ShopName
+                    href={page.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {page.storeName}
+                  </ShopName>
                   <Price>{page.price}</Price>
                 </PriceItem>
               ))}

@@ -67,206 +67,171 @@ const SetupBoardContainer = styled.div`
   align-items: center;
   padding: 0;
   height: fit-content;
+  margin-left: 5%;
+  margin-right: 5%;
 `;
 
 const Flexbox = styled.div`
   display: flex;
+  flex-direction: row;
+  justify-content: space-around;
   align-items: center;
-  gap: 1rem;
   width: 100%;
-  margin-bottom: 2rem;
+  height: 18vh;
+  margin-right: 5%;
+  margin-left: 5%;
 `;
 
-const Flexbox2 = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: end;
-`;
-
-const Category = function () {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+const Category = function ({
+  setLoading,
+  setProducts,
+  setError,
+  fetchProductList,
+}) {
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const [searchQuery, setSearchQuery] = useState('');
+  const [criteria, setCriteria] = useState(1); // 기본 정렬 기준을 1(인기순)로 설정
+  const [criteriaLabel, setCriteriaLabel] = useState('인기순'); // 기본 라벨 설정
+
+  const handleSearch = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        'http://localhost:8080/api/products/search',
+        { params: { query: searchQuery } }
+      );
+      setProducts(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error searching products:', error);
+      setError('상품 검색에 실패했습니다.');
+      setLoading(false);
+    }
+  };
+
+  const handleMenuItemClick = (criteriaValue, label) => {
+    setCriteria(criteriaValue);
+    setCriteriaLabel(label); // 라벨 업데이트
+    handleClose();
+    fetchProductList(setProducts, setLoading, setError, criteriaValue);
+  };
+
   return (
     <GoodsBoardMenu>
-      <Flexbox>
-        <Button
-          variant="contained"
+      <Flexbox
+        style={{ alignItems: 'center', justifyContent: 'space-between' }}
+      >
+        <TextField
+          id="search-field"
+          variant="standard"
+          placeholder="검색어를 입력해주세요."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
           color="primary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          전체
-        </Button>
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <IconButton onClick={handleSearch} style={{ padding: 0 }}>
+                  <SearchIcon color="primary" style={{ cursor: 'pointer' }} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          style={{ minWidth: 200, whiteSpace: 'nowrap' }}
+        />
+
+        <GoodsBoardTitle>셋업에 사용된 상품을 둘러보세요!</GoodsBoardTitle>
         <Button
-          variant="contained"
-          color="secondary"
+          id="basic-button"
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
           size="large"
-          style={{ flex: 1 }}
+          style={{
+            minWidth: 120,
+            whiteSpace: 'nowrap',
+            color: '#d3d3d3',
+            fontSize: '1rem',
+          }}
+          endIcon={<KeyboardArrowDown />}
         >
-          키보드
+          {criteriaLabel} {/* 버튼 라벨 업데이트 */}
         </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
+
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
         >
-          마우스
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          노트북
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          모니터
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          데스크
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          스피커
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          기타
-        </Button>
-        <Flexbox2>
-          <Button
-            id="basic-button"
-            aria-controls={open ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            size="large"
-            style={{ color: '#d3d3d3', fontSize: '1rem' }}
-            endIcon={<KeyboardArrowDown />}
-          >
-            정렬기준
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem onClick={handleClose}>인기순</MenuItem>
-            <MenuItem onClick={handleClose}>가격순</MenuItem>
-          </Menu>
-        </Flexbox2>
+          <MenuItem onClick={() => handleMenuItemClick(1, '인기순')}>
+            인기순
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuItemClick(2, '좋아요')}>
+            좋아요
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuItemClick(3, '조회수')}>
+            조회수
+          </MenuItem>
+        </Menu>
       </Flexbox>
     </GoodsBoardMenu>
   );
-};
-// 상품 목록을 불러오는 함수
-const fetchProductList = async (setProducts, setLoading, setError) => {
-  setLoading(true);
-  try {
-    const response = await axios.get('http://localhost:8080/api/products', {});
-    setProducts(response.data.data);
-    setLoading(false);
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    setError('상품을 불러오는데 실패했습니다.');
-    setLoading(false);
-  }
-};
-
-// 상품 검색을 처리하는 함수
-const searchProducts = async (query, setProducts, setLoading, setError) => {
-  setLoading(true);
-  try {
-    const response = await axios.get(
-      'http://localhost:8080/api/products/search',
-      { params: { query } }
-    );
-    setProducts(response.data);
-    setLoading(false);
-  } catch (error) {
-    console.error('Error searching products:', error);
-    setError('상품 검색에 실패했습니다.');
-    setLoading(false);
-  }
 };
 
 export default function GoodsBoard() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+
+  const fetchProductList = async (setProducts, setLoading, setError) => {
+    setLoading(true);
+    try {
+      const response = await axios.get('http://localhost:8080/api/products');
+      setProducts(response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setError('상품을 불러오는데 실패했습니다.');
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetchProductList(setProducts, setLoading, setError); // 초기 상품 목록 불러오기
+    fetchProductList(setProducts, setLoading, setError);
   }, []);
-
-  const handleSearch = () => {
-    searchProducts(searchQuery, setProducts, setLoading, setError);
-  };
 
   return (
     <ThemeProvider theme={theme}>
       <Navbar />
-      <TextField
-        id="search-field"
-        variant="standard"
-        placeholder="검색어를 입력해주세요."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        color="primary"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <IconButton onClick={handleSearch} style={{ padding: 0 }}>
-                <SearchIcon color="primary" style={{ cursor: 'pointer' }} />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
+
       <Container>
-        <GoodsBoardTitle>셋업에 사용된 상품을 둘러보세요!</GoodsBoardTitle>
+        <Category
+          setLoading={setLoading}
+          setProducts={setProducts}
+          setError={setError}
+          fetchProductList={fetchProductList} // 함수를 prop으로 전달
+        />
         {loading ? (
           <CircularProgress />
         ) : error ? (
           <p>{error}</p>
         ) : (
           <SetupBoardContainer>
-            {Array.isArray(products) &&
-              products.map((product) => (
-                <GoodsItem key={product.id} product={product} id={product.id} />
-              ))}
+            {products.map((product) => (
+              <GoodsItem key={product.id} product={product} id={product.id} />
+            ))}
           </SetupBoardContainer>
         )}
       </Container>
