@@ -2,6 +2,7 @@ import { Key } from '@mui/icons-material';
 import { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { TextField } from '@mui/material';
 
 // 모달 스타일드 컴포넌트 생성
 const ModalWrapper = styled.div`
@@ -17,7 +18,7 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-  background-color: #a9a9a977;
+  background-color: rgba(87, 87, 87, 0.9);
   padding: 20px;
   border-radius: 10px;
   width: 60vw;
@@ -45,19 +46,9 @@ const ModalCloseButton = styled.button`
   right: 10px;
 `;
 
-const SearchInput = styled.input`
-  height: 1vw;
-  width: 92%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px 0 0 5px; /* 오른쪽 둥근 모서리만 적용 */
-  font-size: 16px;
-`;
-
 const SearchButton = styled.button`
-  height: 2.5vw;
+  height: 3vw;
   border: #0085ff;
-  border-radius: 0 5px 5px 0; /* 오른쪽 둥근 모서리만 적용 */
   background-color: #0085ff;
   font-size: 16px;
   cursor: pointer;
@@ -96,6 +87,14 @@ const Item_button = styled.button`
   cursor: pointer;
 `;
 
+const InputTextField = styled(TextField)({
+  '& label': {
+    // placeholder text color
+    color: '#aeaaaa',
+    fontSize: '0.9vw',
+  },
+});
+
 // 모달 컴포넌트 정의
 function ProductModal({ isOpen, onClose, onSelect }) {
   const [Keyword, setKeyword] = useState('');
@@ -106,9 +105,10 @@ function ProductModal({ isOpen, onClose, onSelect }) {
     onClose();
   };
 
-  const handleSearch = (event) => {
-    event.preventDefault();
-    setKeyword(event.target.value);
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      searchProduct();
+    }
   };
 
   const searchProduct = async () => {
@@ -136,12 +136,26 @@ function ProductModal({ isOpen, onClose, onSelect }) {
         <ModalContent>
           <ModalCloseButton onClick={onClose}>닫기</ModalCloseButton>
           <div>
-            <SearchInput
-              type="text"
-              placeholder="제품을 검색해보세요"
-              onChange={handleSearch}
+            <InputTextField
+              sx={{
+                input: {
+                  fontSize: '1.2vw',
+
+                  color: 'white',
+                },
+              }}
+              size="small"
+              id="filled-basic"
+              label="상품명 검색"
+              variant="filled"
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={handleKeyDown}
+              value={Keyword}
+              style={{
+                width: '59.5vw',
+              }}
             />
-            <SearchButton onClick={searchProduct}>검색</SearchButton>
+            {/* <SearchButton onClick={searchProduct}>검색</SearchButton> /검색버튼 */}
           </div>
 
           <div>
