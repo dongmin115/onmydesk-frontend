@@ -10,6 +10,8 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ShareIcon from '@mui/icons-material/Share';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const SetupTitleContainer = styled.div`
   width: 100%;
@@ -52,12 +54,8 @@ const DateInfo = styled.div`
 `;
 
 const Image = styled.img`
-  width: 55vw;
-  height: 60vh;
+  height: 70vh;
   border-radius: 1rem;
-  display: flex;
-  flex-direction: column;
-  margin-left: 23%;
 `;
 
 const TextContainer = styled.div`
@@ -263,6 +261,27 @@ type Comment = {
   nickname: string;
 };
 
+const ImageGallery = ({ imageUrls }) => {
+  // imageUrls가 배열인지 확인 후 처리
+  if (!Array.isArray(imageUrls) || imageUrls.length === 0) {
+    return <p>No images to display.</p>;
+  }
+
+  return (
+    <Carousel showArrows={true} showThumbs={false}>
+      {imageUrls.map((imageUrl, index) => (
+        <div key={index}>
+          <Image
+            src={imageUrl}
+            alt={`Image ${index}`}
+            style={{ width: '70%' }}
+          />
+        </div>
+      ))}
+    </Carousel>
+  );
+};
+
 const PostDetail = () => {
   const { id } = useParams();
   const [posts, setPosts] = useState({ title: '', imageUrls: [] });
@@ -416,10 +435,8 @@ const PostDetail = () => {
         <DateInfo>{posts.updatedAt}</DateInfo>
       </DeskInfoContainer>
       <div>
-        {posts.imageUrls &&
-          posts.imageUrls.map((imageUrl, index) => (
-            <img key={index} src={imageUrl} alt={`Image ${index}`} />
-          ))}
+        <ImageGallery imageUrls={posts.imageUrls} />
+        {/* 다른 내용들도 표시 */}
       </div>
       <RightBox>
         <Circle>
