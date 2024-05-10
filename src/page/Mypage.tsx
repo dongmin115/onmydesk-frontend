@@ -518,6 +518,39 @@ function Mypage() {
                     />
                   ))}
               </TabList>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '1rem',
+                  height: 'fit-content',
+                  paddingLeft: '2rem',
+                  paddingRight: '2rem',
+                }}
+              >
+                <p
+                  style={{
+                    color: '#7b7878',
+                    width: '60%',
+                    textAlign: 'center',
+                  }}
+                >
+                  제품
+                </p>
+                <p
+                  style={{
+                    color: '#7b7878',
+                    width: '10vw',
+                    textAlign: 'center',
+                  }}
+                >
+                  최저가
+                </p>
+                <div style={{ width: '10vw' }}></div>
+              </div>
+              <Divider style={{ marginLeft: '2rem', marginRight: '2rem' }} />
               {setups &&
                 setups.map((setup: Setup, i: number) => (
                   <TabPanel value={`${i + 1}`} key={setup.id}>
@@ -565,7 +598,7 @@ function Mypage() {
                                   fontSize: '1.25rem',
                                   color: 'white',
                                   fontWeight: 'bold',
-                                  width: 'fit-content',
+                                  width: '100%',
                                 }}
                               >
                                 {product.productName}
@@ -576,6 +609,8 @@ function Mypage() {
                             style={{
                               fontSize: '1.25rem',
                               color: 'white',
+                              width: '10vw',
+                              textAlign: 'center',
                             }}
                           >
                             {product.lprice}원
@@ -587,6 +622,7 @@ function Mypage() {
                               alignItems: 'center',
                               justifyContent: 'center',
                               gap: '1rem',
+                              width: '10vw',
                             }}
                           >
                             <Button
