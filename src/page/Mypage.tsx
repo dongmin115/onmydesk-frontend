@@ -258,7 +258,11 @@ function Mypage() {
 
   const renderPosts = () => {
     return posts.map((post: Post) => (
-      <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
+      <Link
+        key={post.id}
+        to={`/PostDetail/${post.id}`}
+        style={{ textDecoration: 'none' }}
+      >
         <ImageContainer>
           <SetupBoardImage
             key={post.id}
@@ -505,17 +509,18 @@ function Mypage() {
                 aria-label="lab API tabs example"
               >
                 {setups &&
-                  setups.map((setup: Setup) => (
+                  setups.map((setup: Setup, i: number) => (
                     <Tab
                       label={setup.setupName}
-                      value={`${setup.id}`}
+                      value={`${i + 1}`}
                       onClick={async () => await fetchSetupDetail(setup.id)}
+                      key={i}
                     />
                   ))}
               </TabList>
               {setups &&
-                setups.map((setup: Setup) => (
-                  <TabPanel value={`${setup.id}`}>
+                setups.map((setup: Setup, i: number) => (
+                  <TabPanel value={`${i + 1}`} key={setup.id}>
                     {setupDetail &&
                       setupDetail.map((product: SetupDetail) => (
                         <div
