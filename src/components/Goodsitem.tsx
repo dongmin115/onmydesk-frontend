@@ -52,6 +52,7 @@ const SetupBoardImage = styled.img`
 `;
 function GoodsItem({ product, id }) {
   const navigate = useNavigate();
+
   return (
     <GoodsBoardFlexbox onClick={() => navigate(`/productdetail/${id}`)}>
       <SetupBoardImage src={product.img} alt={product.productName} />

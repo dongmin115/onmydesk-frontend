@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 5173:5173
+    volumes:
+      - .:/frontend/
+      - /frontend/node_modules
+    networks:
+      - omd
+    tty: true
+    stdin_open: true
+
+networks:
+  omd:
+    driver: bridge

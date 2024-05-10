@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-
+import ProductModal from '../components/ProductModal';
 import Navbar from '../components/Navbar';
 import mouse from '../assets/image/Post_registration/mouse.svg';
 import ReactQuill, { Quill } from 'react-quill';
@@ -29,8 +29,7 @@ const Item_box = styled.div`
   background-color: #3c3c3c;
   height: 6vw;
   width: 68vw;
-  margin-bottom: 3vw;
-  margin-top: 1vw;
+  margin-bottom: 1vw;
 
   display: flex;
   flex-direction: row;
@@ -77,6 +76,44 @@ const Finbutton = styled.button`
 function Post_reg() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
+  const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+
+  interface Product {
+    productName: string;
+    img: string;
+    productCode: string;
+    lprice: number;
+    brand: string;
+    maker: string;
+    category1: string;
+    category2: string;
+    category3?: string;
+    category4?: string;
+    pages: { price: number; link: string; storeName: string }[];
+  }
+
+  const handleProductSelect = (product) => {
+    setArrProduct([...ArrProduct, product]);
+    setIsModalopen(false); // 모달 닫기
+  };
+
+  const handleProductDelete = (indexToRemove) => {
+    const updatedProducts = ArrProduct.filter(
+      (_, index) => index !== indexToRemove
+    );
+    setArrProduct(updatedProducts);
+
+    console.log(ArrProduct);
+  };
+
+  const Modalopen = () => {
+    setIsModalopen(true);
+  };
+
+  const Modalclose = () => {
+    setIsModalopen(false);
+  };
 
   const handleQuillChange = (content, delta, source, editor) => {
     setContent(content);
@@ -138,28 +175,7 @@ function Post_reg() {
         {
           title: `${title}`,
           content: `${content}`,
-          products: [
-            {
-              productName:
-                'Apple <b>아이패드</b> 에어 5세대 M1 WIFI 64G 스페이스 그레이 (MM9C3KH/A)',
-              img: 'https://shopping-phinf.pstatic.net/main_3153084/31530843620.20220705164247.jpg',
-              productCode: '31530843620',
-              lprice: 828490,
-              brand: 'Apple',
-              maker: 'Apple',
-              category1: '디지털/가전',
-              category2: '태블릿PC',
-              category3: 'string',
-              category4: 'string',
-              pages: [
-                {
-                  price: 829690,
-                  link: 'https://search.shopping.naver.com/gate.nhn?id=31530843620',
-                  storeName: '네이버',
-                },
-              ],
-            },
-          ],
+          products: ArrProduct,
         },
         {
           headers: {
@@ -168,6 +184,7 @@ function Post_reg() {
         }
       );
       console.log(response.data);
+      console.log(ArrProduct);
 
       alert('게시글이 등록되었습니다.');
       window.history.back();
@@ -247,59 +264,68 @@ function Post_reg() {
                 color: '#349af8',
                 marginTop: '3vw',
               }}
+              onClick={Modalopen}
             >
               게시글 상품 추가
             </Item_button>
           </div>
 
           <Centerdiv>
-            <Item_box>
-              <img
-                src={mouse}
-                style={{
-                  width: '4.5vw',
-                  marginLeft: '2vw',
-                  pointerEvents: 'none',
-                }}
-              />
-              <div
-                style={{
-                  color: 'white',
-                  width: '20vw',
-                  fontSize: '1.5vw',
-                  marginLeft: '2vw',
-                }}
-              >
-                <Item_text>상품명</Item_text>:Magic Mouse
-              </div>
-              <div
-                style={{
-                  color: 'white',
-                  width: '20vw',
-                  fontSize: '1.5vw',
-                  marginLeft: '6vw',
-                }}
-              >
-                <Item_text>가격</Item_text>: 900,0000 KRW
-              </div>
-              <div
-                style={{
-                  color: 'white',
-                  fontSize: '2vw',
-                  marginLeft: 'auto',
-                  marginRight: '1vw',
-                }}
-              >
-                <Item_button
+            {ArrProduct.map((product, index) => (
+              <Item_box>
+                <img
+                  src={product.img}
                   style={{
-                    color: 'red',
+                    width: '4.5vw',
+                    marginLeft: '2vw',
+                    pointerEvents: 'none',
+                  }}
+                />
+                <div
+                  style={{
+                    color: 'white',
+                    width: '20vw',
+                    fontSize: '1.5vw',
+                    marginLeft: '2vw',
                   }}
                 >
-                  삭제
-                </Item_button>
-              </div>
-            </Item_box>
+                  <Item_text>상품명</Item_text>:
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: product.productName,
+                    }}
+                  />
+                </div>
 
+                <div
+                  style={{
+                    color: 'white',
+                    width: '20vw',
+                    fontSize: '1.5vw',
+                    marginLeft: '6vw',
+                  }}
+                >
+                  <Item_text>가격</Item_text>: {product.lprice} KRW
+                </div>
+                <div
+                  style={{
+                    color: 'white',
+                    fontSize: '2vw',
+                    marginLeft: 'auto',
+                    marginRight: '1vw',
+                  }}
+                >
+                  <Item_button
+                    style={{
+                      color: 'red',
+                    }}
+                    onClick={() => handleProductDelete(index)}
+                  >
+                    삭제
+                  </Item_button>
+                </div>
+              </Item_box>
+            ))}
             <Finbuttonbox>
               <Link to="/setupboard">
                 <Finbutton style={{ backgroundColor: '#3C3C3C' }}>
@@ -314,6 +340,11 @@ function Post_reg() {
                 등록하기
               </Finbutton>
             </Finbuttonbox>
+            <ProductModal
+              isOpen={IsModalopen}
+              onClose={Modalclose}
+              onSelect={handleProductSelect}
+            />
           </Centerdiv>
         </div>
       </div>

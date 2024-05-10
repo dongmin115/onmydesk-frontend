@@ -1,19 +1,11 @@
-import {
-  Button,
-  IconButton,
-  Menu,
-  MenuItem,
-  CircularProgress,
-  InputAdornment,
-  TextField,
-} from '@mui/material';
+import { Button, Menu, MenuItem, CircularProgress } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import { KeyboardArrowDown } from '@mui/icons-material';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import SearchIcon from '@mui/icons-material/Search';
+
 import GoodsItem from '../components/Goodsitem';
 
 const theme = createTheme({
@@ -87,6 +79,8 @@ const Category = function ({
   setProducts,
   setError,
   fetchProductList,
+  criteria,
+  setCriteria,
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -96,31 +90,13 @@ const Category = function ({
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const [searchQuery, setSearchQuery] = useState('');
-  const [criteria, setCriteria] = useState(1); // 기본 정렬 기준을 1(인기순)로 설정
-  const [criteriaLabel, setCriteriaLabel] = useState('인기순'); // 기본 라벨 설정
 
-  const handleSearch = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        'http://localhost:8080/api/products/search',
-        { params: { query: searchQuery } }
-      );
-      setProducts(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error searching products:', error);
-      setError('상품 검색에 실패했습니다.');
-      setLoading(false);
-    }
-  };
+  const [criteriaLabel, setCriteriaLabel] = useState('인기순'); // 기본 라벨 설정
 
   const handleMenuItemClick = (criteriaValue, label) => {
     setCriteria(criteriaValue);
-    setCriteriaLabel(label); // 라벨 업데이트
+    setCriteriaLabel(label);
     handleClose();
-    fetchProductList(setProducts, setLoading, setError, criteriaValue);
   };
 
   return (
@@ -128,25 +104,6 @@ const Category = function ({
       <Flexbox
         style={{ alignItems: 'center', justifyContent: 'space-between' }}
       >
-        <TextField
-          id="search-field"
-          variant="standard"
-          placeholder="검색어를 입력해주세요."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          color="primary"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <IconButton onClick={handleSearch} style={{ padding: 0 }}>
-                  <SearchIcon color="primary" style={{ cursor: 'pointer' }} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          style={{ minWidth: 200, whiteSpace: 'nowrap' }}
-        />
-
         <GoodsBoardTitle>셋업에 사용된 상품을 둘러보세요!</GoodsBoardTitle>
         <Button
           id="basic-button"
@@ -194,11 +151,16 @@ export default function GoodsBoard() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [criteria, setCriteria] = useState(1);
 
-  const fetchProductList = async (setProducts, setLoading, setError) => {
+  const fetchProductList = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('http://localhost:8080/api/products');
+      const response = await axios.get('http://localhost:8080/api/products', {
+        params: {
+          criteria: criteria,
+        },
+      });
       setProducts(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -209,8 +171,8 @@ export default function GoodsBoard() {
   };
 
   useEffect(() => {
-    fetchProductList(setProducts, setLoading, setError);
-  }, []);
+    fetchProductList();
+  }, [criteria]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -221,7 +183,9 @@ export default function GoodsBoard() {
           setLoading={setLoading}
           setProducts={setProducts}
           setError={setError}
-          fetchProductList={fetchProductList} // 함수를 prop으로 전달
+          fetchProductList={fetchProductList}
+          criteria={criteria}
+          setCriteria={setCriteria}
         />
         {loading ? (
           <CircularProgress />
