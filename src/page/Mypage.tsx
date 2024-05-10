@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar.tsx';
 import {
   Box,
   Button,
+  Divider,
   IconButton,
   Modal,
   Tab,
@@ -556,7 +557,6 @@ function Mypage() {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             width: '100%',
-                            margin: '2rem',
                           }}
                         >
                           <div
@@ -565,15 +565,15 @@ function Mypage() {
                               flexDirection: 'row',
                               alignItems: 'center',
                               justifyContent: 'space-between',
-                              width: '50%',
+                              width: '60%',
                             }}
                           >
                             <img
                               src={product.img}
                               alt={product.productName}
                               style={{
-                                width: '10vw',
-                                height: '10vw',
+                                width: 'fit-content',
+                                height: '5vw',
                                 borderRadius: '1rem',
                                 boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
                               }}
@@ -589,19 +589,28 @@ function Mypage() {
                             >
                               <p
                                 style={{
-                                  fontSize: '1.5rem',
+                                  fontSize: '1.25rem',
                                   color: 'white',
                                   fontWeight: 'bold',
+                                  width: 'fit-content',
                                 }}
                               >
                                 {product.productName}
                               </p>
                             </div>
                           </div>
+                          <p
+                            style={{
+                              fontSize: '1.25rem',
+                              color: 'white',
+                            }}
+                          >
+                            {product.lprice}원
+                          </p>
                           <div
                             style={{
                               display: 'flex',
-                              flexDirection: 'column',
+                              flexDirection: 'row',
                               alignItems: 'center',
                               justifyContent: 'center',
                               gap: '1rem',
@@ -609,22 +618,9 @@ function Mypage() {
                           >
                             <Button
                               variant="contained"
-                              color="secondary"
-                              style={{
-                                fontSize: '1rem',
-                                width: '6vw',
-                                height: '2.5vw',
-                              }}
-                            >
-                              수정
-                            </Button>
-                            <Button
-                              variant="contained"
                               color="error"
                               style={{
                                 fontSize: '1rem',
-                                width: '6vw',
-                                height: '2.5vw',
                               }}
                             >
                               삭제
@@ -632,6 +628,19 @@ function Mypage() {
                           </div>
                         </div>
                       ))}
+                    <Divider style={{ margin: '1rem' }} />
+                    <p
+                      style={{
+                        fontSize: '1.25rem',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        width: '100%',
+                        margin: '0',
+                        textAlign: 'end',
+                      }}
+                    >
+                      총액 : {setup.postTotalPrice} 원
+                    </p>
                   </TabPanel>
                 ))}
             </Box>
