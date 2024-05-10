@@ -79,8 +79,7 @@ function Post_reg() {
   const [content, setContent] = useState('');
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
-  const [images, setImages] = useState([]);
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
 
   interface Product {
     productName: string;
@@ -179,10 +178,11 @@ function Post_reg() {
           title: `${title}`,
           content: `${content}`,
           products: ArrProduct,
+          imageIds: [1, 2],
+          thumbnailImageId: 1,
         },
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         }
@@ -200,9 +200,11 @@ function Post_reg() {
 
   const handleImageChange = (event) => {
     const files = event.target.files;
-    // 파일 목록을 배열로 변환
-    const selectedFiles = Array.prototype.slice.call(files);
-    setSelectedImages(selectedFiles);
+    // 파일 목록을 배열로 변환하여 selectedImages 상태를 업데이트
+    if (files) {
+      const selectedFiles = Array.from(files) as File[];
+      setSelectedImages(selectedFiles);
+    }
   };
 
   const uploadImages = async () => {

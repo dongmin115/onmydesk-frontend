@@ -265,7 +265,7 @@ type Comment = {
 
 const PostDetail = () => {
   const { id } = useParams();
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState({ title: '', imageUrls: [] });
   const [productPost, setProductPost] = useState([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [comment, setComment] = useState('');
@@ -415,7 +415,12 @@ const PostDetail = () => {
         </EditDeleteContainer>
         <DateInfo>{posts.updatedAt}</DateInfo>
       </DeskInfoContainer>
-      <Image src={SetupImage} />
+      <div>
+        {posts.imageUrls &&
+          posts.imageUrls.map((imageUrl, index) => (
+            <img key={index} src={imageUrl} alt={`Image ${index}`} />
+          ))}
+      </div>
       <RightBox>
         <Circle>
           <Button
