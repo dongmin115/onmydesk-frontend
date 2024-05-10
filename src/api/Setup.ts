@@ -28,7 +28,7 @@ export const postSetup = async () => {
         products: [
           {
             productName:
-              'Apple <b>아이패드</b> 에어 5세대 M1 WIFI 64G 스페이스 그레이 (MM9C3KH/A)',
+              'Apple 아이패드 에어 5세대 M1 WIFI 64G 스페이스 그레이 (MM9C3KH/A)',
             img: 'https://shopping-phinf.pstatic.net/main_3153084/31530843620.20220705164247.jpg',
             productCode: '31530843620',
             lprice: 828490,

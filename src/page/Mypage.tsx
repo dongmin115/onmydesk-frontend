@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import CustomModal from '../components/Modal.tsx';
 import Dropdown from '../components/Dropdown.tsx';
 import profile from '../assets/image/mypage/profile-image.svg';
-import plusbox from '../assets/image/mypage/plusbox.svg';
 import Navbar from '../components/Navbar.tsx';
 import {
   Box,
@@ -21,10 +19,15 @@ import { userStore } from '../store.ts';
 import { deleteUser, putUserInfo } from '../api/User.ts';
 import { Favorite, FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
 import { disFavorite, favorite, getFavorite } from '../api/Favorite.ts';
-import { LikeCountsMap, LikesMap, Post } from '../types/type.ts';
+import {
+  LikeCountsMap,
+  LikesMap,
+  Post,
+  Setup,
+  SetupDetail,
+} from '../types/type.ts';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { getSetupDetail, getSetups } from '../api/Setup.ts';
-import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -117,34 +120,6 @@ const SetupContainer = styled.div`
   gap: 2rem;
 `;
 
-const Plusbutton = styled.button`
-  //나만의 데스크탑 아이템 추가 버튼
-  margin: 0.5vw;
-  border: none;
-  background-color: #3d3d3d;
-  padding: 0%;
-  border-radius: 2.5vw;
-  cursor: pointer;
-  border-radius: 1rem;
-  drop-shadow: 0 0 0.5rem #000000;
-
-  &:hover {
-    transform: scale(1.05);
-    transition: transform 0.5s;
-  }
-`;
-
-const PlusImage = styled.img`
-  // 아이템 추가 이미지
-  width: full;
-  pointer-events: none;
-`;
-
-const Flexdiv = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
 const Flexdiv2 = styled.div`
   display: flex;
   flex-direction: column;
@@ -205,17 +180,10 @@ function Mypage() {
   const [posts, setPosts] = useState([]);
   const [setups, setSetups] = useState([]);
   const [setupDetail, setSetupDetail] = useState([]);
-  const [IsModalOpen, setIsModalOpen] = useState(false);
 
   const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
   const [likeCounts, setLikeCounts] = useState<LikeCountsMap>({}); // 포스트의 좋아요 수를 저장하는 객체
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   // 닉네임 수정 모달 핸들러
   const [isUserInfoModalOpen, setIsUserInfoModalOpen] = useState(false);
   const putUserInfoModalOpen = () => {
@@ -537,19 +505,19 @@ function Mypage() {
                 aria-label="lab API tabs example"
               >
                 {setups &&
-                  setups.map((setup) => (
+                  setups.map((setup: Setup) => (
                     <Tab
                       label={setup.setupName}
-                      value={setup.id}
+                      value={`${setup.id}`}
                       onClick={async () => await fetchSetupDetail(setup.id)}
                     />
                   ))}
               </TabList>
               {setups &&
-                setups.map((setup) => (
-                  <TabPanel value={setup.id}>
+                setups.map((setup: Setup) => (
+                  <TabPanel value={`${setup.id}`}>
                     {setupDetail &&
-                      setupDetail.map((product: any) => (
+                      setupDetail.map((product: SetupDetail) => (
                         <div
                           style={{
                             display: 'flex',
