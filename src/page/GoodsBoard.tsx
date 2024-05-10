@@ -1,10 +1,12 @@
-import { Button, IconButton, Menu, MenuItem } from '@mui/material';
+import { Button, Menu, MenuItem, CircularProgress } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import { KeyboardArrowDown } from '@mui/icons-material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useState } from 'react';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+
+import GoodsItem from '../components/Goodsitem';
 
 const theme = createTheme({
   palette: {
@@ -57,216 +59,145 @@ const SetupBoardContainer = styled.div`
   align-items: center;
   padding: 0;
   height: fit-content;
+  margin-left: 5%;
+  margin-right: 5%;
 `;
 
-const SetupBoardImage = styled.img`
-  width: 100%;
-  height: 20vh;
-  border-radius: 1rem 1rem 0 0;
-`;
 const Flexbox = styled.div`
   display: flex;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-  margin-bottom: 2rem;
-`;
-
-const Flexbox2 = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: end;
-`;
-
-const GoodsBoardFlexbox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  drop-shadow: 0 0 0.5rem #000000;
-
-  &:hover {
-    transform: scale(1.05);
-    transition: transform 0.5s;
-  }
-`;
-
-const GoodsBoardInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: #3d3d3d;
-  border-radius: 0 0 1rem 1rem;
-  height: fit-content;
-  width: 100%;
-  color: #ffffff;
-  align-items: start;
-`;
-
-const GoodsBoardInfoFlexbox = styled.div`
-  width: 90%;
-  display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  item-align: center;
-  text-align: center;
-  padding: 0 5% 0 5%;
-`;
-
-const FavoriteButton = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
+  width: 100%;
+  height: 18vh;
+  margin-right: 5%;
+  margin-left: 5%;
 `;
 
-const GoodsItem = function () {
-  return (
-    <GoodsBoardFlexbox>
-      <SetupBoardImage src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png" />
-      <GoodsBoardInfo>
-        <GoodsBoardInfoFlexbox>
-          <p>맥북 프로 16인치 2021 M1 맥스</p>
-          <FavoriteButton>
-            <IconButton>
-              <FavoriteIcon color="success" />
-            </IconButton>
-            <p>12</p>
-          </FavoriteButton>
-        </GoodsBoardInfoFlexbox>
-        <GoodsBoardInfoFlexbox>
-          <p>최저가 19,000원</p>
-        </GoodsBoardInfoFlexbox>
-      </GoodsBoardInfo>
-    </GoodsBoardFlexbox>
-  );
-};
-
-const Categoray = function () {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+const Category = function ({
+  setLoading,
+  setProducts,
+  setError,
+  fetchProductList,
+  criteria,
+  setCriteria,
+}) {
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [criteriaLabel, setCriteriaLabel] = useState('인기순'); // 기본 라벨 설정
+
+  const handleMenuItemClick = (criteriaValue, label) => {
+    setCriteria(criteriaValue);
+    setCriteriaLabel(label);
+    handleClose();
+  };
+
   return (
     <GoodsBoardMenu>
-      <Flexbox>
+      <Flexbox
+        style={{ alignItems: 'center', justifyContent: 'space-between' }}
+      >
+        <GoodsBoardTitle>셋업에 사용된 상품을 둘러보세요!</GoodsBoardTitle>
         <Button
-          variant="contained"
-          color="primary"
+          id="basic-button"
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
           size="large"
-          style={{ flex: 1 }}
+          style={{
+            minWidth: 120,
+            whiteSpace: 'nowrap',
+            color: '#d3d3d3',
+            fontSize: '1rem',
+          }}
+          endIcon={<KeyboardArrowDown />}
         >
-          전체
+          {criteriaLabel} {/* 버튼 라벨 업데이트 */}
         </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
+
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
         >
-          키보드
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          마우스
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          노트북
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          모니터
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          데스크
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          스피커
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          size="large"
-          style={{ flex: 1 }}
-        >
-          기타
-        </Button>
-        <Flexbox2>
-          <Button
-            id="basic-button"
-            aria-controls={open ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            size="large"
-            style={{ color: '#d3d3d3', fontSize: '1rem' }}
-            endIcon={<KeyboardArrowDown />}
-          >
-            정렬기준
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
-          >
-            <MenuItem onClick={handleClose}>인기순</MenuItem>
-            <MenuItem onClick={handleClose}>가격순</MenuItem>
-          </Menu>
-        </Flexbox2>
+          <MenuItem onClick={() => handleMenuItemClick(1, '인기순')}>
+            인기순
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuItemClick(2, '좋아요')}>
+            좋아요
+          </MenuItem>
+          <MenuItem onClick={() => handleMenuItemClick(3, '조회수')}>
+            조회수
+          </MenuItem>
+        </Menu>
       </Flexbox>
     </GoodsBoardMenu>
   );
 };
+
 export default function GoodsBoard() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [criteria, setCriteria] = useState(1);
+
+  const fetchProductList = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get('http://localhost:8080/api/products', {
+        params: {
+          criteria: criteria,
+        },
+      });
+      setProducts(response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setError('상품을 불러오는데 실패했습니다.');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProductList();
+  }, [criteria]);
+
   return (
     <ThemeProvider theme={theme}>
       <Navbar />
+
       <Container>
-        <GoodsBoardTitle>셋업에 사용된 상품을 둘러보세요!</GoodsBoardTitle>
-        <Categoray />
-        <SetupBoardContainer>
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-          <GoodsItem />
-        </SetupBoardContainer>
+        <Category
+          setLoading={setLoading}
+          setProducts={setProducts}
+          setError={setError}
+          fetchProductList={fetchProductList}
+          criteria={criteria}
+          setCriteria={setCriteria}
+        />
+        {loading ? (
+          <CircularProgress />
+        ) : error ? (
+          <p>{error}</p>
+        ) : (
+          <SetupBoardContainer>
+            {products.map((product) => (
+              <GoodsItem key={product.id} product={product} id={product.id} />
+            ))}
+          </SetupBoardContainer>
+        )}
       </Container>
     </ThemeProvider>
   );
