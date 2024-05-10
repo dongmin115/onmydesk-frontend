@@ -1,16 +1,15 @@
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import Mouse from '../assets/Mouse.png';
-import Keyboard from '../assets/Keyboard.png';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Product } from '../types/Product';
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { boolean } from 'zod';
 const ProductInfoContainer = styled.div`
   //상부 전체를 묶는 컨테이너
   display: flex;
@@ -81,11 +80,18 @@ const PriceItem = styled.div`
   align-items: center;
   margin-bottom: 10px;
 `;
-const ShopName = styled.span`
+
+const ShopName = styled.a`
+  // 스타일을 a 태그에 적용
   margin-right: 5%;
   width: 7vw;
   height: 4vh;
   margin-top: 3%;
+  color: #ffffff; // 링크 색상을 지정
+  text-decoration: none; // 밑줄 제거
+  &:hover {
+    text-decoration: underline; // 호버 시 밑줄 표시
+  }
 `;
 const Price = styled.span`
   font-family: 'Kiwi Maru';
@@ -163,7 +169,9 @@ const ObjectName = styled.span`
 `;
 const ProductDetail = () => {
   const { id } = useParams();
+  const [productDetailData, setProductDetailData] = useState<Product>();
   const [LikeProduct, setLikeProduct] = useState(false);
+
   const clickLikeProduct = () => {
     if (!LikeProduct) {
       wishProduct();
@@ -183,7 +191,7 @@ const ProductDetail = () => {
           },
         }
       );
-      console.log(response.data.data.product.wished);
+      setProductDetailData(response.data);
       setLikeProduct(response.data.data.product.wished);
     } catch (error) {
       console.log('에러');
@@ -191,8 +199,8 @@ const ProductDetail = () => {
   };
 
   useEffect(() => {
-    searchProduct(), [];
-  });
+    searchProduct();
+  }, []);
 
   const wishProduct = async () => {
     try {
@@ -229,10 +237,12 @@ const ProductDetail = () => {
     <>
       <Navbar></Navbar>
       <ProductInfoContainer>
-        <ProductImage src={Keyboard} />
+        <ProductImage src={productDetailData?.data.product.img} />
         <ProductDetails>
           <TitleContainer>
-            <ProductName>Apple Magic Keyboard</ProductName>
+            <ProductName>
+              {productDetailData?.data.product.productName}
+            </ProductName>
             <Circle>
               <Button
                 variant="contained"
@@ -253,32 +263,23 @@ const ProductDetail = () => {
             </Circle>
           </TitleContainer>
           <ProductDetail1>
-            연결방식 : 무선 | 전송방식 : 블루투스 | 특수기능키 : 기능키,
-            멀티미디어키 | 단자 : 라이트닝, USB Type-C | 무게 : 243g | 케이블 :
-            분리형케이블 | 배터리 : 배터리내장
+            {productDetailData?.data.product.category1}
+            {productDetailData?.data.product.category2}
           </ProductDetail1>
           <ProductDetail2>
             <PriceList>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
-              <PriceItem>
-                <ShopName>신세계몰</ShopName>
-                <Price>162,000</Price>
-              </PriceItem>
+              {productDetailData?.data.pages.map((page) => (
+                <PriceItem key={page.id}>
+                  <ShopName
+                    href={page.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {page.storeName}
+                  </ShopName>
+                  <Price>{page.price}</Price>
+                </PriceItem>
+              ))}
             </PriceList>
           </ProductDetail2>
         </ProductDetails>
