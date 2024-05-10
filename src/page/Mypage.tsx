@@ -22,6 +22,8 @@ import { Favorite, FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
 import { disFavorite, favorite, getFavorite } from '../api/Favorite.ts';
 import { LikeCountsMap, LikesMap, Post } from '../types/type.ts';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { getSetupDetail, getSetups } from '../api/Setup.ts';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -200,6 +202,8 @@ function Mypage() {
   const { name, nickname, email, setNickname } = userStore();
   const [newNickname, setNewNickname] = useState('');
   const [posts, setPosts] = useState([]);
+  const [setups, setSetups] = useState([]);
+  const [setupDetail, setSetupDetail] = useState([]);
   const [IsModalOpen, setIsModalOpen] = useState(false);
 
   const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
@@ -243,6 +247,11 @@ function Mypage() {
     }
   };
 
+  const fetchSetupDetail = async (id: number) => {
+    const response = await getSetupDetail(id);
+    setSetupDetail(response.data.products);
+  };
+
   useEffect(() => {
     if (name) {
       const fetchFavorite = async () => {
@@ -262,10 +271,21 @@ function Mypage() {
           console.error(error);
         }
       };
+      const fetchSetups = () => {
+        getSetups().then((setups) => {
+          setSetups(setups.data);
+          console.log(setups);
+        });
+      };
 
       fetchFavorite();
+      fetchSetups();
     }
   }, []);
+
+  useEffect(() => {
+    console.log(setupDetail);
+  }, [setupDetail]);
 
   const renderPosts = () => {
     return posts.map((post: Post) => (
@@ -515,14 +535,106 @@ function Mypage() {
                 onChange={handleChange}
                 aria-label="lab API tabs example"
               >
-                <Tab label="Item One" value="1" />
-                <Tab label="Item Two" value="2" />
-                <Tab label="Item Three" value="3" />
+                {setups &&
+                  setups.map((setup) => (
+                    <Tab
+                      label={setup.setupName}
+                      value={setup.id}
+                      onClick={async () => await fetchSetupDetail(setup.id)}
+                    />
+                  ))}
               </TabList>
+              {setups &&
+                setups.map((setup) => (
+                  <TabPanel value={setup.id}>
+                    {setupDetail &&
+                      setupDetail.map((product: any) => (
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            width: '100%',
+                            margin: '2rem',
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              width: '50%',
+                            }}
+                          >
+                            <img
+                              src={product.img}
+                              alt={product.productName}
+                              style={{
+                                width: '10vw',
+                                height: '10vw',
+                                borderRadius: '1rem',
+                                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
+                              }}
+                            />
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'start',
+                                justifyContent: 'center',
+                                marginLeft: '1rem',
+                              }}
+                            >
+                              <p
+                                style={{
+                                  fontSize: '1.5rem',
+                                  color: 'white',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {product.productName}
+                              </p>
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '1rem',
+                            }}
+                          >
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              style={{
+                                fontSize: '1rem',
+                                width: '6vw',
+                                height: '2.5vw',
+                              }}
+                            >
+                              수정
+                            </Button>
+                            <Button
+                              variant="contained"
+                              color="error"
+                              style={{
+                                fontSize: '1rem',
+                                width: '6vw',
+                                height: '2.5vw',
+                              }}
+                            >
+                              삭제
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                  </TabPanel>
+                ))}
             </Box>
-            <TabPanel value="1">Item One</TabPanel>
-            <TabPanel value="2">Item Two</TabPanel>
-            <TabPanel value="3">Item Three</TabPanel>
           </TabContext>
         </div>
       </Container>

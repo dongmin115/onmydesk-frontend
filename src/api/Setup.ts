@@ -82,7 +82,7 @@ export const deleteSetups = async (setupId: number) => {
 
 export const getSetupDetail = async (setupId: number) => {
   try {
-    const response = await axios.delete(
+    const response = await axios.get(
       `http://localhost:8080/api/setups/${setupId}`,
       {
         headers: {
