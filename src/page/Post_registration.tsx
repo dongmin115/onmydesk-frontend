@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ProductModal from '../components/ProductModal';
 import Navbar from '../components/Navbar';
-import mouse from '../assets/image/Post_registration/mouse.svg';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
+import { ImageResize } from 'quill-image-resize-module-ts';
 import { TextField, Box } from '@mui/material';
+
+Quill.register('modules/ImageResize', ImageResize);
 
 const Centerdiv = styled.div`
   display: flex;
@@ -78,6 +79,8 @@ function Post_reg() {
   const [content, setContent] = useState('');
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+  const [images, setImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
 
   interface Product {
     productName: string;
@@ -179,6 +182,7 @@ function Post_reg() {
         },
         {
           headers: {
+            'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${sessionStorage.getItem('token')}`,
           },
         }
@@ -194,9 +198,43 @@ function Post_reg() {
     }
   };
 
+  const handleImageChange = (event) => {
+    const files = event.target.files;
+    // 파일 목록을 배열로 변환
+    const selectedFiles = Array.prototype.slice.call(files);
+    setSelectedImages(selectedFiles);
+  };
+
+  const uploadImages = async () => {
+    const formData = new FormData();
+    selectedImages.forEach((file) => {
+      formData.append('images', file);
+    });
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/images/upload',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        }
+      );
+
+      console.log(response.data); // 이미지 업로드 후 서버 응답 처리
+      alert('이미지 업로드가 완료되었습니다.');
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
+      alert('이미지 업로드에 실패했습니다.');
+    }
+  };
+
   return (
     <>
       <Navbar />
+
       <div
         style={{
           display: 'flex',
@@ -206,6 +244,12 @@ function Post_reg() {
       >
         <div>
           <Centerdiv style={{ marginTop: '2vw' }}>
+            <div>
+              {/* 이미지 파일 선택을 위한 input 태그 */}
+              <input type="file" multiple onChange={handleImageChange} />
+              {/* 이미지 업로드 버튼 */}
+              <button onClick={uploadImages}>이미지 업로드</button>
+            </div>
             <div
               style={{
                 background: '#3c3c3c',
