@@ -264,7 +264,7 @@ type Comment = {
 const ImageGallery = ({ imageUrls }) => {
   // imageUrls가 배열인지 확인 후 처리
   if (!Array.isArray(imageUrls) || imageUrls.length === 0) {
-    return <p>No images to display.</p>;
+    return <p></p>;
   }
 
   return (
@@ -274,7 +274,7 @@ const ImageGallery = ({ imageUrls }) => {
           <Image
             src={imageUrl}
             alt={`Image ${index}`}
-            style={{ width: '70%' }}
+            style={{ width: '65%' }}
           />
         </div>
       ))}

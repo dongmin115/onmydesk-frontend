@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -74,12 +74,78 @@ const Finbutton = styled.button`
   }
 `;
 
+const UploadContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  margin-top: 1vw;
+`;
+
+const UploadInput = styled.input`
+  display: none;
+`;
+
+const UploadButton = styled.button`
+  background-color: #349af8;
+  color: white;
+  font-size: 1.2vw;
+  padding: 0.5vw 0.5vw;
+  cursor: pointer;
+  border-radius: 0.5vw;
+  border: none;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #0077cc;
+  }
+`;
+
+const UploadImagesButton = styled.button`
+  background-color: red;
+  color: white;
+  font-size: 1.2vw;
+  padding: 0.5vw 0.5vw;
+  cursor: pointer;
+  border-radius: 0.5vw;
+  border: none;
+  transition: background-color 0.3s;
+  margin-top: 1vw;
+
+  &:hover {
+    background-color: #fc6d6d;
+  }
+`;
+
+const Thumbnail_img = styled.button`
+  background: transparent;
+  max-width: 68vw;
+  cursor: pointer;
+  padding: 0;
+  width: 8.3vw; /* Set the width of the button */
+  height: 8.3vw; /* Set the height of the button */
+  margin: 0.2vw;
+  border: none;
+  overflow: hidden;
+
+  &:hover {
+    border: 2px solid #fc6d6d; /* Add a border on hover */
+  }
+
+  &:active {
+    opacity: 0.5; /* Reduce opacity when clicked */
+    border: 2px solid #fc6d6d;
+  }
+`;
+
 function Post_reg() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [imgid, setImgid] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewImageUrls, setPreviewImageUrls] = useState<string[]>([]);
 
   interface Product {
     productName: string;
@@ -163,12 +229,8 @@ function Post_reg() {
   };
 
   useEffect(() => {
-    console.log(`제목변경:${title}`);
-  }, [title]);
-
-  useEffect(() => {
-    console.log(`내용 변경:${content}`), [content];
-  });
+    console.log(imgid); // imgid 상태가 업데이트된 후 로그 출력
+  }, [imgid]);
 
   const handleSubmit = async () => {
     try {
@@ -178,7 +240,7 @@ function Post_reg() {
           title: `${title}`,
           content: `${content}`,
           products: ArrProduct,
-          imageIds: [1, 2],
+          imageIds: imgid,
           thumbnailImageId: 1,
         },
         {
@@ -198,10 +260,13 @@ function Post_reg() {
     }
   };
 
-  const handleImageChange = (event) => {
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
-    // 파일 목록을 배열로 변환하여 selectedImages 상태를 업데이트
-    if (files) {
+    if (files && files.length > 0) {
+      const urls = Array.from(files).map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
+      setPreviewImageUrls(urls); // 미리보기 이미지 URL들 설정
       const selectedFiles = Array.from(files) as File[];
       setSelectedImages(selectedFiles);
     }
@@ -225,7 +290,9 @@ function Post_reg() {
         }
       );
 
-      console.log(response.data); // 이미지 업로드 후 서버 응답 처리
+      const imageIds = response.data.data.map((image) => image.id);
+      setImgid(imageIds);
+      setPreviewImageUrls([]);
       alert('이미지 업로드가 완료되었습니다.');
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
@@ -246,12 +313,6 @@ function Post_reg() {
       >
         <div>
           <Centerdiv style={{ marginTop: '2vw' }}>
-            <div>
-              {/* 이미지 파일 선택을 위한 input 태그 */}
-              <input type="file" multiple onChange={handleImageChange} />
-              {/* 이미지 업로드 버튼 */}
-              <button onClick={uploadImages}>이미지 업로드</button>
-            </div>
             <div
               style={{
                 background: '#3c3c3c',
@@ -278,6 +339,44 @@ function Post_reg() {
               />
             </div>
           </Centerdiv>
+          <UploadContainer>
+            <UploadInput
+              type="file"
+              multiple
+              onChange={handleImageChange}
+              ref={fileInputRef}
+            />
+            <UploadButton onClick={() => fileInputRef.current?.click()}>
+              이미지 파일 선택
+            </UploadButton>
+            <UploadImagesButton onClick={uploadImages}>
+              이미지 업로드
+            </UploadImagesButton>
+          </UploadContainer>
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              marginTop: '10px',
+              maxWidth: '68vw',
+            }}
+          >
+            {previewImageUrls.map((url, index) => (
+              <Thumbnail_img>
+                <img
+                  key={index}
+                  src={url}
+                  style={{
+                    width: '8vw',
+                    height: '8vw',
+                    marginRight: '10px',
+                    marginBottom: '10px',
+                  }}
+                  alt={`Preview ${index}`}
+                />
+              </Thumbnail_img>
+            ))}
+          </div>
           <Box
             sx={{
               '  .ql-editor': {
