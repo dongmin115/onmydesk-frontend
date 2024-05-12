@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as React from 'react';
 import styled from 'styled-components';
-import Dropdown from '../components/Dropdown.tsx';
 import profile from '../assets/image/mypage/profile-image.svg';
 import Navbar from '../components/Navbar.tsx';
 import {
@@ -35,7 +34,6 @@ import {
   getSetups,
   postSetup,
 } from '../api/Setup.ts';
-import ProductModal from '../components/ProductModal.tsx';
 import GoodsModal from '../components/GoodsModal.tsx';
 
 const theme = createTheme({
@@ -175,7 +173,13 @@ const Caption = styled.div`
   }
 `;
 
-function CustomTabLabel({ name, onDelete }) {
+function CustomTabLabel({
+  name,
+  onDelete,
+}: {
+  name: string;
+  onDelete: () => void;
+}) {
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       {name}
