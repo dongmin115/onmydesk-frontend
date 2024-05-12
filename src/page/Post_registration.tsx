@@ -4,9 +4,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ProductModal from '../components/ProductModal';
 import Navbar from '../components/Navbar';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { ImageResize } from 'quill-image-resize-module-ts';
 import { TextField, Box } from '@mui/material';
 
 const Centerdiv = styled.div`
