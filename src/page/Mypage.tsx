@@ -28,6 +28,8 @@ import {
 } from '../types/type.ts';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { getSetupDetail, getSetups } from '../api/Setup.ts';
+import ProductModal from '../components/ProductModal.tsx';
+import GoodsModal from '../components/GoodsModal.tsx';
 
 const theme = createTheme({
   palette: {
@@ -181,6 +183,36 @@ function Mypage() {
   const [setups, setSetups] = useState([]);
   const [setupDetail, setSetupDetail] = useState([]);
 
+  const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
+  const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+
+  interface Product {
+    productName: string;
+    img: string;
+    productCode: string;
+    lprice: number;
+    brand: string;
+    maker: string;
+    category1: string;
+    category2: string;
+    category3?: string;
+    category4?: string;
+    pages: { price: number; link: string; storeName: string }[];
+  }
+
+  const handleProductSelect = (product: Product) => {
+    setArrProduct([...ArrProduct, product]);
+    setIsModalopen(false); // 모달 닫기
+  };
+
+  const Modalopen = () => {
+    setIsModalopen(true);
+  };
+
+  const Modalclose = () => {
+    setIsModalopen(false);
+  };
+
   const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
   const [likeCounts, setLikeCounts] = useState<LikeCountsMap>({}); // 포스트의 좋아요 수를 저장하는 객체
 
@@ -219,6 +251,10 @@ function Mypage() {
   const fetchSetupDetail = async (id: number) => {
     const response = await getSetupDetail(id);
     setSetupDetail(response.data.products);
+  };
+
+  const handleDelete = (setupId: number) => {
+    deleteSetups(setupId);
   };
 
   useEffect(() => {
@@ -638,6 +674,7 @@ function Mypage() {
                         </div>
                       ))}
                     <Divider style={{ margin: '1rem' }} />
+                    <Button onClick={Modalopen}>추가하기</Button>
                     <p
                       style={{
                         fontSize: '1.25rem',
@@ -655,6 +692,11 @@ function Mypage() {
             </Box>
           </TabContext>
         </div>
+        <GoodsModal
+          isOpen={IsModalopen}
+          onClose={Modalclose}
+          onSelect={handleProductSelect}
+        />
       </Container>
     </ThemeProvider>
   );
