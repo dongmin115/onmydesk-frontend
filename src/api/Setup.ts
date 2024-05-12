@@ -5,7 +5,7 @@ export const getSetups = async () => {
     const response = await axios.get('http://localhost:8080/api/setups', {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
       },
       params: {
         page: 1,
@@ -51,7 +51,7 @@ export const postSetup = async () => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       }
     );
@@ -69,7 +69,7 @@ export const deleteSetups = async (setupId: number) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       }
     );
@@ -87,7 +87,7 @@ export const getSetupDetail = async (setupId: number) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       }
     );
@@ -108,7 +108,7 @@ export const deleteSetupGoods = async (
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       }
     );

@@ -511,7 +511,7 @@ function Mypage() {
                   height: '2.5vw',
                   whiteSpace: 'nowrap',
                 }}
-                onClick={() => sessionStorage.removeItem('token')}
+                onClick={() => sessionStorage.removeItem('accessToken')}
               >
                 {name ? '로그아웃' : '로그인'}
               </Button>
@@ -529,7 +529,7 @@ function Mypage() {
               }}
               onClick={() => {
                 deleteUser();
-                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('accessToken');
                 navigate('/login');
               }}
             >

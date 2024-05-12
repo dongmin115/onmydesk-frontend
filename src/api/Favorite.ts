@@ -7,7 +7,7 @@ export const getFavorite = async () => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       }
     );
@@ -26,7 +26,7 @@ export const favorite = async (postId: number) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       }
     );
@@ -44,7 +44,7 @@ export const disFavorite = async (postId: number) => {
       {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       }
     );

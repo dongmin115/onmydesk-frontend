@@ -9,8 +9,9 @@ import {
   Menu,
   MenuItem,
   TextField,
+  createTheme,
+  ThemeProvider,
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material';
 import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
@@ -208,7 +209,7 @@ export default function SetupBoard() {
         },
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       });
       setPosts(response.data.data);
