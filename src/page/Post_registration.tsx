@@ -9,8 +9,6 @@ import 'react-quill/dist/quill.snow.css';
 import { ImageResize } from 'quill-image-resize-module-ts';
 import { TextField, Box } from '@mui/material';
 
-Quill.register('modules/ImageResize', ImageResize);
-
 const Centerdiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -76,8 +74,7 @@ const Finbutton = styled.button`
 
 const UploadContainer = styled.div`
   display: flex;
-  flex-direction: column;
-
+  justify-content: space-between;
   margin-top: 1vw;
 `;
 
@@ -86,7 +83,8 @@ const UploadInput = styled.input`
 `;
 
 const UploadButton = styled.button`
-  background-color: #349af8;
+  background-color: #565e66;
+  width: 49%;
   color: white;
   font-size: 1.2vw;
   padding: 0.5vw 0.5vw;
@@ -100,28 +98,12 @@ const UploadButton = styled.button`
   }
 `;
 
-const UploadImagesButton = styled.button`
-  background-color: red;
-  color: white;
-  font-size: 1.2vw;
-  padding: 0.5vw 0.5vw;
-  cursor: pointer;
-  border-radius: 0.5vw;
-  border: none;
-  transition: background-color 0.3s;
-  margin-top: 1vw;
-
-  &:hover {
-    background-color: #fc6d6d;
-  }
-`;
-
 const Thumbnail_img = styled.button`
   background: transparent;
   max-width: 68vw;
   cursor: pointer;
   padding: 0;
-  width: 8.3vw; /* Set the width of the button */
+  width: 9.2vw; /* Set the width of the button */
   height: 8.3vw; /* Set the height of the button */
   margin: 0.2vw;
   border: none;
@@ -146,6 +128,9 @@ function Post_reg() {
   const [imgid, setImgid] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewImageUrls, setPreviewImageUrls] = useState<string[]>([]);
+  const [selectedThumbnail, setSelectedThumbnail] = useState<string | null>(
+    null
+  );
 
   interface Product {
     productName: string;
@@ -160,6 +145,13 @@ function Post_reg() {
     category4?: string;
     pages: { price: number; link: string; storeName: string }[];
   }
+
+  const handleThumbnailClick = (index) => {
+    if (imgid.length > index) {
+      setSelectedThumbnail(imgid[index]);
+      console.log('썸네일 이미지 ID:', imgid[index]);
+    }
+  };
 
   const handleProductSelect = (product) => {
     setArrProduct([...ArrProduct, product]);
@@ -189,9 +181,7 @@ function Post_reg() {
 
   const modules = {
     toolbar: [
-      [{ font: [] }],
-      [{ size: ['small', false, 'large', 'huge'] }],
-      [{ header: [1, 2, false] }],
+      [{ header: [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
       [
         { list: 'ordered' },
@@ -199,15 +189,13 @@ function Post_reg() {
         { indent: '-1' },
         { indent: '+1' },
       ],
-      ['link', 'image'],
+      ['link'],
       [{ align: [] }, { color: [] }, { background: [] }], // dropdown with defaults from theme
       ['clean'],
     ],
   };
 
   const formats = [
-    'font',
-    'size',
     'header',
     'bold',
     'italic',
@@ -241,7 +229,7 @@ function Post_reg() {
           content: `${content}`,
           products: ArrProduct,
           imageIds: imgid,
-          thumbnailImageId: 1,
+          thumbnailImageId: selectedThumbnail,
         },
         {
           headers: {
@@ -267,6 +255,7 @@ function Post_reg() {
     if (files && files.length > 0) {
       const urls = Array.from(files).map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
       setPreviewImageUrls(urls); // 미리보기 이미지 URL들 설정
+      console.log(urls);
       const selectedFiles = Array.from(files) as File[];
       setSelectedImages(selectedFiles);
     }
@@ -292,8 +281,10 @@ function Post_reg() {
 
       const imageIds = response.data.data.map((image) => image.id);
       setImgid(imageIds);
-      setPreviewImageUrls([]);
-      alert('이미지 업로드가 완료되었습니다.');
+      // setPreviewImageUrls([]);
+      alert(
+        '이미지 업로드가 완료되었습니다. 썸네일로 등록할 이미지를 클릭하세요!'
+      );
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
       alert('이미지 업로드에 실패했습니다.');
@@ -349,9 +340,8 @@ function Post_reg() {
             <UploadButton onClick={() => fileInputRef.current?.click()}>
               이미지 파일 선택
             </UploadButton>
-            <UploadImagesButton onClick={uploadImages}>
-              이미지 업로드
-            </UploadImagesButton>
+
+            <UploadButton onClick={uploadImages}>이미지 업로드</UploadButton>
           </UploadContainer>
           <div
             style={{
@@ -362,12 +352,16 @@ function Post_reg() {
             }}
           >
             {previewImageUrls.map((url, index) => (
-              <Thumbnail_img>
+              <Thumbnail_img
+                key={index}
+                onClick={() => handleThumbnailClick(index)}
+                // 이미지 id를 기반으로 선택된 썸네일 설정
+              >
                 <img
                   key={index}
                   src={url}
                   style={{
-                    width: '8vw',
+                    width: '9vw',
                     height: '8vw',
                     marginRight: '10px',
                     marginBottom: '10px',
