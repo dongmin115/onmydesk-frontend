@@ -212,6 +212,7 @@ export default function SetupBoard() {
         },
       });
       setPosts(response.data.data);
+      console.log(response.data.data);
 
       const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
       const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
@@ -271,7 +272,7 @@ export default function SetupBoard() {
         <ImageContainer>
           <SetupBoardImage
             key={post.id}
-            src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
+            src={post.thumbnailUrl}
             alt={post.title}
           />
           <Caption>

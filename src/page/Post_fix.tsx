@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ProductModal from '../components/ProductModal';
 import Navbar from '../components/Navbar';
-import mouse from '../assets/image/Post_registration/mouse.svg';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import { TextField, Box } from '@mui/material';
@@ -73,12 +72,66 @@ const Finbutton = styled.button`
   }
 `;
 
+const UploadContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1vw;
+`;
+
+const UploadInput = styled.input`
+  display: none;
+`;
+
+const UploadButton = styled.button`
+  background-color: #565e66;
+  width: 49%;
+  color: white;
+  font-size: 1.2vw;
+  padding: 0.5vw 0.5vw;
+  cursor: pointer;
+  border-radius: 0.5vw;
+  border: none;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #0077cc;
+  }
+`;
+
+const Thumbnail_img = styled.button`
+  background: transparent;
+  max-width: 68vw;
+  cursor: pointer;
+  padding: 0;
+  width: 9.2vw; /* Set the width of the button */
+  height: 8.3vw; /* Set the height of the button */
+  margin: 0.2vw;
+  border: none;
+  overflow: hidden;
+
+  &:hover {
+    border: 2px solid #fc6d6d; /* Add a border on hover */
+  }
+
+  &:active {
+    opacity: 0.5; /* Reduce opacity when clicked */
+    border: 2px solid #fc6d6d;
+  }
+`;
+
 function Post_fix() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const { id } = useParams();
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [imgid, setImgid] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewImageUrls, setPreviewImageUrls] = useState<string[]>([]);
+  const [selectedThumbnail, setSelectedThumbnail] = useState<string | null>(
+    null
+  );
 
   interface Product {
     productName: string;
@@ -93,6 +146,13 @@ function Post_fix() {
     category4?: string;
     pages: { price: number; link: string; storeName: string }[];
   }
+
+  const handleThumbnailClick = (index) => {
+    if (imgid.length > index) {
+      setSelectedThumbnail(imgid[index]);
+      console.log('썸네일 이미지 ID:', imgid[index]);
+    }
+  };
 
   const handleProductSelect = (product) => {
     setArrProduct([...ArrProduct, product]);
@@ -122,8 +182,6 @@ function Post_fix() {
 
   const modules = {
     toolbar: [
-      [{ font: [] }],
-      [{ size: ['small', false, 'large', 'huge'] }],
       [{ header: [1, 2, false] }],
       ['bold', 'italic', 'underline', 'strike'],
       [
@@ -132,15 +190,13 @@ function Post_fix() {
         { indent: '-1' },
         { indent: '+1' },
       ],
-      ['link', 'image'],
+      ['link'],
       [{ align: [] }, { color: [] }, { background: [] }], // dropdown with defaults from theme
       ['clean'],
     ],
   };
 
   const formats = [
-    'font',
-    'size',
     'header',
     'bold',
     'italic',
@@ -169,6 +225,8 @@ function Post_fix() {
           title: `${title}`,
           content: `${content}`,
           products: ArrProduct,
+          imageIds: imgid,
+          thumbnailImageId: selectedThumbnail,
         },
 
         {
@@ -185,6 +243,49 @@ function Post_fix() {
     } catch (error) {
       console.log('에러');
       alert('게시글 수정 권한이 없습니다.');
+    }
+  };
+
+  const handleImageChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const urls = Array.from(files).map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
+      setPreviewImageUrls(urls); // 미리보기 이미지 URL들 설정
+      console.log(urls);
+      const selectedFiles = Array.from(files) as File[];
+      setSelectedImages(selectedFiles);
+    }
+  };
+
+  const uploadImages = async () => {
+    const formData = new FormData();
+    selectedImages.forEach((file) => {
+      formData.append('images', file);
+    });
+
+    try {
+      const response = await axios.post(
+        'http://localhost:8080/api/images/upload',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          },
+        }
+      );
+
+      const imageIds = response.data.data.map((image) => image.id);
+      setImgid(imageIds);
+      // setPreviewImageUrls([]);
+      alert(
+        '이미지 업로드가 완료되었습니다. 썸네일로 등록할 이미지를 클릭하세요!'
+      );
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
+      alert('이미지 업로드에 실패했습니다.');
     }
   };
 
@@ -226,6 +327,35 @@ function Post_fix() {
               />
             </div>
           </Centerdiv>
+
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              marginTop: '10px',
+              maxWidth: '68vw',
+            }}
+          >
+            {previewImageUrls.map((url, index) => (
+              <Thumbnail_img
+                key={index}
+                onClick={() => handleThumbnailClick(index)}
+                // 이미지 id를 기반으로 선택된 썸네일 설정
+              >
+                <img
+                  key={index}
+                  src={url}
+                  style={{
+                    width: '9vw',
+                    height: '8vw',
+                    marginRight: '10px',
+                    marginBottom: '10px',
+                  }}
+                  alt={`Preview ${index}`}
+                />
+              </Thumbnail_img>
+            ))}
+          </div>
           <Box
             sx={{
               '  .ql-editor': {
