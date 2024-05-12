@@ -78,12 +78,6 @@ function GoodsModal({ isOpen, onClose, onSelect }) {
     onClose();
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      fetchFavoriteGoods();
-    }
-  };
-
   const fetchFavoriteGoods = async () => {
     try {
       const response = await axios.get(

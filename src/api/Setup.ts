@@ -97,3 +97,24 @@ export const getSetupDetail = async (setupId: number) => {
     return error;
   }
 };
+
+export const deleteSetupGoods = async (
+  setupId: number,
+  setupProductId: number
+) => {
+  try {
+    const response = await axios.delete(
+      `http://localhost:8080/api/setups/${setupId}/${setupProductId}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};

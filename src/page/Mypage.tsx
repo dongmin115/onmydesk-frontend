@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
 import Dropdown from '../components/Dropdown.tsx';
 import profile from '../assets/image/mypage/profile-image.svg';
@@ -27,7 +28,13 @@ import {
   SetupDetail,
 } from '../types/type.ts';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { getSetupDetail, getSetups } from '../api/Setup.ts';
+import {
+  deleteSetupGoods,
+  deleteSetups,
+  getSetupDetail,
+  getSetups,
+  postSetup,
+} from '../api/Setup.ts';
 import ProductModal from '../components/ProductModal.tsx';
 import GoodsModal from '../components/GoodsModal.tsx';
 
@@ -168,6 +175,20 @@ const Caption = styled.div`
   }
 `;
 
+function CustomTabLabel({ name, onDelete }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      {name}
+      <Button
+        onClick={onDelete}
+        style={{ minWidth: '30px', padding: '0 5px', marginLeft: '10px' }}
+      >
+        삭제
+      </Button>
+    </div>
+  );
+}
+
 function Mypage() {
   const navigate = useNavigate();
 
@@ -180,11 +201,13 @@ function Mypage() {
   const { name, nickname, email, setNickname } = userStore();
   const [newNickname, setNewNickname] = useState('');
   const [posts, setPosts] = useState([]);
-  const [setups, setSetups] = useState([]);
+  const [setups, setSetups] = useState<Setup[]>([]);
   const [setupDetail, setSetupDetail] = useState([]);
 
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   interface Product {
     productName: string;
@@ -199,6 +222,22 @@ function Mypage() {
     category4?: string;
     pages: { price: number; link: string; storeName: string }[];
   }
+
+  const open = Boolean(anchorEl);
+
+  const refreshSetups = async () => {
+    const setups = await getSetups();
+    setSetups([...setups.data]); // 새 배열 생성으로 상태 갱신 강제
+  };
+  const handlePost = async () => {
+    await postSetup();
+    refreshSetups();
+  };
+
+  const handleDelete = async (setupId: number) => {
+    await deleteSetups(setupId);
+    refreshSetups();
+  };
 
   const handleProductSelect = (product: Product) => {
     setArrProduct([...ArrProduct, product]);
@@ -253,10 +292,6 @@ function Mypage() {
     setSetupDetail(response.data.products);
   };
 
-  const handleDelete = (setupId: number) => {
-    deleteSetups(setupId);
-  };
-
   useEffect(() => {
     if (name) {
       const fetchFavorite = async () => {
@@ -279,7 +314,6 @@ function Mypage() {
       const fetchSetups = () => {
         getSetups().then((setups) => {
           setSetups(setups.data);
-          console.log(setups);
         });
       };
 
@@ -287,10 +321,6 @@ function Mypage() {
       fetchSetups();
     }
   }, []);
-
-  useEffect(() => {
-    console.log(setupDetail);
-  }, [setupDetail]);
 
   const renderPosts = () => {
     return posts.map((post: Post) => (
@@ -528,7 +558,6 @@ function Mypage() {
         </SetupContainer>
         <TitleContainer>
           <TitleText>나만의 데스크탑</TitleText>
-          <Dropdown />
         </TitleContainer>
         <div
           style={{
@@ -547,12 +576,26 @@ function Mypage() {
                 {setups &&
                   setups.map((setup: Setup, i: number) => (
                     <Tab
-                      label={setup.setupName}
-                      value={`${i + 1}`}
+                      label={
+                        <CustomTabLabel
+                          name={setup.setupName}
+                          onDelete={() => handleDelete(setup.id)}
+                        />
+                      }
+                      value={(i + 1).toString()}
                       onClick={async () => await fetchSetupDetail(setup.id)}
-                      key={i}
                     />
                   ))}
+                <Button
+                  id="demo-positioned-button"
+                  aria-controls={open ? 'demo-positioned-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handlePost}
+                  style={{ fontSize: '1vw' }}
+                >
+                  셋업 만들기
+                </Button>
               </TabList>
               <div
                 style={{
@@ -589,7 +632,7 @@ function Mypage() {
               <Divider style={{ marginLeft: '2rem', marginRight: '2rem' }} />
               {setups &&
                 setups.map((setup: Setup, i: number) => (
-                  <TabPanel value={`${i + 1}`} key={setup.id}>
+                  <TabPanel value={(i + 1).toString()} key={setup.id}>
                     {setupDetail &&
                       setupDetail.map((product: SetupDetail) => (
                         <div
@@ -667,6 +710,9 @@ function Mypage() {
                               style={{
                                 fontSize: '1rem',
                               }}
+                              onClick={() =>
+                                deleteSetupGoods(setup.id, product.id)
+                              }
                             >
                               삭제
                             </Button>
