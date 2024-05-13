@@ -19,13 +19,7 @@ import { userStore } from '../store.ts';
 import { deleteUser, putUserInfo } from '../api/User.ts';
 import { Favorite, FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
 import { disFavorite, favorite, getFavorite } from '../api/Favorite.ts';
-import {
-  LikeCountsMap,
-  LikesMap,
-  Post,
-  Setup,
-  SetupDetail,
-} from '../types/type.ts';
+import { LikeCountsMap, LikesMap, Post, Setup } from '../types/type.ts';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import {
   deleteSetupGoods,
@@ -36,6 +30,7 @@ import {
 } from '../api/Setup.ts';
 import GoodsModal from '../components/GoodsModal.tsx';
 import axios from 'axios';
+import { Product } from '../types/Product.ts';
 
 const theme = createTheme({
   palette: {
@@ -207,29 +202,13 @@ function Mypage() {
   const [newNickname, setNewNickname] = useState('');
   const [posts, setPosts] = useState([]);
   const [setups, setSetups] = useState<Setup[]>([]);
-  const [setupDetail, setSetupDetail] = useState([]);
 
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
-  const [ArrProduct, setArrProduct] = useState<Product[]>([]);
   const [productsBySetup, setProductsBySetup] = useState<
     Record<number, Product[]>
   >({});
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  interface Product {
-    productName: string;
-    img: string;
-    productCode: string;
-    lprice: number;
-    brand: string;
-    maker: string;
-    category1: string;
-    category2: string;
-    category3?: string;
-    category4?: string;
-    pages: { price: number; link: string; storeName: string }[];
-  }
 
   const open = Boolean(anchorEl);
 
@@ -381,22 +360,21 @@ function Mypage() {
           // 각 셋업별 상품 세부 데이터 불러오기
           const productsBySetupTemp: Record<number, Product[]> = {};
           await Promise.all(
-            setups.data.map(async (setup) => {
+            setups.data.map(async (setup: Setup) => {
               const response = await getSetupDetail(setup.id);
               const products = response.data.products;
 
               // 각 상품의 상세 정보를 불러오기
               const detailedProducts = await Promise.all(
-                products.map(async (product) => {
+                products.map(async (product: Product) => {
                   return await fetchGoodsDetail(product.id); // 상품의 상세 정보만 저장
                 })
               );
 
               productsBySetupTemp[setup.id] = detailedProducts;
+              setProductsBySetup(productsBySetupTemp);
             })
           );
-
-          setProductsBySetup(productsBySetupTemp);
           console.log('Updated product details:', productsBySetupTemp);
         } catch (error) {
           console.error('Error fetching setups or product details:', error);
@@ -786,7 +764,7 @@ function Mypage() {
                     <GoodsModal
                       isOpen={IsModalopen}
                       onClose={Modalclose}
-                      onSelect={(product) =>
+                      onSelect={(product: Product) =>
                         handleProductSelect(product, setup.id)
                       }
                       setupId={setup.id}
