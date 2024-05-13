@@ -9,8 +9,9 @@ import {
   Menu,
   MenuItem,
   TextField,
+  createTheme,
+  ThemeProvider,
 } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material';
 import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
@@ -38,17 +39,19 @@ const theme = createTheme({
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100vw;
+  max-width: 1440px;
   align-items: center;
-  width: 100wh;
+  margin: 0 auto; // 가운데 정렬
 `;
 
 const SetupBoardMenu = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  width: 100%;
   height: 18vh;
+  width: 100%;
 `;
 
 const SetupBoardTitle = styled.h1`
@@ -82,7 +85,7 @@ const SetupBoardContainer = styled.div`
   gap: 3vh;
   text-align: center;
   align-items: center;
-  padding: 0% 5% 10vh 5%;
+  padding: 0% 0% 10vh 0%;
   height: fit-content;
 `;
 
@@ -125,6 +128,56 @@ const Caption = styled.div`
   }
 `;
 
+const CustomTextField = styled(TextField)`
+  .MuiInputBase-root {
+    max-width: 240px;
+    width: fit-content; // 너비 설정
+    align-items: center; // 입력 요소들을 수직 중앙 정렬합니다.
+    text-align: center; // 입력 텍스트를 가운데 정렬합니다.
+    padding: 0.5rem 1rem; // 내부 여백 설정
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  }
+
+  .MuiFilledInput-root {
+    background-color: #333333; // 배경색 설정
+    transition: transform 0.5s;
+    &:before,
+    &:after {
+      display: none; // 밑줄 제거
+    }
+
+    &.Mui-focused {
+      background-color: #444444; // 포커스 시 배경색 변경
+      text-align: center; // 입력 텍스트 가운데 정렬
+      transform: scale(1.05);
+      &:before,
+      &:after {
+        display: none; // 밑줄 제거
+      }
+    }
+
+    &:hover {
+      transform: scale(1.05);
+      background-color: #444444; // 호버 시 배경색 변경
+    }
+  }
+
+  .MuiFilledInput-input {
+    padding-left: auto; // 왼쪽 여백 설정
+    padding-right: auto; // 오른쪽 여백 설정
+    padding-top: 0.5rem; // 위 여백 설정
+    padding-bottom: 0.5rem; // 아래 여백 설정
+    color: #d3d3d3; // 텍스트 색상 변경
+
+    &::placeholder {
+      color: #b1b1b1; // Placeholder 텍스트 색상 변경
+      width: 100%; // 너비 100% 설정
+      opacity: 1; // Safari에서는 필요할 수 있습니다.
+    }
+  }
+`;
+
 export default function SetupBoard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
@@ -156,7 +209,7 @@ export default function SetupBoard() {
         },
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       });
       setPosts(response.data.data);
@@ -199,7 +252,7 @@ export default function SetupBoard() {
     }
   };
 
-  const handlePageChange = (event, page, criteria) => {
+  const handlePageChange = (page, criteria) => {
     setPagenation(page);
     fetchPosts(page, criteria);
   };
@@ -287,18 +340,19 @@ export default function SetupBoard() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Navbar />
       <Container>
-        <Navbar />
         <SetupBoardMenu>
-          <TextField
+          <CustomTextField
             id="standard-basic"
-            variant="standard"
-            placeholder="검색어를 입력해주세요."
-            color="primary"
+            variant="filled"
+            placeholder="검색어를 입력해주세요"
             InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon color="primary" />
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton>
+                    <SearchIcon color="primary" />
+                  </IconButton>
                 </InputAdornment>
               ),
             }}

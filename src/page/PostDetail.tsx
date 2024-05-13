@@ -320,7 +320,7 @@ const PostDetail = () => {
 
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );
@@ -359,7 +359,7 @@ const PostDetail = () => {
         { content: comment },
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );
@@ -381,7 +381,7 @@ const PostDetail = () => {
         { content: updatedContent },
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );
@@ -406,7 +406,7 @@ const PostDetail = () => {
         `http://localhost:8080/api/posts/${id}/comments/${commentId}`,
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );

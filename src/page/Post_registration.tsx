@@ -232,7 +232,7 @@ function Post_reg() {
         },
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );
@@ -273,7 +273,7 @@ function Post_reg() {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );

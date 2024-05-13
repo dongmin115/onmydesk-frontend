@@ -33,7 +33,9 @@ export const Login = async (jsonData: { email: string; password: string }) => {
       }
     );
     // 세션스토리지에 토큰 저장
-    sessionStorage.setItem('token', response.data.data.token);
+    console.log(response.data);
+    sessionStorage.setItem('accessToken', response.data.data.accessToken);
+    sessionStorage.setItem('refreshToken', response.data.data.refreshToken);
     return response.data;
   } catch (error) {
     return error;
@@ -45,7 +47,7 @@ export const getUserInfo = async () => {
     const response = await axios.get('http://localhost:8080/api/user', {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
       },
     });
     return response.data;

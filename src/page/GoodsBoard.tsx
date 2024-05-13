@@ -1,5 +1,5 @@
 import { Button, Menu, MenuItem, CircularProgress } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import { KeyboardArrowDown } from '@mui/icons-material';
@@ -29,7 +29,6 @@ const Container = styled.div`
   item-align: center;
   max-width: 1440px;
   margin: 0 auto;
-  padding-bottom: 5vh;
 `;
 
 const GoodsBoardMenu = styled.div`
@@ -59,8 +58,6 @@ const SetupBoardContainer = styled.div`
   align-items: center;
   padding: 0;
   height: fit-content;
-  margin-left: 5%;
-  margin-right: 5%;
 `;
 
 const Flexbox = styled.div`
@@ -177,7 +174,6 @@ export default function GoodsBoard() {
   return (
     <ThemeProvider theme={theme}>
       <Navbar />
-
       <Container>
         <Category
           setLoading={setLoading}
