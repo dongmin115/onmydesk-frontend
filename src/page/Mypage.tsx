@@ -35,6 +35,7 @@ import {
   postSetup,
 } from '../api/Setup.ts';
 import GoodsModal from '../components/GoodsModal.tsx';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -210,6 +211,9 @@ function Mypage() {
 
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+  const [productsBySetup, setProductsBySetup] = useState<
+    Record<number, Product[]>
+  >({});
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -243,8 +247,37 @@ function Mypage() {
     refreshSetups();
   };
 
-  const handleProductSelect = (product: Product) => {
-    setArrProduct([...ArrProduct, product]);
+  const handleProductSelect = async (product: Product, setupId: number) => {
+    // 새로운 상품 목록을 준비
+    const updatedProducts = [...productsBySetup[setupId], product];
+    console.log('Updated products:', updatedProducts);
+
+    try {
+      // 서버에 업데이트 요청
+      const response = await axios.put(
+        `http://localhost:8080/api/setups/${setupId}`,
+        {
+          setupName: 'Setup Name', // 셋업 이름 업데이트 필요 시 수정
+          products: updatedProducts,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        // 상태 업데이트
+        setProductsBySetup((prev) => ({
+          ...prev,
+          [setupId]: updatedProducts,
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to update products:', error);
+    }
+
     setIsModalopen(false); // 모달 닫기
   };
 
@@ -292,8 +325,33 @@ function Mypage() {
   };
 
   const fetchSetupDetail = async (id: number) => {
-    const response = await getSetupDetail(id);
-    setSetupDetail(response.data.products);
+    try {
+      const response = await getSetupDetail(id);
+      setProductsBySetup((prev) => ({
+        ...prev,
+        [id]: response.data.products, // 각 셋업 ID에 따라 상품 목록을 저장
+      }));
+    } catch (error) {
+      console.error('Failed to fetch setup details:', error);
+    }
+  };
+
+  const fetchGoodsDetail = async (productId: number) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/products/${productId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
+      return response.data.data.product;
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
   };
 
   useEffect(() => {
@@ -315,10 +373,34 @@ function Mypage() {
           console.error(error);
         }
       };
-      const fetchSetups = () => {
-        getSetups().then((setups) => {
+      const fetchSetups = async () => {
+        try {
+          const setups = await getSetups();
           setSetups(setups.data);
-        });
+
+          // 각 셋업별 상품 세부 데이터 불러오기
+          const productsBySetupTemp: Record<number, Product[]> = {};
+          await Promise.all(
+            setups.data.map(async (setup) => {
+              const response = await getSetupDetail(setup.id);
+              const products = response.data.products;
+
+              // 각 상품의 상세 정보를 불러오기
+              const detailedProducts = await Promise.all(
+                products.map(async (product) => {
+                  return await fetchGoodsDetail(product.id); // 상품의 상세 정보만 저장
+                })
+              );
+
+              productsBySetupTemp[setup.id] = detailedProducts;
+            })
+          );
+
+          setProductsBySetup(productsBySetupTemp);
+          console.log('Updated product details:', productsBySetupTemp);
+        } catch (error) {
+          console.error('Error fetching setups or product details:', error);
+        }
       };
 
       fetchFavorite();
@@ -637,8 +719,8 @@ function Mypage() {
               {setups &&
                 setups.map((setup: Setup, i: number) => (
                   <TabPanel value={(i + 1).toString()} key={setup.id}>
-                    {setupDetail &&
-                      setupDetail.map((product: SetupDetail) => (
+                    {productsBySetup[setup.id] &&
+                      productsBySetup[setup.id].map((product) => (
                         <div
                           style={{
                             display: 'flex',
@@ -648,45 +730,35 @@ function Mypage() {
                             width: '100%',
                           }}
                         >
+                          <img
+                            src={product.img}
+                            alt={product.productName}
+                            style={{
+                              width: 'fit-content',
+                              height: '5vw',
+                              borderRadius: '1rem',
+                              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
+                            }}
+                          />
                           <div
                             style={{
                               display: 'flex',
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              width: '60%',
+                              flexDirection: 'column',
+                              alignItems: 'start',
+                              justifyContent: 'center',
+                              marginLeft: '1rem',
                             }}
                           >
-                            <img
-                              src={product.img}
-                              alt={product.productName}
+                            <p
                               style={{
-                                width: 'fit-content',
-                                height: '5vw',
-                                borderRadius: '1rem',
-                                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
-                              }}
-                            />
-                            <div
-                              style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'start',
-                                justifyContent: 'center',
-                                marginLeft: '1rem',
+                                fontSize: '1.25rem',
+                                color: 'white',
+                                fontWeight: 'bold',
+                                width: '100%',
                               }}
                             >
-                              <p
-                                style={{
-                                  fontSize: '1.25rem',
-                                  color: 'white',
-                                  fontWeight: 'bold',
-                                  width: '100%',
-                                }}
-                              >
-                                {product.productName}
-                              </p>
-                            </div>
+                              {product.productName}
+                            </p>
                           </div>
                           <p
                             style={{
@@ -698,55 +770,33 @@ function Mypage() {
                           >
                             {product.lprice}원
                           </p>
-                          <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              gap: '1rem',
-                              width: '10vw',
-                            }}
+                          <Button
+                            variant="contained"
+                            color="error"
+                            style={{ fontSize: '1rem' }}
+                            onClick={() =>
+                              deleteSetupGoods(setup.id, product.id)
+                            }
                           >
-                            <Button
-                              variant="contained"
-                              color="error"
-                              style={{
-                                fontSize: '1rem',
-                              }}
-                              onClick={() =>
-                                deleteSetupGoods(setup.id, product.id)
-                              }
-                            >
-                              삭제
-                            </Button>
-                          </div>
+                            삭제
+                          </Button>
                         </div>
                       ))}
                     <Divider style={{ margin: '1rem' }} />
+                    <GoodsModal
+                      isOpen={IsModalopen}
+                      onClose={Modalclose}
+                      onSelect={(product) =>
+                        handleProductSelect(product, setup.id)
+                      }
+                      setupId={setup.id}
+                    />
                     <Button onClick={Modalopen}>추가하기</Button>
-                    <p
-                      style={{
-                        fontSize: '1.25rem',
-                        color: 'white',
-                        fontWeight: 'bold',
-                        width: '100%',
-                        margin: '0',
-                        textAlign: 'end',
-                      }}
-                    >
-                      총액 : {setup.postTotalPrice} 원
-                    </p>
                   </TabPanel>
                 ))}
             </Box>
           </TabContext>
         </div>
-        <GoodsModal
-          isOpen={IsModalopen}
-          onClose={Modalclose}
-          onSelect={handleProductSelect}
-        />
       </Container>
     </ThemeProvider>
   );

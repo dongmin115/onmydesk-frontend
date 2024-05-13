@@ -70,11 +70,13 @@ const Item_text = styled.b`
 `;
 
 // 모달 컴포넌트 정의
-function GoodsModal({ isOpen, onClose, onSelect }) {
+function GoodsModal({ isOpen, onClose, onSelect, setupId }) {
   const [searchGoods, setSearchGoods] = useState([]);
 
   const ClickProduct = (product) => {
-    onSelect(product);
+    //여기의 product는 productDetail
+    console.log(product);
+    onSelect(product, setupId);
     onClose();
   };
 
@@ -89,7 +91,6 @@ function GoodsModal({ isOpen, onClose, onSelect }) {
           },
         }
       );
-      console.log(response.data.data);
       setSearchGoods(response.data.data);
     } catch (error) {
       console.log('Error', error);
