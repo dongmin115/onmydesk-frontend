@@ -247,18 +247,35 @@ function Post_reg() {
     }
   };
 
+  const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
+
   const handleImageChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      const urls = Array.from(files).map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
-      setPreviewImageUrls(urls); // 미리보기 이미지 URL들 설정
-      console.log(urls);
       const selectedFiles = Array.from(files) as File[];
+
+      // 파일 크기 검사
+      const oversizedFiles = selectedFiles.filter(
+        (file) => file.size > MAX_FILE_SIZE_BYTES
+      );
+      if (oversizedFiles.length > 0) {
+        alert(
+          `파일 크기는 최대 ${MAX_FILE_SIZE_BYTES / (1024 * 1024)}MB여야 합니다.`
+        );
+        return;
+      }
+
+      const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
+      setPreviewImageUrls(urls); // 미리보기 이미지 URL들 설정
       setSelectedImages(selectedFiles);
     }
   };
+
+  const isUploadDisabled = selectedImages.some(
+    (file) => file.size > MAX_FILE_SIZE_BYTES
+  );
 
   const uploadImages = async () => {
     const formData = new FormData();
@@ -340,7 +357,9 @@ function Post_reg() {
               이미지 파일 선택
             </UploadButton>
 
-            <UploadButton onClick={uploadImages}>이미지 업로드</UploadButton>
+            <UploadButton onClick={uploadImages} disabled={isUploadDisabled}>
+              이미지 업로드
+            </UploadButton>
           </UploadContainer>
           <div
             style={{

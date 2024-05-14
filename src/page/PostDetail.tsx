@@ -61,7 +61,7 @@ const Image = styled.img`
 const TextContainer = styled.div`
   color: #ffffff;
   width: 55vw;
-  height: 40vh;
+  height: 80vh;
   margin-left: 23%;
 `;
 
