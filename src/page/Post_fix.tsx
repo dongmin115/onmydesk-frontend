@@ -120,9 +120,11 @@ const Thumbnail_img = styled.button`
 `;
 
 function Post_fix() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
   const { id } = useParams();
+  const [Previous_post, setPrevious_post] = useState();
+  const [Previous_product, setPrevious_product] = useState([]);
+  const [title, setTitle] = useState(``);
+  const [content, setContent] = useState(``);
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -146,6 +148,30 @@ function Post_fix() {
     category4?: string;
     pages: { price: number; link: string; storeName: string }[];
   }
+
+  useEffect(() => {
+    if (Previous_post) {
+      setTitle(Previous_post.title);
+      setContent(Previous_post.content);
+    }
+  }, [Previous_post]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/posts/${id}`
+        );
+        setPrevious_post(response.data.data.post);
+        setPrevious_product(response.data.data.product);
+        console.log('목록 불러오기 성공:', response.data.data);
+      } catch (error) {
+        console.log('목록 불러오기 실패:', error);
+      }
+    }
+
+    fetchPosts();
+  }, [id]);
 
   const handleThumbnailClick = (index) => {
     if (imgid.length > index) {
@@ -378,6 +404,7 @@ function Post_fix() {
               theme="snow"
               modules={modules}
               formats={formats}
+              value={content}
               onChange={handleQuillChange}
             />
           </Box>
