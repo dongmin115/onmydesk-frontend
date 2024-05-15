@@ -126,7 +126,7 @@ function Post_fix() {
   const [title, setTitle] = useState(``);
   const [content, setContent] = useState(``);
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
-  const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+  const [ArrProduct, setArrProduct] = useState<Product[]>([Previous_product]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imgid, setImgid] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);

@@ -118,6 +118,8 @@ const Thumbnail_img = styled.button`
   }
 `;
 
+const token = `eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWh5ZUBuYXZlci5jb20iLCJhdXRoIjoiUk9MRV9VU0VSIiwiZXhwIjoxNzE1ODQ1NjAzfQ.7dTdkA0DO5jP0SEfUw1T_cMcXq7B0l-vRN73lKJur7maXVkVRdur9D3_TFl5_b8tDZqvjrI_7_UHWUXwSb-L2A`;
+
 function Post_reg() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
