@@ -187,7 +187,7 @@ const ProductDetail = () => {
 
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );
@@ -209,7 +209,7 @@ const ProductDetail = () => {
         null,
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );
@@ -224,7 +224,7 @@ const ProductDetail = () => {
         `http://localhost:8080/api/products/wish/${id}`,
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );

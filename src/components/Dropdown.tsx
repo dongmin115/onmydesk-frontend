@@ -2,15 +2,28 @@ import * as React from 'react';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { deleteSetups, getSetups, postSetup } from '../api/Setup';
 
 export default function PositionedMenu() {
+  const [setups, setSetups] = React.useState([]);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    getSetups().then((setups) => {
+      setSetups(setups.data);
+    });
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handlePost = () => {
+    postSetup();
+  };
+
+  const handleDelete = (setupId: number) => {
+    deleteSetups(setupId);
   };
 
   return (
@@ -23,7 +36,7 @@ export default function PositionedMenu() {
         onClick={handleClick}
         style={{ fontSize: '1vw' }}
       >
-        다른 구성 만들기
+        셋업 목록
       </Button>
       <Menu
         id="demo-positioned-menu"
@@ -40,16 +53,24 @@ export default function PositionedMenu() {
           horizontal: 'left',
         }}
       >
-        <MenuItem onClick={handleClose} style={{ width: '10vw' }}>
-          셋업1
-        </MenuItem>
-        <MenuItem onClick={handleClose} style={{ width: '10vw' }}>
-          셋업2
-        </MenuItem>
-        <MenuItem onClick={handleClose} style={{ width: '10vw' }}>
-          셋업3
-        </MenuItem>
+        {setups &&
+          setups.map((setup) => (
+            <MenuItem onClick={handleClose} style={{ width: '10vw' }}>
+              {setup.setupName}
+              <Button onClick={() => handleDelete(setup.id)}>삭제</Button>
+            </MenuItem>
+          ))}
       </Menu>
+      <Button
+        id="demo-positioned-button"
+        aria-controls={open ? 'demo-positioned-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handlePost}
+        style={{ fontSize: '1vw' }}
+      >
+        셋업 만들기
+      </Button>
     </div>
   );
 }

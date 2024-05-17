@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
+import * as React from 'react';
 import styled from 'styled-components';
-import CustomModal from '../components/Modal.tsx';
-import Dropdown from '../components/Dropdown.tsx';
 import profile from '../assets/image/mypage/profile-image.svg';
-import plusbox from '../assets/image/mypage/plusbox.svg';
 import Navbar from '../components/Navbar.tsx';
 import {
   Box,
   Button,
+  Divider,
   IconButton,
   Modal,
+  Tab,
   TextField,
   ThemeProvider,
   createTheme,
@@ -19,7 +19,18 @@ import { userStore } from '../store.ts';
 import { deleteUser, putUserInfo } from '../api/User.ts';
 import { Favorite, FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
 import { disFavorite, favorite, getFavorite } from '../api/Favorite.ts';
-import { LikeCountsMap, LikesMap, Post } from '../types/type.ts';
+import { LikeCountsMap, LikesMap, Post, Setup } from '../types/type.ts';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import {
+  deleteSetupGoods,
+  deleteSetups,
+  getSetupDetail,
+  getSetups,
+  postSetup,
+} from '../api/Setup.ts';
+import GoodsModal from '../components/GoodsModal.tsx';
+import axios from 'axios';
+import { Product } from '../types/Product.ts';
 
 const theme = createTheme({
   palette: {
@@ -112,34 +123,6 @@ const SetupContainer = styled.div`
   gap: 2rem;
 `;
 
-const Plusbutton = styled.button`
-  //나만의 데스크탑 아이템 추가 버튼
-  margin: 0.5vw;
-  border: none;
-  background-color: #3d3d3d;
-  padding: 0%;
-  border-radius: 2.5vw;
-  cursor: pointer;
-  border-radius: 1rem;
-  drop-shadow: 0 0 0.5rem #000000;
-
-  &:hover {
-    transform: scale(1.05);
-    transition: transform 0.5s;
-  }
-`;
-
-const PlusImage = styled.img`
-  // 아이템 추가 이미지
-  width: full;
-  pointer-events: none;
-`;
-
-const Flexdiv = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
 const Flexdiv2 = styled.div`
   display: flex;
   flex-direction: column;
@@ -186,23 +169,108 @@ const Caption = styled.div`
   }
 `;
 
+function CustomTabLabel({
+  name,
+  onDelete,
+}: {
+  name: string;
+  onDelete: () => void;
+}) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      {name}
+      <Button
+        onClick={onDelete}
+        style={{ minWidth: '30px', padding: '0 5px', marginLeft: '10px' }}
+      >
+        삭제
+      </Button>
+    </div>
+  );
+}
+
 function Mypage() {
   const navigate = useNavigate();
+
+  const [value, setValue] = useState('1');
+
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
 
   const { name, nickname, email, setNickname } = userStore();
   const [newNickname, setNewNickname] = useState('');
   const [posts, setPosts] = useState([]);
-  const [IsModalOpen, setIsModalOpen] = useState(false);
+  const [setups, setSetups] = useState<Setup[]>([]);
+
+  const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
+  const [productsBySetup, setProductsBySetup] = useState<
+    Record<number, Product[]>
+  >({});
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const open = Boolean(anchorEl);
+
+  const refreshSetups = async () => {
+    const setups = await getSetups();
+    setSetups([...setups.data]); // 새 배열 생성으로 상태 갱신 강제
+  };
+  const handlePost = async () => {
+    await postSetup();
+    refreshSetups();
+  };
+
+  const handleDelete = async (setupId: number) => {
+    await deleteSetups(setupId);
+    refreshSetups();
+  };
+
+  const handleProductSelect = async (product: Product, setupId: number) => {
+    // 새로운 상품 목록을 준비
+    const updatedProducts = [...productsBySetup[setupId], product];
+    console.log('Updated products:', updatedProducts);
+
+    try {
+      // 서버에 업데이트 요청
+      const response = await axios.put(
+        `http://localhost:8080/api/setups/${setupId}`,
+        {
+          setupName: 'Setup Name', // 셋업 이름 업데이트 필요 시 수정
+          products: updatedProducts,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        // 상태 업데이트
+        setProductsBySetup((prev) => ({
+          ...prev,
+          [setupId]: updatedProducts,
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to update products:', error);
+    }
+
+    setIsModalopen(false); // 모달 닫기
+  };
+
+  const Modalopen = () => {
+    setIsModalopen(true);
+  };
+
+  const Modalclose = () => {
+    setIsModalopen(false);
+  };
 
   const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
   const [likeCounts, setLikeCounts] = useState<LikeCountsMap>({}); // 포스트의 좋아요 수를 저장하는 객체
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   // 닉네임 수정 모달 핸들러
   const [isUserInfoModalOpen, setIsUserInfoModalOpen] = useState(false);
   const putUserInfoModalOpen = () => {
@@ -235,12 +303,42 @@ function Mypage() {
     }
   };
 
+  const fetchSetupDetail = async (id: number) => {
+    try {
+      const response = await getSetupDetail(id);
+      setProductsBySetup((prev) => ({
+        ...prev,
+        [id]: response.data.products, // 각 셋업 ID에 따라 상품 목록을 저장
+      }));
+    } catch (error) {
+      console.error('Failed to fetch setup details:', error);
+    }
+  };
+
+  const fetchGoodsDetail = async (productId: number) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/products/${productId}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
+      return response.data.data.product;
+    } catch (error) {
+      console.error(error);
+      return error;
+    }
+  };
+
   useEffect(() => {
     if (name) {
       const fetchFavorite = async () => {
         try {
           const response = await getFavorite();
-          await setPosts(response.data);
+          setPosts(response.data);
           const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
           const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
 
@@ -254,14 +352,47 @@ function Mypage() {
           console.error(error);
         }
       };
+      const fetchSetups = async () => {
+        try {
+          const setups = await getSetups();
+          setSetups(setups.data);
+
+          // 각 셋업별 상품 세부 데이터 불러오기
+          const productsBySetupTemp: Record<number, Product[]> = {};
+          await Promise.all(
+            setups.data.map(async (setup: Setup) => {
+              const response = await getSetupDetail(setup.id);
+              const products = response.data.products;
+
+              // 각 상품의 상세 정보를 불러오기
+              const detailedProducts = await Promise.all(
+                products.map(async (product: Product) => {
+                  return await fetchGoodsDetail(product.id); // 상품의 상세 정보만 저장
+                })
+              );
+
+              productsBySetupTemp[setup.id] = detailedProducts;
+              setProductsBySetup(productsBySetupTemp);
+            })
+          );
+          console.log('Updated product details:', productsBySetupTemp);
+        } catch (error) {
+          console.error('Error fetching setups or product details:', error);
+        }
+      };
 
       fetchFavorite();
+      fetchSetups();
     }
   }, []);
 
   const renderPosts = () => {
     return posts.map((post: Post) => (
-      <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
+      <Link
+        key={post.id}
+        to={`/PostDetail/${post.id}`}
+        style={{ textDecoration: 'none' }}
+      >
         <ImageContainer>
           <SetupBoardImage
             key={post.id}
@@ -440,7 +571,7 @@ function Mypage() {
                   height: '2.5vw',
                   whiteSpace: 'nowrap',
                 }}
-                onClick={() => sessionStorage.removeItem('token')}
+                onClick={() => sessionStorage.removeItem('accessToken')}
               >
                 {name ? '로그아웃' : '로그인'}
               </Button>
@@ -458,7 +589,7 @@ function Mypage() {
               }}
               onClick={() => {
                 deleteUser();
-                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('accessToken');
                 navigate('/login');
               }}
             >
@@ -491,58 +622,158 @@ function Mypage() {
         </SetupContainer>
         <TitleContainer>
           <TitleText>나만의 데스크탑</TitleText>
-          <Dropdown />
         </TitleContainer>
         <div
           style={{
-            backgroundColor: '#414141',
-            borderRadius: '1vw',
-            display: 'flex',
-            boxShadow: '2px 2px 10px 2px rgba(0, 0, 0, 0.5)',
+            backgroundColor: '#3d3d3d',
             width: '100%',
-            justifyContent: 'center',
+            borderRadius: '1vw',
+            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
           }}
         >
-          <div>
-            <div style={{ marginRight: '1vw' }}>
-              <Flexdiv>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-              </Flexdiv>
-              <Flexdiv>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-              </Flexdiv>
-
-              <Flexdiv>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-                <Plusbutton onClick={openModal}>
-                  <PlusImage src={plusbox} />
-                </Plusbutton>
-
-                <CustomModal isOpen={IsModalOpen} onClose={closeModal} />
-              </Flexdiv>
-            </div>
-          </div>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                {setups &&
+                  setups.map((setup: Setup, i: number) => (
+                    <Tab
+                      label={
+                        <CustomTabLabel
+                          name={setup.setupName}
+                          onDelete={() => handleDelete(setup.id)}
+                        />
+                      }
+                      value={(i + 1).toString()}
+                      onClick={async () => await fetchSetupDetail(setup.id)}
+                    />
+                  ))}
+                <Button
+                  id="demo-positioned-button"
+                  aria-controls={open ? 'demo-positioned-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handlePost}
+                  style={{ fontSize: '1vw' }}
+                >
+                  셋업 만들기
+                </Button>
+              </TabList>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: '1rem',
+                  height: 'fit-content',
+                  paddingLeft: '2rem',
+                  paddingRight: '2rem',
+                }}
+              >
+                <p
+                  style={{
+                    color: '#7b7878',
+                    width: '60%',
+                    textAlign: 'center',
+                  }}
+                >
+                  제품
+                </p>
+                <p
+                  style={{
+                    color: '#7b7878',
+                    width: '10vw',
+                    textAlign: 'center',
+                  }}
+                >
+                  최저가
+                </p>
+                <div style={{ width: '10vw' }}></div>
+              </div>
+              <Divider style={{ marginLeft: '2rem', marginRight: '2rem' }} />
+              {setups &&
+                setups.map((setup: Setup, i: number) => (
+                  <TabPanel value={(i + 1).toString()} key={setup.id}>
+                    {productsBySetup[setup.id] &&
+                      productsBySetup[setup.id].map((product) => (
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            width: '100%',
+                          }}
+                        >
+                          <img
+                            src={product.img}
+                            alt={product.productName}
+                            style={{
+                              width: 'fit-content',
+                              height: '5vw',
+                              borderRadius: '1rem',
+                              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
+                            }}
+                          />
+                          <div
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              alignItems: 'start',
+                              justifyContent: 'center',
+                              marginLeft: '1rem',
+                            }}
+                          >
+                            <p
+                              style={{
+                                fontSize: '1.25rem',
+                                color: 'white',
+                                fontWeight: 'bold',
+                                width: '100%',
+                              }}
+                            >
+                              {product.productName}
+                            </p>
+                          </div>
+                          <p
+                            style={{
+                              fontSize: '1.25rem',
+                              color: 'white',
+                              width: '10vw',
+                              textAlign: 'center',
+                            }}
+                          >
+                            {product.lprice}원
+                          </p>
+                          <Button
+                            variant="contained"
+                            color="error"
+                            style={{ fontSize: '1rem' }}
+                            onClick={() =>
+                              deleteSetupGoods(setup.id, product.id)
+                            }
+                          >
+                            삭제
+                          </Button>
+                        </div>
+                      ))}
+                    <Divider style={{ margin: '1rem' }} />
+                    <GoodsModal
+                      isOpen={IsModalopen}
+                      onClose={Modalclose}
+                      onSelect={(product: Product) =>
+                        handleProductSelect(product, setup.id)
+                      }
+                      setupId={setup.id}
+                    />
+                    <Button onClick={Modalopen}>추가하기</Button>
+                  </TabPanel>
+                ))}
+            </Box>
+          </TabContext>
         </div>
       </Container>
     </ThemeProvider>

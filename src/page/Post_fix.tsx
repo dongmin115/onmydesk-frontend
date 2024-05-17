@@ -257,7 +257,7 @@ function Post_fix() {
 
         {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );
@@ -298,7 +298,7 @@ function Post_fix() {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );
