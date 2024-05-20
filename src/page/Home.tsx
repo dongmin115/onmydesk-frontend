@@ -10,7 +10,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   item-align: center;
-  width: 100wh;
   align-items: center;
   margin: 0 auto; // 가운데 정렬
 `;
@@ -50,6 +49,7 @@ const HotDeskImageLayer = styled.div`
   position: absolute;
   top: 50%;
   width: 30%;
+  height: 70%;
   transform: translateY(-50%);
   display: flex;
   justify-content: center;
@@ -87,6 +87,7 @@ const HotDeskImageLayer = styled.div`
 const HotDeskImage = styled.img`
   width: 100%;
   height: 100%;
+  object-fit: cover;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 0px #000000;
   transition: 0.5s ease;
@@ -141,39 +142,19 @@ const HotDesk = (props) => {
       </HotDeskDescription>
       <HotDeskImageContainer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[3].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[3].imageUrls} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[1].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[1].imageUrls} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[0].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[0].imageUrls} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[2].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[2].imageUrls} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[4].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[4].imageUrls} alt="hot-desk" />
         </HotDeskImageLayer>
       </HotDeskImageContainer>
     </>
@@ -269,6 +250,7 @@ export default function Home() {
           },
         });
         setHotDesk(response.data.data);
+        console.log(response.data.data);
       } catch (error) {
         console.log('Error', error);
       }
@@ -280,7 +262,11 @@ export default function Home() {
     <Container>
       <Navbar />
       <SectionContainer>
-        <HotDesk hotDesk={hotDesk} />
+        {hotDesk.length === 0 ? (
+          <div>Loading...</div>
+        ) : (
+          <HotDesk hotDesk={hotDesk} />
+        )}
       </SectionContainer>
       <SectionContainer>
         <HotGoods />
