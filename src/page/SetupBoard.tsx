@@ -9,9 +9,9 @@ import {
   Menu,
   MenuItem,
   TextField,
-  createTheme,
   ThemeProvider,
 } from '@mui/material';
+import createTheme from '@mui/material/styles/createTheme';
 import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';

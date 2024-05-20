@@ -6,8 +6,8 @@ import {
   Menu,
   MenuItem,
   ThemeProvider,
-  createTheme,
 } from '@mui/material';
+import createTheme from '@mui/material/styles/createTheme';
 import { useEffect, useState } from 'react';
 import {
   FavoriteBorder,

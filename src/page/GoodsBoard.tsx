@@ -1,5 +1,6 @@
 import { Button, Menu, MenuItem, CircularProgress } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import createTheme from '@mui/material/styles/createTheme';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import { KeyboardArrowDown } from '@mui/icons-material';

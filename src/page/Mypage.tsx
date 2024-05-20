@@ -12,8 +12,8 @@ import {
   Tab,
   TextField,
   ThemeProvider,
-  createTheme,
 } from '@mui/material';
+import createTheme from '@mui/material/styles/createTheme';
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../store.ts';
 import { deleteUser, putUserInfo } from '../api/User.ts';
