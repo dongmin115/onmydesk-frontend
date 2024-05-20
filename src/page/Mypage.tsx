@@ -387,6 +387,7 @@ function Mypage() {
   }, []);
 
   const renderPosts = () => {
+    console.log(posts);
     return posts.map((post: Post) => (
       <Link
         key={post.id}
@@ -396,7 +397,7 @@ function Mypage() {
         <ImageContainer>
           <SetupBoardImage
             key={post.id}
-            src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
+            src={post.thumbnailUrl}
             alt={post.title}
           />
           <Caption>
