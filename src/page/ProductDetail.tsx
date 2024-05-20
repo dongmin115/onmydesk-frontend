@@ -21,9 +21,9 @@ const ProductImage = styled.img`
   //상품 이미지
   background-size: cover;
   width: 27vw;
-  height: 44vh;
+  height: 60vh;
   border-radius: 5%;
-  margin-top: 4.3%;
+  margin-top: 6.3%;
 `;
 const ProductDetails = styled.div`
   //상품의 판매처,가격,상세 정보를 묶는 컨테이너
@@ -78,14 +78,14 @@ const PriceList = styled.div`
 const PriceItem = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 `;
 
 const ShopName = styled.a`
   // 스타일을 a 태그에 적용
   margin-right: 5%;
-  width: 7vw;
-  height: 4vh;
+  width: 14vw;
+  height: 6vh;
   margin-top: 3%;
   color: #ffffff; // 링크 색상을 지정
   text-decoration: none; // 밑줄 제거
@@ -268,7 +268,7 @@ const ProductDetail = () => {
           </ProductDetail1>
           <ProductDetail2>
             <PriceList>
-              {productDetailData?.data.pages.map((page) => (
+              {productDetailData?.data.pages.slice(0, 5).map((page) => (
                 <PriceItem key={page.id}>
                   <ShopName
                     href={page.link}

@@ -67,7 +67,7 @@ function GoodsItem({ product, id }) {
           </FavoriteButton>
         </GoodsBoardInfoFlexbox>
         <GoodsBoardInfoFlexbox>
-          <p>{`최저가 ${product.price}원`}</p>
+          <p>{`최저가 ${product.lprice}원`}</p>
         </GoodsBoardInfoFlexbox>
       </GoodsBoardInfo>
     </GoodsBoardFlexbox>
