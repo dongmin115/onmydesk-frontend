@@ -222,7 +222,6 @@ export default function Home() {
           },
         });
         setHotDesk(response.data.data);
-        console.log(response.data.data);
       } catch (error) {
         console.log('Error', error);
       }
@@ -236,7 +235,6 @@ export default function Home() {
             criteria: 3,
           },
         });
-        console.log(response.data.data);
         setHotGoods(response.data.data);
       } catch (error) {
         console.log('Error', error);

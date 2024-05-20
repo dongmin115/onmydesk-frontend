@@ -213,7 +213,6 @@ export default function SetupBoard() {
         },
       });
       setPosts(response.data.data);
-      console.log(response.data.data);
 
       const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
       const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
