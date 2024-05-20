@@ -161,7 +161,7 @@ const HotDesk = (props) => {
   );
 };
 
-const HotGoods = () => {
+const HotGoods = ({ hotGoods }) => {
   return (
     <>
       <HotDeskTitle>인기있는 셋업 상품</HotDeskTitle>
@@ -169,56 +169,27 @@ const HotGoods = () => {
         On My Desk에서 오늘의 인기있는 셋업 상품을 확인해보세요!
       </HotDeskDescription>
       <HotGoodsContainer>
-        <SpanningItem4>
-          <HotGoodsImage
-            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-            alt="hot-desk"
-          />
-        </SpanningItem4>
-        <SpanningItem2>
-          <HotGoodsImage
-            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-            alt="hot-desk"
-          />
-        </SpanningItem2>
-        <SpanningItem2>
-          <HotGoodsImage
-            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-            alt="hot-desk"
-          />
-        </SpanningItem2>
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
+        {hotGoods.length > 0 && (
+          <SpanningItem4>
+            <HotGoodsImage src={hotGoods[0].img} alt="hot-desk" />
+          </SpanningItem4>
+        )}
+        {hotGoods.length > 1 && (
+          <SpanningItem2>
+            <HotGoodsImage src={hotGoods[1].img} alt="hot-desk" />
+          </SpanningItem2>
+        )}
+        {hotGoods.length > 2 && (
+          <SpanningItem2>
+            <HotGoodsImage src={hotGoods[2].img} alt="hot-desk" />
+          </SpanningItem2>
+        )}
+        {hotGoods.length > 3 &&
+          hotGoods
+            .slice(3)
+            .map((item, index) => (
+              <HotGoodsImage key={index} src={item.img} alt="hot-desk" />
+            ))}
       </HotGoodsContainer>
     </>
   );
@@ -227,6 +198,7 @@ const HotGoods = () => {
 export default function Home() {
   const { setName, setNickname, setEmail } = userStore();
   const [hotDesk, setHotDesk] = useState([]);
+  const [hotGoods, setHotGoods] = useState([]);
 
   useEffect(() => {
     // 로그인 후 홈페이지로 이동하면 유저 정보를 가져옴
@@ -255,7 +227,23 @@ export default function Home() {
         console.log('Error', error);
       }
     };
+    const fetchHotGoods = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/products', {
+          params: {
+            page: 1,
+            limit: 11,
+            criteria: 3,
+          },
+        });
+        console.log(response.data.data);
+        setHotGoods(response.data.data);
+      } catch (error) {
+        console.log('Error', error);
+      }
+    };
     fetchHotDesk();
+    fetchHotGoods();
     fetchUserInfo();
   }, []);
   return (
@@ -269,7 +257,11 @@ export default function Home() {
         )}
       </SectionContainer>
       <SectionContainer>
-        <HotGoods />
+        {hotGoods.length === 0 ? (
+          <div>Loading...</div>
+        ) : (
+          <HotGoods hotGoods={hotGoods} />
+        )}
       </SectionContainer>
     </Container>
   );
