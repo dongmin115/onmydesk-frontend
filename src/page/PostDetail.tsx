@@ -11,6 +11,8 @@ import ShareIcon from '@mui/icons-material/Share';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { Carousel } from 'react-responsive-carousel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const SetupTitleContainer = styled.div`
@@ -261,14 +263,63 @@ type Comment = {
   nickname: string;
 };
 
+const PrevArrow = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  z-index: 2;
+  cursor: pointer;
+  font-size: 4rem;
+  color: white;
+  border-width: 0 0 3px 3px;
+`;
+
+const NextArrow = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  z-index: 2;
+  cursor: pointer;
+  font-size: 4rem;
+  color: white;
+  border-width: 0 0 3px 3px;
+`;
+
 const ImageGallery = ({ imageUrls }) => {
-  // imageUrls가 배열인지 확인 후 처리
   if (!Array.isArray(imageUrls) || imageUrls.length === 0) {
-    return <p></p>;
+    return <></>;
   }
 
+  const handlePrevClick = (onClickHandler) => {
+    onClickHandler();
+  };
+
+  const handleNextClick = (onClickHandler) => {
+    onClickHandler();
+  };
+
   return (
-    <Carousel showArrows={true} showThumbs={false}>
+    <Carousel
+      showArrows={true} // 화살표를 숨김
+      showThumbs={false}
+      showStatus={false}
+      renderArrowPrev={(onClickHandler, hasPrev) =>
+        hasPrev && (
+          <PrevArrow onClick={() => handlePrevClick(onClickHandler)}>
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </PrevArrow>
+        )
+      }
+      renderArrowNext={(onClickHandler, hasNext) =>
+        hasNext && (
+          <NextArrow onClick={() => handleNextClick(onClickHandler)}>
+            <FontAwesomeIcon icon={faArrowRight} />
+          </NextArrow>
+        )
+      }
+    >
       {imageUrls.map((imageUrl, index) => (
         <div key={index}>
           <Image
