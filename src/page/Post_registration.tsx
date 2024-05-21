@@ -292,7 +292,6 @@ function Post_reg() {
   return (
     <>
       <Navbar />
-
       <div
         style={{
           display: 'flex',

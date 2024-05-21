@@ -122,11 +122,10 @@ const Thumbnail_img = styled.button`
 function Post_fix() {
   const { id } = useParams();
   const [Previous_post, setPrevious_post] = useState();
-  const [Previous_product, setPrevious_product] = useState([]);
   const [title, setTitle] = useState(``);
   const [content, setContent] = useState(``);
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
-  const [ArrProduct, setArrProduct] = useState<Product[]>([Previous_product]);
+  const [ArrProduct, setArrProduct] = useState<Product[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imgid, setImgid] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -151,10 +150,21 @@ function Post_fix() {
 
   useEffect(() => {
     if (Previous_post) {
-      setTitle(Previous_post.title);
-      setContent(Previous_post.content);
+      setTitle(Previous_post.post.title);
+      setContent(Previous_post.post.content);
+      setArrProduct(Previous_post.products);
+      setPreviewImageUrls(Previous_post.post.imageUrls);
+      console.log(Previous_post);
     }
   }, [Previous_post]);
+
+  useEffect(() => {
+    console.log(previewImageUrls);
+  }, [previewImageUrls]);
+
+  useEffect(() => {
+    console.log('imgid:', imgid);
+  }, [imgid]);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -162,8 +172,8 @@ function Post_fix() {
         const response = await axios.get(
           `http://localhost:8080/api/posts/${id}`
         );
-        setPrevious_post(response.data.data.post);
-        setPrevious_product(response.data.data.product);
+        setPrevious_post(response.data.data);
+
         console.log('목록 불러오기 성공:', response.data.data);
       } catch (error) {
         console.log('목록 불러오기 실패:', error);
@@ -251,7 +261,7 @@ function Post_fix() {
           title: `${title}`,
           content: `${content}`,
           products: ArrProduct,
-          imageIds: imgid,
+          imageIds: [44],
           thumbnailImageId: selectedThumbnail,
         },
 
@@ -305,7 +315,7 @@ function Post_fix() {
 
       const imageIds = response.data.data.map((image) => image.id);
       setImgid(imageIds);
-      // setPreviewImageUrls([]);
+      //setPreviewImageUrls([]);
       alert(
         '이미지 업로드가 완료되었습니다. 썸네일로 등록할 이미지를 클릭하세요!'
       );
@@ -353,6 +363,19 @@ function Post_fix() {
               />
             </div>
           </Centerdiv>
+          <UploadContainer>
+            <UploadInput
+              type="file"
+              multiple
+              onChange={handleImageChange}
+              ref={fileInputRef}
+            />
+            <UploadButton onClick={() => fileInputRef.current?.click()}>
+              이미지 파일 선택
+            </UploadButton>
+
+            <UploadButton onClick={uploadImages}>이미지 업로드</UploadButton>
+          </UploadContainer>
 
           <div
             style={{
