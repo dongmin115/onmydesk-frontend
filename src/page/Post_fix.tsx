@@ -84,7 +84,7 @@ const UploadInput = styled.input`
 
 const UploadButton = styled.button`
   background-color: #565e66;
-  width: 49%;
+  width: 68vw;
   color: white;
   font-size: 1.2vw;
   padding: 0.5vw 0.5vw;
@@ -158,10 +158,6 @@ function Post_fix() {
       console.log(Previous_post);
     }
   }, [Previous_post]);
-
-  useEffect(() => {
-    console.log(previewImageUrls);
-  }, [previewImageUrls]);
 
   useEffect(() => {
     console.log('imgid:', imgid);
@@ -254,6 +250,11 @@ function Post_fix() {
     setTitle(event.target.value);
   };
 
+  useEffect(() => {
+    console.log(previewImageUrls); // imgid 상태가 업데이트된 후 로그 출력
+    uploadImages();
+  }, [previewImageUrls]);
+
   const Handlefix = async () => {
     try {
       const response = await axios.put(
@@ -262,8 +263,8 @@ function Post_fix() {
           title: `${title}`,
           content: `${content}`,
           products: ArrProduct,
-          imageIds: [11],
-          thumbnailImageId: 11,
+          imageIds: imgid,
+          thumbnailImageId: selectedThumbnail,
         },
 
         {
@@ -328,12 +329,9 @@ function Post_fix() {
       const imageIds = response.data.data.map((image) => image.id);
       setImgid(imageIds);
       //setPreviewImageUrls([]);
-      alert(
-        '이미지 업로드가 완료되었습니다. 썸네일로 등록할 이미지를 클릭하세요!'
-      );
+      alert('썸네일로 등록할 이미지를 클릭하세요');
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
-      alert('이미지 업로드에 실패했습니다.');
     }
   };
 
@@ -383,10 +381,8 @@ function Post_fix() {
               ref={fileInputRef}
             />
             <UploadButton onClick={() => fileInputRef.current?.click()}>
-              이미지 파일 선택
+              Upload image
             </UploadButton>
-
-            <UploadButton onClick={uploadImages}>이미지 업로드</UploadButton>
           </UploadContainer>
 
           <div
@@ -451,7 +447,11 @@ function Post_fix() {
             }}
           >
             <ReactQuill
-              style={{ height: `600px`, marginTop: '1vw', marginBottom: '1vw' }}
+              style={{
+                height: `600px`,
+                marginTop: '0.5vw',
+                marginBottom: '0.5vw',
+              }}
               theme="snow"
               modules={modules}
               formats={formats}

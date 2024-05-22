@@ -84,7 +84,7 @@ const UploadInput = styled.input`
 
 const UploadButton = styled.button`
   background-color: #565e66;
-  width: 49.5%;
+  width: 68vw;
   color: white;
   font-size: 1.2vw;
   padding: 0.5vw 0.5vw;
@@ -221,6 +221,11 @@ function Post_reg() {
     console.log(imgid); // imgid 상태가 업데이트된 후 로그 출력
   }, [imgid]);
 
+  useEffect(() => {
+    console.log(previewImageUrls); // imgid 상태가 업데이트된 후 로그 출력
+    uploadImages();
+  }, [previewImageUrls]);
+
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
@@ -294,12 +299,9 @@ function Post_reg() {
       const imageIds = response.data.data.map((image) => image.id);
       setImgid(imageIds);
       // setPreviewImageUrls([]);
-      alert(
-        '이미지 업로드가 완료되었습니다. 썸네일로 등록할 이미지를 클릭하세요!'
-      );
+      alert('썸네일로 등록할 이미지를 선택해주세요.');
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
-      alert('이미지 업로드에 실패했습니다.');
     }
   };
 
@@ -349,10 +351,8 @@ function Post_reg() {
               ref={fileInputRef}
             />
             <UploadButton onClick={() => fileInputRef.current?.click()}>
-              이미지 파일 선택
+              Upload image
             </UploadButton>
-
-            <UploadButton onClick={uploadImages}>이미지 업로드</UploadButton>
           </UploadContainer>
           <div
             style={{
