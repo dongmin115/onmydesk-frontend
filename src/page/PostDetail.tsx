@@ -551,7 +551,7 @@ const PostDetail = () => {
 
       <SetupObjectContainer>
         {productPost.map((product, index) => (
-          <SetupObject>
+          <SetupObject key={product.id}>
             <Link to={`/productdetail/${product.id}`}>
               <ObjectImage src={product.img} />
               <ObjectNameContainer>

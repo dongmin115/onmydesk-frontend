@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { TextField, Box } from '@mui/material';
+import { transformer } from 'zod';
 
 const Centerdiv = styled.div`
   display: flex;
@@ -83,7 +84,7 @@ const UploadInput = styled.input`
 
 const UploadButton = styled.button`
   background-color: #565e66;
-  width: 49%;
+  width: 49.5%;
   color: white;
   font-size: 1.2vw;
   padding: 0.5vw 0.5vw;
@@ -97,7 +98,7 @@ const UploadButton = styled.button`
   }
 `;
 
-const Thumbnail_img = styled.button`
+const Thumbnail_button = styled.button`
   background: transparent;
   max-width: 68vw;
   cursor: pointer;
@@ -107,6 +108,7 @@ const Thumbnail_img = styled.button`
   margin: 0.2vw;
   border: none;
   overflow: hidden;
+  position: relative;
 
   &:hover {
     border: 2px solid #fc6d6d; /* Add a border on hover */
@@ -254,9 +256,21 @@ function Post_reg() {
     if (files && files.length > 0) {
       const selectedFiles = Array.from(files) as File[];
       const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
-      setPreviewImageUrls(urls); // 미리보기 이미지 URL들 설정
-      setSelectedImages(selectedFiles);
+      setPreviewImageUrls((prevUrls) => [...prevUrls, ...urls]); // 기존 미리보기 이미지 URL에 새 URL 추가
+      setSelectedImages((prevImages) => [...prevImages, ...selectedFiles]); // 기존 이미지 배열에 새 이미지 추가
     }
+  };
+
+  const handleImageDelete = (indexToRemove) => {
+    setPreviewImageUrls((prevUrls) =>
+      prevUrls.filter((_, index) => index !== indexToRemove)
+    );
+    setSelectedImages((prevImages) =>
+      prevImages.filter((_, index) => index !== indexToRemove)
+    );
+    setImgid((prevIds) =>
+      prevIds.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const uploadImages = async () => {
@@ -272,7 +286,7 @@ function Post_reg() {
         {
           headers: {
             'Content-Type': 'multipart/form-data',
-            Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
           },
         }
       );
@@ -349,11 +363,26 @@ function Post_reg() {
             }}
           >
             {previewImageUrls.map((url, index) => (
-              <Thumbnail_img
+              <Thumbnail_button
                 key={index}
                 onClick={() => handleThumbnailClick(index)}
-                // 이미지 id를 기반으로 선택된 썸네일 설정
               >
+                <button
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    zIndex: '5',
+                    width: '10%',
+                    height: '10%',
+                    position: 'absolute',
+                    right: '0.5vw',
+                    color: '#d43921',
+                    fontSize: '1vw',
+                  }}
+                  onClick={() => handleImageDelete(index)}
+                >
+                  X
+                </button>
                 <img
                   key={index}
                   src={url}
@@ -365,7 +394,7 @@ function Post_reg() {
                   }}
                   alt={`Preview ${index}`}
                 />
-              </Thumbnail_img>
+              </Thumbnail_button>
             ))}
           </div>
           <Box
@@ -386,7 +415,11 @@ function Post_reg() {
             }}
           >
             <ReactQuill
-              style={{ height: `600px`, marginTop: '1vw', marginBottom: '1vw' }}
+              style={{
+                height: `600px`,
+                marginTop: '0.5vw',
+                marginBottom: '0.5vw',
+              }}
               theme="snow"
               modules={modules}
               formats={formats}

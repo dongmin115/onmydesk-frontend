@@ -261,8 +261,8 @@ function Post_fix() {
           title: `${title}`,
           content: `${content}`,
           products: ArrProduct,
-          imageIds: [44],
-          thumbnailImageId: selectedThumbnail,
+          imageIds: [11],
+          thumbnailImageId: 11,
         },
 
         {
