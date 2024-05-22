@@ -98,7 +98,7 @@ const UploadButton = styled.button`
   }
 `;
 
-const Thumbnail_img = styled.button`
+const Thumbnail_button = styled.button`
   background: transparent;
   max-width: 68vw;
   cursor: pointer;
@@ -108,6 +108,7 @@ const Thumbnail_img = styled.button`
   margin: 0.2vw;
   border: none;
   overflow: hidden;
+  position: relative;
 
   &:hover {
     border: 2px solid #fc6d6d; /* Add a border on hover */
@@ -287,12 +288,23 @@ function Post_fix() {
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      const urls = Array.from(files).map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
-      setPreviewImageUrls(urls); // 미리보기 이미지 URL들 설정
-      console.log(urls);
       const selectedFiles = Array.from(files) as File[];
-      setSelectedImages(selectedFiles);
+      const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
+      setPreviewImageUrls((prevUrls) => [...prevUrls, ...urls]); // 기존 미리보기 이미지 URL에 새 URL 추가
+      setSelectedImages((prevImages) => [...prevImages, ...selectedFiles]); // 기존 이미지 배열에 새 이미지 추가
     }
+  };
+
+  const handleImageDelete = (indexToRemove) => {
+    setPreviewImageUrls((prevUrls) =>
+      prevUrls.filter((_, index) => index !== indexToRemove)
+    );
+    setSelectedImages((prevImages) =>
+      prevImages.filter((_, index) => index !== indexToRemove)
+    );
+    setImgid((prevIds) =>
+      prevIds.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const uploadImages = async () => {
@@ -386,11 +398,27 @@ function Post_fix() {
             }}
           >
             {previewImageUrls.map((url, index) => (
-              <Thumbnail_img
+              <Thumbnail_button
                 key={index}
                 onClick={() => handleThumbnailClick(index)}
                 // 이미지 id를 기반으로 선택된 썸네일 설정
               >
+                <button
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    zIndex: '5',
+                    width: '10%',
+                    height: '10%',
+                    position: 'absolute',
+                    right: '0.5vw',
+                    color: '#d43921',
+                    fontSize: '1vw',
+                  }}
+                  onClick={() => handleImageDelete(index)}
+                >
+                  X
+                </button>
                 <img
                   key={index}
                   src={url}
@@ -402,7 +430,7 @@ function Post_fix() {
                   }}
                   alt={`Preview ${index}`}
                 />
-              </Thumbnail_img>
+              </Thumbnail_button>
             ))}
           </div>
           <Box
