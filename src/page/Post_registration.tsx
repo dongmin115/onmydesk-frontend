@@ -98,7 +98,7 @@ const UploadButton = styled.button`
   }
 `;
 
-const Thumbnail_button = styled.button`
+const Thumbnail_button = styled.button<{ isSelected: boolean }>`
   background: transparent;
   max-width: 68vw;
   cursor: pointer;
@@ -106,16 +106,17 @@ const Thumbnail_button = styled.button`
   width: 9.2vw; /* Set the width of the button */
   height: 8.3vw; /* Set the height of the button */
   margin: 0.2vw;
-  border: none;
   overflow: hidden;
   position: relative;
+  border: ${({ isSelected }) => (isSelected ? '4px solid #f82020' : 'none')};
+  opacity: ${({ isSelected }) => (isSelected ? '0.7' : '1')};
 
   &:hover {
     border: 2px solid #fc6d6d; /* Add a border on hover */
   }
 
   &:active {
-    opacity: 0.5; /* Reduce opacity when clicked */
+    opacity: 0.5;
     border: 2px solid #fc6d6d;
   }
 `;
@@ -365,6 +366,7 @@ function Post_reg() {
             {previewImageUrls.map((url, index) => (
               <Thumbnail_button
                 key={index}
+                isSelected={selectedThumbnail === imgid[index]}
                 onClick={() => handleThumbnailClick(index)}
               >
                 <button

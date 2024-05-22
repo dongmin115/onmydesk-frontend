@@ -8,6 +8,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import { TextField, Box } from '@mui/material';
+import { boolean } from 'zod';
 
 const Centerdiv = styled.div`
   display: flex;
@@ -98,7 +99,7 @@ const UploadButton = styled.button`
   }
 `;
 
-const Thumbnail_button = styled.button`
+const Thumbnail_button = styled.button<{ isSelected: boolean }>`
   background: transparent;
   max-width: 68vw;
   cursor: pointer;
@@ -106,9 +107,10 @@ const Thumbnail_button = styled.button`
   width: 9.2vw; /* Set the width of the button */
   height: 8.3vw; /* Set the height of the button */
   margin: 0.2vw;
-  border: none;
   overflow: hidden;
   position: relative;
+  border: ${({ isSelected }) => (isSelected ? '4px solid #f82020' : 'none')};
+  opacity: ${({ isSelected }) => (isSelected ? '0.7' : '1')};
 
   &:hover {
     border: 2px solid #fc6d6d; /* Add a border on hover */
@@ -396,6 +398,7 @@ function Post_fix() {
             {previewImageUrls.map((url, index) => (
               <Thumbnail_button
                 key={index}
+                isSelected={selectedThumbnail === imgid[index]}
                 onClick={() => handleThumbnailClick(index)}
                 // 이미지 id를 기반으로 선택된 썸네일 설정
               >
