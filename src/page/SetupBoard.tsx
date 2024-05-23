@@ -96,8 +96,8 @@ const ImageContainer = styled.div`
 `;
 
 const SetupBoardImage = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
   border-radius: 1rem;
   drop-shadow: 0 0 0.5rem #000000;
   transition: transform 0.5s;
