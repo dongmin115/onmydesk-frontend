@@ -16,7 +16,7 @@ import {
 import createTheme from '@mui/material/styles/createTheme';
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../store.ts';
-import { deleteUser, putUserInfo } from '../api/User.ts';
+import { deleteUser, getUserInfo, putUserInfo } from '../api/User.ts';
 import { Favorite, FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
 import { disFavorite, favorite, getFavorite } from '../api/Favorite.ts';
 import { LikeCountsMap, LikesMap, Post, Setup } from '../types/type.ts';
@@ -198,7 +198,7 @@ function Mypage() {
     setValue(newValue);
   };
 
-  const { name, nickname, email, setNickname } = userStore();
+  const { name, nickname, email, setName, setNickname, setEmail } = userStore();
   const [newNickname, setNewNickname] = useState('');
   const [posts, setPosts] = useState([]);
   const [setups, setSetups] = useState<Setup[]>([]);
@@ -334,6 +334,18 @@ function Mypage() {
   };
 
   useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await getUserInfo();
+        setName(response.data.name);
+        setNickname(response.data.nickname);
+        setEmail(response.data.email);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserInfo();
+
     if (name) {
       const fetchFavorite = async () => {
         try {
@@ -384,7 +396,7 @@ function Mypage() {
       fetchFavorite();
       fetchSetups();
     }
-  }, []);
+  }, [name]);
 
   const renderPosts = () => {
     console.log(posts);
