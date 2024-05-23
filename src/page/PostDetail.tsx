@@ -4,8 +4,6 @@ import Navbar from '../components/Navbar';
 import Button from '@mui/material/Button';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import ShareIcon from '@mui/icons-material/Share';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { Carousel } from 'react-responsive-carousel';
@@ -503,40 +501,6 @@ const PostDetail = () => {
             }}
           >
             <FavoriteBorderIcon />
-          </Button>
-        </Circle>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <BookmarkIcon />
-          </Button>
-        </Circle>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <ShareIcon />
           </Button>
         </Circle>
       </RightBox>
