@@ -16,7 +16,6 @@ import TvIcon from '@mui/icons-material/Tv';
 import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
 import { Favorite, KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
-import { Pagination } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import { disFavorite, favorite } from '../api/Favorite';
 import { LikeCountsMap, LikesMap, Post } from '../types/type';
@@ -183,7 +182,6 @@ export default function SetupBoard() {
   const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
   const [likeCounts, setLikeCounts] = useState<LikeCountsMap>({}); // 포스트의 좋아요 수를 저장하는 객체
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [pagenation, setPagenation] = useState(1);
   const open = Boolean(anchorEl);
   const [currentSortOption, setCurrentSortOption] = useState('최신순');
 
@@ -250,11 +248,6 @@ export default function SetupBoard() {
     } catch (error) {
       console.error('Error updating like status:', error);
     }
-  };
-
-  const handlePageChange = (page, criteria) => {
-    setPagenation(page);
-    fetchPosts(page, criteria);
   };
 
   const handleSortOptionClick = (
@@ -400,17 +393,6 @@ export default function SetupBoard() {
           </div>
         </SetupBoardMenu>
         <SetupBoardContainer>{renderPosts()}</SetupBoardContainer>
-        <Pagination
-          count={10} // 전체 페이지 수
-          page={pagenation} // 현재 페이지
-          color="primary"
-          onChange={handlePageChange}
-          sx={{
-            '& .MuiPaginationItem-root': { color: 'white', fontSize: '1vw' },
-          }}
-          style={{ marginBottom: '3vw' }}
-          // 페이지 변경 핸들러
-        />
       </Container>
     </ThemeProvider>
   );

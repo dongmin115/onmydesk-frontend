@@ -157,13 +157,14 @@ function Post_fix() {
       setContent(Previous_post.post.content);
       setArrProduct(Previous_post.products);
       setPreviewImageUrls(Previous_post.post.imageUrls);
+      setSelectedImages(Previous_post.post.imageUrls);
       console.log(Previous_post);
     }
   }, [Previous_post]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     console.log('imgid:', imgid);
-  }, [imgid]);
+  }, [imgid]);*/
 
   useEffect(() => {
     async function fetchPosts() {
@@ -254,7 +255,9 @@ function Post_fix() {
 
   useEffect(() => {
     console.log(previewImageUrls); // imgid 상태가 업데이트된 후 로그 출력
-    uploadImages();
+    if (previewImageUrls.length > 0) {
+      uploadImages();
+    }
   }, [previewImageUrls]);
 
   const Handlefix = async () => {
@@ -295,9 +298,9 @@ function Post_fix() {
       const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
       setPreviewImageUrls((prevUrls) => [...prevUrls, ...urls]); // 기존 미리보기 이미지 URL에 새 URL 추가
       setSelectedImages((prevImages) => [...prevImages, ...selectedFiles]); // 기존 이미지 배열에 새 이미지 추가
+      console.log(selectedImages);
     }
   };
-
   const handleImageDelete = (indexToRemove) => {
     setPreviewImageUrls((prevUrls) =>
       prevUrls.filter((_, index) => index !== indexToRemove)
@@ -329,8 +332,8 @@ function Post_fix() {
       );
 
       const imageIds = response.data.data.map((image) => image.id);
+      console.log(response.data.data);
       setImgid(imageIds);
-      //setPreviewImageUrls([]);
       alert('썸네일로 등록할 이미지를 클릭하세요');
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
@@ -386,6 +389,7 @@ function Post_fix() {
               Upload image
             </UploadButton>
           </UploadContainer>
+          <button onClick={uploadImages}></button>
 
           <div
             style={{
