@@ -228,6 +228,15 @@ function Post_reg() {
   }, [previewImageUrls]);
 
   const handleSubmit = async () => {
+    if (previewImageUrls.length == 0) {
+      alert('이미지를 최소 1장 업로드해주세요!');
+      return;
+    }
+    if (previewImageUrls.length > 0 && selectedThumbnail == null) {
+      alert('썸네일을 선택해주세요.');
+      return;
+    }
+
     try {
       const response = await axios.post(
         `http://localhost:8080/api/posts`,
@@ -298,7 +307,6 @@ function Post_reg() {
       );
 
       const newImageIds = response.data.data.map((image) => image.id);
-
       setImgid((prevId) => [...prevId, ...newImageIds]);
       // setPreviewImageUrls([]);
       alert('썸네일로 등록할 이미지를 선택해주세요.');

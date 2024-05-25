@@ -263,6 +263,16 @@ function Post_fix() {
   }, [selectedImages]);
 
   const Handlefix = async () => {
+    if (previewImageUrls.length == 0) {
+      alert('이미지를 최소 1장 업로드해주세요!');
+      return;
+    }
+
+    if (previewImageUrls.length > 0 && selectedThumbnail == null) {
+      alert('썸네일을 선택해주세요.');
+      return;
+    }
+
     try {
       const response = await axios.put(
         `http://localhost:8080/api/posts/${id}`,
