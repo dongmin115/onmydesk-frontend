@@ -341,6 +341,7 @@ const PostDetail = () => {
   const [comment, setComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editingContent, setEditingContent] = useState('');
+  const [post_Image, setPost_Image] = useState([]);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -350,7 +351,9 @@ const PostDetail = () => {
         );
         setPosts(response.data.data.post);
         setProductPost(response.data.data.products);
+        setPost_Image(response.data.data.post.imageUrls);
 
+        console.log(response.data.data.post.imageUrls);
         const commentsResponse = await axios.get(
           `http://localhost:8080/api/posts/${id}/comments`
         );
@@ -363,6 +366,8 @@ const PostDetail = () => {
 
     fetchPosts();
   }, [id]);
+
+  const urllist = post_Image.map((value) => value.url);
 
   const PostDel = async () => {
     try {
@@ -486,7 +491,7 @@ const PostDetail = () => {
         <DateInfo>{posts.updatedAt}</DateInfo>
       </DeskInfoContainer>
       <div>
-        <ImageGallery imageUrls={posts.imageUrls} />
+        <ImageGallery imageUrls={urllist} />
         {/* 다른 내용들도 표시 */}
       </div>
       <RightBox>

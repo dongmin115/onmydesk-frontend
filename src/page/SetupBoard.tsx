@@ -184,6 +184,7 @@ export default function SetupBoard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [currentSortOption, setCurrentSortOption] = useState('최신순');
+  const [pagenumber, setPagenumber] = useState(1);
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 최신순으로 포스트를 검색하여 가져오기
@@ -197,11 +198,11 @@ export default function SetupBoard() {
     setAnchorEl(null);
   };
 
-  const fetchPosts = async (page: number, criteria: number): Promise<void> => {
+  const fetchPosts = async (criteria: number): Promise<void> => {
     try {
       const response = await axios.get('http://localhost:8080/api/posts', {
         params: {
-          page: page,
+          page: pagenumber,
           limit: 9,
           criteria: criteria,
         },
