@@ -263,7 +263,7 @@ function Post_reg() {
       const selectedFiles = Array.from(files) as File[];
       const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
       setPreviewImageUrls((prevUrls) => [...prevUrls, ...urls]); // 기존 미리보기 이미지 URL에 새 URL 추가
-      setSelectedImages((prevImages) => [...prevImages, ...selectedFiles]); // 기존 이미지 배열에 새 이미지 추가
+      setSelectedImages(selectedFiles); // 기존 이미지 배열에 새 이미지 추가
     }
   };
 
@@ -297,8 +297,9 @@ function Post_reg() {
         }
       );
 
-      const imageIds = response.data.data.map((image) => image.id);
-      setImgid(imageIds);
+      const newImageIds = response.data.data.map((image) => image.id);
+
+      setImgid((prevId) => [...prevId, ...newImageIds]);
       // setPreviewImageUrls([]);
       alert('썸네일로 등록할 이미지를 선택해주세요.');
     } catch (error) {

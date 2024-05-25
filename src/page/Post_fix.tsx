@@ -158,17 +158,17 @@ function Post_fix() {
       setContent(Previous_post.post.content);
       setArrProduct(Previous_post.products);
       setImage(Previous_post.post.imageUrls);
+      const preImageUrl = Image.map((value) => value.url); //이미지 url 배열 값에서 url 추출 배열 만들기!
+      const preImageID = Image.map((value) => value.id); //이미지 url 배열 값에서 id 추출 배열 만들기!
       setPreviewImageUrls(preImageUrl);
       setSelectedImages(preImageUrl);
       setImgid(preImageID);
     }
   }, [Previous_post]);
 
-  const preImageUrl = Image.map((value) => value.url); //이미지 url 배열 값에서 url 추출 배열 만들기!
-  const preImageID = Image.map((value) => value.id); //이미지 url 배열 값에서 id 추출 배열 만들기!
-  /*useEffect(() => {
+  useEffect(() => {
     console.log('imgid:', imgid);
-  }, [imgid]);*/
+  }, [imgid]);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -258,11 +258,9 @@ function Post_fix() {
   };
 
   useEffect(() => {
-    console.log(previewImageUrls); // imgid 상태가 업데이트된 후 로그 출력
-    if (previewImageUrls.length > 0) {
-      uploadImages();
-    }
-  }, [previewImageUrls]);
+    console.log(selectedImages); // imgid 상태가 업데이트된 후 로그 출력
+    uploadImages();
+  }, [selectedImages]);
 
   const Handlefix = async () => {
     try {
@@ -282,8 +280,6 @@ function Post_fix() {
           },
         }
       );
-      console.log(response.data);
-      console.log(ArrProduct);
 
       alert('게시글이 수정되었습니다.');
       window.history.back();
@@ -301,8 +297,7 @@ function Post_fix() {
       const selectedFiles = Array.from(files) as File[];
       const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
       setPreviewImageUrls((prevUrls) => [...prevUrls, ...urls]); // 기존 미리보기 이미지 URL에 새 URL 추가
-      setSelectedImages((prevImages) => [...prevImages, ...selectedFiles]); // 기존 이미지 배열에 새 이미지 추가
-      console.log(selectedImages);
+      setSelectedImages(selectedFiles); // 기존 이미지 배열에 새 이미지 추가
     }
   };
   const handleImageDelete = (indexToRemove) => {
@@ -336,7 +331,8 @@ function Post_fix() {
       );
 
       const newImageIds = response.data.data.map((image) => image.id);
-      console.log(response.data.data);
+      console.log(newImageIds);
+
       setImgid((prevId) => [...prevId, ...newImageIds]);
       alert('썸네일로 등록할 이미지를 클릭하세요');
     } catch (error) {
