@@ -129,6 +129,7 @@ function Post_fix() {
   const [content, setContent] = useState(``);
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+  const [Image, setImage] = useState([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imgid, setImgid] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -156,12 +157,15 @@ function Post_fix() {
       setTitle(Previous_post.post.title);
       setContent(Previous_post.post.content);
       setArrProduct(Previous_post.products);
-      setPreviewImageUrls(Previous_post.post.imageUrls);
-      setSelectedImages(Previous_post.post.imageUrls);
-      console.log(Previous_post);
+      setImage(Previous_post.post.imageUrls);
+      setPreviewImageUrls(preImageUrl);
+      setSelectedImages(preImageUrl);
+      setImgid(preImageID);
     }
   }, [Previous_post]);
 
+  const preImageUrl = Image.map((value) => value.url); //이미지 url 배열 값에서 url 추출 배열 만들기!
+  const preImageID = Image.map((value) => value.id); //이미지 url 배열 값에서 id 추출 배열 만들기!
   /*useEffect(() => {
     console.log('imgid:', imgid);
   }, [imgid]);*/
@@ -331,9 +335,9 @@ function Post_fix() {
         }
       );
 
-      const imageIds = response.data.data.map((image) => image.id);
+      const newImageIds = response.data.data.map((image) => image.id);
       console.log(response.data.data);
-      setImgid(imageIds);
+      setImgid((prevId) => [...prevId, ...newImageIds]);
       alert('썸네일로 등록할 이미지를 클릭하세요');
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
@@ -389,7 +393,6 @@ function Post_fix() {
               Upload image
             </UploadButton>
           </UploadContainer>
-          <button onClick={uploadImages}></button>
 
           <div
             style={{
