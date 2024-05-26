@@ -252,6 +252,7 @@ function Mypage() {
           ...prev,
           [setupId]: updatedProducts,
         }));
+        refreshSetups(); // 셋업 목록 갱신
       }
     } catch (error) {
       console.error('Failed to update products:', error);
@@ -719,6 +720,7 @@ function Mypage() {
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             width: '100%',
+                            marginBottom: '1rem',
                           }}
                         >
                           <img
@@ -783,6 +785,13 @@ function Mypage() {
                       setupId={setup.id}
                     />
                     <Button onClick={Modalopen}>추가하기</Button>
+                    <span
+                      style={{
+                        color: 'white',
+                      }}
+                    >
+                      총액 : {setup.postTotalPrice}
+                    </span>
                   </TabPanel>
                 ))}
             </Box>
