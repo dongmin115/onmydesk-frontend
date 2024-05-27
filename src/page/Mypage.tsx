@@ -229,7 +229,6 @@ function Mypage() {
   const handleProductSelect = async (product: Product, setupId: number) => {
     // 새로운 상품 목록을 준비
     const updatedProducts = [...productsBySetup[setupId], product];
-    console.log('Updated products:', updatedProducts);
 
     try {
       // 서버에 업데이트 요청
@@ -388,7 +387,6 @@ function Mypage() {
               setProductsBySetup(productsBySetupTemp);
             })
           );
-          console.log('Updated product details:', productsBySetupTemp);
         } catch (error) {
           console.error('Error fetching setups or product details:', error);
         }
@@ -400,7 +398,6 @@ function Mypage() {
   }, [name]);
 
   const renderPosts = () => {
-    console.log(posts);
     return posts.map((post: Post) => (
       <Link
         key={post.id}
@@ -767,9 +764,11 @@ function Mypage() {
                             variant="contained"
                             color="error"
                             style={{ fontSize: '1rem' }}
-                            onClick={() =>
-                              deleteSetupGoods(setup.id, product.id)
-                            }
+                            onClick={async () => {
+                              await deleteSetupGoods(setup.id, product.id);
+                              await fetchSetupDetail(setup.id);
+                              await refreshSetups();
+                            }}
                           >
                             삭제
                           </Button>
