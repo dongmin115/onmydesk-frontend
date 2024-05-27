@@ -7,7 +7,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  TextField,
   ThemeProvider,
 } from '@mui/material';
 import createTheme from '@mui/material/styles/createTheme';
@@ -142,17 +141,15 @@ export default function SetupBoard() {
 
   const fetchPosts = async (page: number, criteria: number): Promise<void> => {
     try {
-      const response = await axios.get('http://localhost:8080/api/posts', {
-        params: {
-          page: page,
-          limit: 9,
-          criteria: criteria,
-        },
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-        },
-      });
+      const response = await axios.get(
+        `http://localhost:8080/api/posts?page=${page}&limit=10&criteria=${criteria}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
       setPosts(response.data.data);
 
       const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
@@ -164,6 +161,7 @@ export default function SetupBoard() {
       });
       setLikes(initialLikes);
       setLikeCounts(initialLikeCounts);
+      console.log(response);
     } catch (error) {
       console.log('Error', error);
     }
@@ -192,18 +190,18 @@ export default function SetupBoard() {
     }
   };
 
-  const handlePageChange = (page, criteria) => {
+  const handlePageChange = async (page, criteria) => {
     setPagenation(page);
-    fetchPosts(page, criteria);
+    await fetchPosts(page, criteria);
   };
 
-  const handleSortOptionClick = (
+  const handleSortOptionClick = async (
     sortOption: number,
     sortText: string,
     criteria: number
-  ): void => {
+  ) => {
     handleClose();
-    fetchPosts(sortOption, criteria);
+    await fetchPosts(1, criteria);
     setCurrentSortOption(sortText);
   };
 
