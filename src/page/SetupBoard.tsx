@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import {
   Button,
   IconButton,
-  InputAdornment,
   Menu,
   MenuItem,
   TextField,
@@ -13,7 +12,6 @@ import {
 } from '@mui/material';
 import createTheme from '@mui/material/styles/createTheme';
 import TvIcon from '@mui/icons-material/Tv';
-import SearchIcon from '@mui/icons-material/Search';
 import { useEffect, useState } from 'react';
 import { Favorite, KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
 import { Pagination } from '@mui/material';
@@ -47,10 +45,9 @@ const Container = styled.div`
 
 const SetupBoardMenu = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 18vh;
   width: 100%;
 `;
 
@@ -59,7 +56,8 @@ const SetupBoardTitle = styled.h1`
   font-weight: 300;
   color: #ffffff;
   text-align: center;
-  margin: 0;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
 `;
 
 const SetupBoardParagraph = styled.p`
@@ -67,15 +65,6 @@ const SetupBoardParagraph = styled.p`
   color: #d3d3d3;
   text-align: center;
   margin: 0;
-`;
-
-const Title = styled.h1`
-  font-size: 2rem;
-  font-weight: 200;
-  color: #ffffff;
-  text-align: center;
-  text-decoration: none;
-  margin-bottom: 0;
 `;
 
 const SetupBoardContainer = styled.div`
@@ -91,13 +80,14 @@ const SetupBoardContainer = styled.div`
 
 const ImageContainer = styled.div`
   position: relative;
-  width: fit-content;
-  height: fit-content;
+  width: 100%; /* 그리드 셀 너비에 맞춤 */
+  height: 100%; /* 그리드 셀 높이에 맞춤 */
 `;
 
 const SetupBoardImage = styled.img`
-  width: 80%;
-  height: 80%;
+  width: 100%; /* 컨테이너 너비에 맞춤 */
+  height: auto;
+  max-height: 100%; /* 컨테이너 높이를 초과하지 않도록 설정 */
   border-radius: 1rem;
   drop-shadow: 0 0 0.5rem #000000;
   transition: transform 0.5s;
@@ -125,56 +115,6 @@ const Caption = styled.div`
   /* 호버 시 투명도 변경 */
   ${ImageContainer}:hover & {
     opacity: 1;
-  }
-`;
-
-const CustomTextField = styled(TextField)`
-  .MuiInputBase-root {
-    max-width: 240px;
-    width: fit-content; // 너비 설정
-    align-items: center; // 입력 요소들을 수직 중앙 정렬합니다.
-    text-align: center; // 입력 텍스트를 가운데 정렬합니다.
-    padding: 0.5rem 1rem; // 내부 여백 설정
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  }
-
-  .MuiFilledInput-root {
-    background-color: #333333; // 배경색 설정
-    transition: transform 0.5s;
-    &:before,
-    &:after {
-      display: none; // 밑줄 제거
-    }
-
-    &.Mui-focused {
-      background-color: #444444; // 포커스 시 배경색 변경
-      text-align: center; // 입력 텍스트 가운데 정렬
-      transform: scale(1.05);
-      &:before,
-      &:after {
-        display: none; // 밑줄 제거
-      }
-    }
-
-    &:hover {
-      transform: scale(1.05);
-      background-color: #444444; // 호버 시 배경색 변경
-    }
-  }
-
-  .MuiFilledInput-input {
-    padding-left: auto; // 왼쪽 여백 설정
-    padding-right: auto; // 오른쪽 여백 설정
-    padding-top: 0.5rem; // 위 여백 설정
-    padding-bottom: 0.5rem; // 아래 여백 설정
-    color: #d3d3d3; // 텍스트 색상 변경
-
-    &::placeholder {
-      color: #b1b1b1; // Placeholder 텍스트 색상 변경
-      width: 100%; // 너비 100% 설정
-      opacity: 1; // Safari에서는 필요할 수 있습니다.
-    }
   }
 `;
 
@@ -332,7 +272,6 @@ export default function SetupBoard() {
             </div>
           </Caption>
         </ImageContainer>
-        <Title>{post.title}</Title>
       </Link>
     ));
   };
@@ -342,22 +281,8 @@ export default function SetupBoard() {
       <Navbar />
       <Container>
         <SetupBoardMenu>
-          <CustomTextField
-            id="standard-basic"
-            variant="filled"
-            placeholder="검색어를 입력해주세요"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton>
-                    <SearchIcon color="primary" />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
           <SetupBoardTitle>데스크탑 셋업을 공유해보세요!</SetupBoardTitle>
-          <div>
+          <div style={{ alignSelf: 'end' }}>
             <Link to="/Post_registration">
               <Button endIcon={<TvIcon />}>
                 <SetupBoardParagraph>셋업공유</SetupBoardParagraph>
