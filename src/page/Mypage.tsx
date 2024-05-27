@@ -547,6 +547,7 @@ function Mypage() {
                 width: '6vw',
                 height: '2.5vw',
                 whiteSpace: 'nowrap',
+                color: 'white',
               }}
               onClick={putUserInfoModalOpen}
             >
