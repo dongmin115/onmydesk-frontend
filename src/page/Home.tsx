@@ -104,7 +104,7 @@ const HotGoodsContainer = styled.div`
   gap: 3vh;
   text-align: center;
   align-items: center;
-  padding: 0% 5% 10vh 5%;
+  padding: 0% 5% 10% 5%;
   height: fit-content;
 `;
 
@@ -116,7 +116,7 @@ const SpanningItem4 = styled.div`
 `;
 
 const SpanningItem2 = styled.div`
-  grid-column: span 2;
+  grid-column: span 1;
   height: 100%;
   width: 100%;
 `;
@@ -142,19 +142,19 @@ const HotDesk = (props) => {
       </HotDeskDescription>
       <HotDeskImageContainer>
         <HotDeskImageLayer>
-          <HotDeskImage src={props.hotDesk[3].imageUrls} alt="hot-desk" />
+          <HotDeskImage src={props.hotDesk[3].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          <HotDeskImage src={props.hotDesk[1].imageUrls} alt="hot-desk" />
+          <HotDeskImage src={props.hotDesk[1].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          <HotDeskImage src={props.hotDesk[0].imageUrls} alt="hot-desk" />
+          <HotDeskImage src={props.hotDesk[0].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          <HotDeskImage src={props.hotDesk[2].imageUrls} alt="hot-desk" />
+          <HotDeskImage src={props.hotDesk[2].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          <HotDeskImage src={props.hotDesk[4].imageUrls} alt="hot-desk" />
+          <HotDeskImage src={props.hotDesk[4].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
       </HotDeskImageContainer>
     </>
@@ -221,6 +221,7 @@ export default function Home() {
             criteria: 2,
           },
         });
+
         setHotDesk(response.data.data);
       } catch (error) {
         console.log('Error', error);
@@ -248,8 +249,8 @@ export default function Home() {
     <Container>
       <Navbar />
       <SectionContainer>
-        {hotDesk.length === 0 ? (
-          <div>Loading...</div>
+        {hotDesk.length !== 5 ? (
+          <div>아직 게시물이 5개 미만입니다.</div>
         ) : (
           <HotDesk hotDesk={hotDesk} />
         )}
