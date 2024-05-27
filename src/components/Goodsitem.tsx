@@ -50,6 +50,10 @@ const SetupBoardImage = styled.img`
   height: 20vh;
   border-radius: 1rem 1rem 0 0;
 `;
+
+const formatPrice = (price) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
 function GoodsItem({ product, id }) {
   const navigate = useNavigate();
 
@@ -67,7 +71,7 @@ function GoodsItem({ product, id }) {
           </FavoriteButton>
         </GoodsBoardInfoFlexbox>
         <GoodsBoardInfoFlexbox>
-          <p>{`최저가 ${product.lprice}원`}</p>
+          <p>{`최저가 ${formatPrice(product.lprice)}원`}</p>
         </GoodsBoardInfoFlexbox>
       </GoodsBoardInfo>
     </GoodsBoardFlexbox>
