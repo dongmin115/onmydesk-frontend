@@ -16,6 +16,8 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
   liked: boolean;
+  thumbnailUrl: string;
+  imageUrls: string[];
 }
 
 // likes 상태에 대한 타입 정의

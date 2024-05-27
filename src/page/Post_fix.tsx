@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -8,6 +8,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import { TextField, Box } from '@mui/material';
+import { boolean } from 'zod';
 
 const Centerdiv = styled.div`
   display: flex;
@@ -84,7 +85,7 @@ const UploadInput = styled.input`
 
 const UploadButton = styled.button`
   background-color: #565e66;
-  width: 49%;
+  width: 68vw;
   color: white;
   font-size: 1.2vw;
   padding: 0.5vw 0.5vw;
@@ -98,7 +99,7 @@ const UploadButton = styled.button`
   }
 `;
 
-const Thumbnail_img = styled.button`
+const Thumbnail_button = styled.button<{ isSelected: boolean }>`
   background: transparent;
   max-width: 68vw;
   cursor: pointer;
@@ -106,8 +107,10 @@ const Thumbnail_img = styled.button`
   width: 9.2vw; /* Set the width of the button */
   height: 8.3vw; /* Set the height of the button */
   margin: 0.2vw;
-  border: none;
   overflow: hidden;
+  position: relative;
+  border: ${({ isSelected }) => (isSelected ? '4px solid #f82020' : 'none')};
+  opacity: ${({ isSelected }) => (isSelected ? '0.7' : '1')};
 
   &:hover {
     border: 2px solid #fc6d6d; /* Add a border on hover */
@@ -120,9 +123,10 @@ const Thumbnail_img = styled.button`
 `;
 
 function Post_fix() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
   const { id } = useParams();
+  const [Previous_post, setPrevious_post] = useState();
+  const [title, setTitle] = useState(``);
+  const [content, setContent] = useState(``);
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -146,6 +150,37 @@ function Post_fix() {
     category4?: string;
     pages: { price: number; link: string; storeName: string }[];
   }
+
+  useEffect(() => {
+    if (Previous_post) {
+      setTitle(Previous_post.post.title);
+      setContent(Previous_post.post.content);
+      setArrProduct(Previous_post.products);
+      setPreviewImageUrls(Previous_post.post.imageUrls);
+      console.log(Previous_post);
+    }
+  }, [Previous_post]);
+
+  useEffect(() => {
+    console.log('imgid:', imgid);
+  }, [imgid]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/posts/${id}`
+        );
+        setPrevious_post(response.data.data);
+
+        console.log('목록 불러오기 성공:', response.data.data);
+      } catch (error) {
+        console.log('목록 불러오기 실패:', error);
+      }
+    }
+
+    fetchPosts();
+  }, [id]);
 
   const handleThumbnailClick = (index) => {
     if (imgid.length > index) {
@@ -217,6 +252,11 @@ function Post_fix() {
     setTitle(event.target.value);
   };
 
+  useEffect(() => {
+    console.log(previewImageUrls); // imgid 상태가 업데이트된 후 로그 출력
+    uploadImages();
+  }, [previewImageUrls]);
+
   const Handlefix = async () => {
     try {
       const response = await axios.put(
@@ -251,12 +291,23 @@ function Post_fix() {
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      const urls = Array.from(files).map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
-      setPreviewImageUrls(urls); // 미리보기 이미지 URL들 설정
-      console.log(urls);
       const selectedFiles = Array.from(files) as File[];
-      setSelectedImages(selectedFiles);
+      const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
+      setPreviewImageUrls((prevUrls) => [...prevUrls, ...urls]); // 기존 미리보기 이미지 URL에 새 URL 추가
+      setSelectedImages((prevImages) => [...prevImages, ...selectedFiles]); // 기존 이미지 배열에 새 이미지 추가
     }
+  };
+
+  const handleImageDelete = (indexToRemove) => {
+    setPreviewImageUrls((prevUrls) =>
+      prevUrls.filter((_, index) => index !== indexToRemove)
+    );
+    setSelectedImages((prevImages) =>
+      prevImages.filter((_, index) => index !== indexToRemove)
+    );
+    setImgid((prevIds) =>
+      prevIds.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const uploadImages = async () => {
@@ -279,13 +330,10 @@ function Post_fix() {
 
       const imageIds = response.data.data.map((image) => image.id);
       setImgid(imageIds);
-      // setPreviewImageUrls([]);
-      alert(
-        '이미지 업로드가 완료되었습니다. 썸네일로 등록할 이미지를 클릭하세요!'
-      );
+      //setPreviewImageUrls([]);
+      alert('썸네일로 등록할 이미지를 클릭하세요');
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
-      alert('이미지 업로드에 실패했습니다.');
     }
   };
 
@@ -327,6 +375,17 @@ function Post_fix() {
               />
             </div>
           </Centerdiv>
+          <UploadContainer>
+            <UploadInput
+              type="file"
+              multiple
+              onChange={handleImageChange}
+              ref={fileInputRef}
+            />
+            <UploadButton onClick={() => fileInputRef.current?.click()}>
+              Upload image
+            </UploadButton>
+          </UploadContainer>
 
           <div
             style={{
@@ -337,11 +396,28 @@ function Post_fix() {
             }}
           >
             {previewImageUrls.map((url, index) => (
-              <Thumbnail_img
+              <Thumbnail_button
                 key={index}
+                isSelected={selectedThumbnail === imgid[index]}
                 onClick={() => handleThumbnailClick(index)}
                 // 이미지 id를 기반으로 선택된 썸네일 설정
               >
+                <button
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    zIndex: '5',
+                    width: '10%',
+                    height: '10%',
+                    position: 'absolute',
+                    right: '0.5vw',
+                    color: '#d43921',
+                    fontSize: '1vw',
+                  }}
+                  onClick={() => handleImageDelete(index)}
+                >
+                  X
+                </button>
                 <img
                   key={index}
                   src={url}
@@ -353,7 +429,7 @@ function Post_fix() {
                   }}
                   alt={`Preview ${index}`}
                 />
-              </Thumbnail_img>
+              </Thumbnail_button>
             ))}
           </div>
           <Box
@@ -374,10 +450,15 @@ function Post_fix() {
             }}
           >
             <ReactQuill
-              style={{ height: `600px`, marginTop: '1vw', marginBottom: '1vw' }}
+              style={{
+                height: `600px`,
+                marginTop: '0.5vw',
+                marginBottom: '0.5vw',
+              }}
               theme="snow"
               modules={modules}
               formats={formats}
+              value={content}
               onChange={handleQuillChange}
             />
           </Box>

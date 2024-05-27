@@ -6,17 +6,16 @@ import Navbar from '../components/Navbar.tsx';
 import {
   Box,
   Button,
-  Divider,
   IconButton,
   Modal,
   Tab,
   TextField,
   ThemeProvider,
-  createTheme,
 } from '@mui/material';
+import createTheme from '@mui/material/styles/createTheme';
 import { Link, useNavigate } from 'react-router-dom';
 import { userStore } from '../store.ts';
-import { deleteUser, putUserInfo } from '../api/User.ts';
+import { deleteUser, getUserInfo, putUserInfo } from '../api/User.ts';
 import { Favorite, FavoriteBorder, RemoveRedEye } from '@mui/icons-material';
 import { disFavorite, favorite, getFavorite } from '../api/Favorite.ts';
 import { LikeCountsMap, LikesMap, Post, Setup } from '../types/type.ts';
@@ -35,13 +34,33 @@ import { Product } from '../types/Product.ts';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#0085FF',
+      main: '#349AF8',
     },
     secondary: {
       main: '#4F4F4F',
     },
     success: {
       main: '#E24E4E',
+    },
+  },
+  components: {
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          backgroundColor: '#349AF8', // 밑줄 색상 변경
+        },
+      },
+    },
+    // Tab 컴포넌트 스타일 오버라이드
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          color: '#858585', // 모든 탭의 기본 색상을 회색으로 설정
+          '&.Mui-selected': {
+            color: '#349AF8', // 선택된 탭의 색상 변경
+          },
+        },
+      },
     },
   },
 });
@@ -177,13 +196,17 @@ function CustomTabLabel({
   onDelete: () => void;
 }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
       {name}
       <Button
         onClick={onDelete}
-        style={{ minWidth: '30px', padding: '0 5px', marginLeft: '10px' }}
+        style={{
+          minWidth: '30px',
+          padding: '0 5px',
+          marginLeft: '10px',
+        }}
       >
-        삭제
+        X
       </Button>
     </div>
   );
@@ -198,7 +221,7 @@ function Mypage() {
     setValue(newValue);
   };
 
-  const { name, nickname, email, setNickname } = userStore();
+  const { name, nickname, email, setName, setNickname, setEmail } = userStore();
   const [newNickname, setNewNickname] = useState('');
   const [posts, setPosts] = useState([]);
   const [setups, setSetups] = useState<Setup[]>([]);
@@ -226,10 +249,28 @@ function Mypage() {
     refreshSetups();
   };
 
+  const handleDeleteSetupGoods = async (setupId: number, productId: number) => {
+    try {
+      await deleteSetupGoods(setupId, productId);
+      const updatedProducts = productsBySetup[setupId].filter(
+        (product) => product.id !== productId
+      );
+
+      setProductsBySetup((prev) => ({
+        ...prev,
+        [setupId]: updatedProducts,
+      }));
+
+      await refreshSetups(); // 셋업 목록 갱신
+    } catch (error) {
+      console.error('Failed to delete product:', error);
+    }
+  };
+
   const handleProductSelect = async (product: Product, setupId: number) => {
     // 새로운 상품 목록을 준비
-    const updatedProducts = [...productsBySetup[setupId], product];
-    console.log('Updated products:', updatedProducts);
+    const currentProducts = productsBySetup[setupId] || [];
+    const updatedProducts = [...currentProducts, product]; // 새 상품 추가
 
     try {
       // 서버에 업데이트 요청
@@ -252,6 +293,7 @@ function Mypage() {
           ...prev,
           [setupId]: updatedProducts,
         }));
+        refreshSetups(); // 셋업 목록 갱신
       }
     } catch (error) {
       console.error('Failed to update products:', error);
@@ -334,6 +376,18 @@ function Mypage() {
   };
 
   useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await getUserInfo();
+        setName(response.data.name);
+        setNickname(response.data.nickname);
+        setEmail(response.data.email);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchUserInfo();
+
     if (name) {
       const fetchFavorite = async () => {
         try {
@@ -375,7 +429,6 @@ function Mypage() {
               setProductsBySetup(productsBySetupTemp);
             })
           );
-          console.log('Updated product details:', productsBySetupTemp);
         } catch (error) {
           console.error('Error fetching setups or product details:', error);
         }
@@ -384,7 +437,7 @@ function Mypage() {
       fetchFavorite();
       fetchSetups();
     }
-  }, []);
+  }, [name]);
 
   const renderPosts = () => {
     return posts.map((post: Post) => (
@@ -396,7 +449,7 @@ function Mypage() {
         <ImageContainer>
           <SetupBoardImage
             key={post.id}
-            src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
+            src={post.thumbnailUrl}
             alt={post.title}
           />
           <Caption>
@@ -494,6 +547,7 @@ function Mypage() {
                 width: '6vw',
                 height: '2.5vw',
                 whiteSpace: 'nowrap',
+                color: 'white',
               }}
               onClick={putUserInfoModalOpen}
             >
@@ -632,7 +686,15 @@ function Mypage() {
           }}
         >
           <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                borderBottom: 1,
+                borderColor: 'divider',
+              }}
+            >
               <TabList
                 onChange={handleChange}
                 aria-label="lab API tabs example"
@@ -650,129 +712,161 @@ function Mypage() {
                       onClick={async () => await fetchSetupDetail(setup.id)}
                     />
                   ))}
-                <Button
-                  id="demo-positioned-button"
-                  aria-controls={open ? 'demo-positioned-menu' : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handlePost}
-                  style={{ fontSize: '1vw' }}
-                >
-                  셋업 만들기
-                </Button>
               </TabList>
-              <div
+              <Button
+                id="demo-positioned-button"
+                aria-controls={open ? 'demo-positioned-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                onClick={handlePost}
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: '1rem',
-                  height: 'fit-content',
-                  paddingLeft: '2rem',
-                  paddingRight: '2rem',
+                  marginRight: '2rem',
+                }}
+                variant="text"
+              >
+                셋업 추가
+              </Button>
+            </Box>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '1rem',
+                height: 'fit-content',
+                paddingLeft: '2rem',
+                paddingRight: '2rem',
+              }}
+            >
+              <p
+                style={{
+                  color: '#858585',
+                  width: '60%',
+                  textAlign: 'center',
                 }}
               >
-                <p
-                  style={{
-                    color: '#7b7878',
-                    width: '60%',
-                    textAlign: 'center',
-                  }}
-                >
-                  제품
-                </p>
-                <p
-                  style={{
-                    color: '#7b7878',
-                    width: '10vw',
-                    textAlign: 'center',
-                  }}
-                >
-                  최저가
-                </p>
-                <div style={{ width: '10vw' }}></div>
-              </div>
-              <Divider style={{ marginLeft: '2rem', marginRight: '2rem' }} />
-              {setups &&
-                setups.map((setup: Setup, i: number) => (
-                  <TabPanel value={(i + 1).toString()} key={setup.id}>
-                    {productsBySetup[setup.id] &&
-                      productsBySetup[setup.id].map((product) => (
+                제품
+              </p>
+              <p
+                style={{
+                  color: '#858585',
+                  width: '10vw',
+                  textAlign: 'center',
+                }}
+              >
+                최저가
+              </p>
+              <div style={{ width: '10vw' }}></div>
+            </div>
+
+            {setups &&
+              setups.map((setup: Setup, i: number) => (
+                <TabPanel value={(i + 1).toString()} key={setup.id}>
+                  {productsBySetup[setup.id] &&
+                  productsBySetup[setup.id].length > 0 ? (
+                    productsBySetup[setup.id].map((product) => (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                          marginBottom: '1rem',
+                        }}
+                      >
+                        <img
+                          src={product.img}
+                          alt={product.productName}
+                          style={{
+                            width: 'fit-content',
+                            height: '5vw',
+                            borderRadius: '1rem',
+                            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
+                          }}
+                        />
                         <div
                           style={{
                             display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            width: '100%',
+                            flexDirection: 'column',
+                            alignItems: 'start',
+                            justifyContent: 'center',
+                            marginLeft: '1rem',
                           }}
                         >
-                          <img
-                            src={product.img}
-                            alt={product.productName}
-                            style={{
-                              width: 'fit-content',
-                              height: '5vw',
-                              borderRadius: '1rem',
-                              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.6)',
-                            }}
-                          />
-                          <div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'column',
-                              alignItems: 'start',
-                              justifyContent: 'center',
-                              marginLeft: '1rem',
-                            }}
-                          >
-                            <p
-                              style={{
-                                fontSize: '1.25rem',
-                                color: 'white',
-                                fontWeight: 'bold',
-                                width: '100%',
-                              }}
-                            >
-                              {product.productName}
-                            </p>
-                          </div>
                           <p
                             style={{
                               fontSize: '1.25rem',
                               color: 'white',
-                              width: '10vw',
-                              textAlign: 'center',
+                              fontWeight: 'bold',
+                              width: '100%',
                             }}
                           >
-                            {product.lprice}원
+                            {product.productName}
                           </p>
-                          <Button
-                            variant="contained"
-                            color="error"
-                            style={{ fontSize: '1rem' }}
-                            onClick={() =>
-                              deleteSetupGoods(setup.id, product.id)
-                            }
-                          >
-                            삭제
-                          </Button>
                         </div>
-                      ))}
-                    <Divider style={{ margin: '1rem' }} />
-                    <GoodsModal
-                      isOpen={IsModalopen}
-                      onClose={Modalclose}
-                      onSelect={(product: Product) =>
-                        handleProductSelect(product, setup.id)
-                      }
-                      setupId={setup.id}
-                    />
+                        <p
+                          style={{
+                            fontSize: '1.25rem',
+                            color: 'white',
+                            width: '10vw',
+                            textAlign: 'center',
+                          }}
+                        >
+                          {product.lprice}원
+                        </p>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          style={{ fontSize: '1rem' }}
+                          onClick={() => {
+                            handleDeleteSetupGoods(setup.id, product.id);
+                          }}
+                        >
+                          삭제
+                        </Button>
+                      </div>
+                    ))
+                  ) : (
+                    <p
+                      style={{
+                        color: 'white',
+                        textAlign: 'center',
+                        width: '100%',
+                      }}
+                    >
+                      상품을 추가하세요
+                    </p>
+                  )}
+                  <GoodsModal
+                    isOpen={IsModalopen}
+                    onClose={Modalclose}
+                    onSelect={(product: Product) =>
+                      handleProductSelect(product, setup.id)
+                    }
+                    setupId={setup.id}
+                  />
+                  <div
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}
+                  >
                     <Button onClick={Modalopen}>추가하기</Button>
-                  </TabPanel>
-                ))}
-            </Box>
+                    <span
+                      style={{
+                        color: 'white',
+                        marginTop: 'auto',
+                        marginBottom: 'auto',
+                      }}
+                    >
+                      총액 : {setup.postTotalPrice}
+                    </span>
+                  </div>
+                </TabPanel>
+              ))}
           </TabContext>
         </div>
       </Container>

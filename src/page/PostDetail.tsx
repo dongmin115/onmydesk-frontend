@@ -1,16 +1,13 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import SetupImage from '../assets/SetupImage.png';
-import Mouse from '../assets/Mouse.png';
 import Button from '@mui/material/Button';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import ShareIcon from '@mui/icons-material/Share';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { Carousel } from 'react-responsive-carousel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const SetupTitleContainer = styled.div`
@@ -61,7 +58,7 @@ const Image = styled.img`
 const TextContainer = styled.div`
   color: #ffffff;
   width: 55vw;
-  height: 40vh;
+  height: 80vh;
   margin-left: 23%;
 `;
 
@@ -261,14 +258,63 @@ type Comment = {
   nickname: string;
 };
 
+const PrevArrow = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  z-index: 2;
+  cursor: pointer;
+  font-size: 4rem;
+  color: white;
+  border-width: 0 0 3px 3px;
+`;
+
+const NextArrow = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  z-index: 2;
+  cursor: pointer;
+  font-size: 4rem;
+  color: white;
+  border-width: 0 0 3px 3px;
+`;
+
 const ImageGallery = ({ imageUrls }) => {
-  // imageUrls가 배열인지 확인 후 처리
   if (!Array.isArray(imageUrls) || imageUrls.length === 0) {
-    return <p></p>;
+    return <></>;
   }
 
+  const handlePrevClick = (onClickHandler) => {
+    onClickHandler();
+  };
+
+  const handleNextClick = (onClickHandler) => {
+    onClickHandler();
+  };
+
   return (
-    <Carousel showArrows={true} showThumbs={false}>
+    <Carousel
+      showArrows={true} // 화살표를 숨김
+      showThumbs={false}
+      showStatus={false}
+      renderArrowPrev={(onClickHandler, hasPrev) =>
+        hasPrev && (
+          <PrevArrow onClick={() => handlePrevClick(onClickHandler)}>
+            <FontAwesomeIcon icon={faArrowLeft} />
+          </PrevArrow>
+        )
+      }
+      renderArrowNext={(onClickHandler, hasNext) =>
+        hasNext && (
+          <NextArrow onClick={() => handleNextClick(onClickHandler)}>
+            <FontAwesomeIcon icon={faArrowRight} />
+          </NextArrow>
+        )
+      }
+    >
       {imageUrls.map((imageUrl, index) => (
         <div key={index}>
           <Image
@@ -442,59 +488,6 @@ const PostDetail = () => {
         <ImageGallery imageUrls={posts.imageUrls} />
         {/* 다른 내용들도 표시 */}
       </div>
-      <RightBox>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'red',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <FavoriteBorderIcon />
-          </Button>
-        </Circle>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <BookmarkIcon />
-          </Button>
-        </Circle>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <ShareIcon />
-          </Button>
-        </Circle>
-      </RightBox>
       <TextContainer style={{ display: 'flex', justifyContent: 'center' }}>
         <div dangerouslySetInnerHTML={{ __html: posts.content }} />
       </TextContainer>
@@ -504,7 +497,7 @@ const PostDetail = () => {
 
       <SetupObjectContainer>
         {productPost.map((product, index) => (
-          <SetupObject>
+          <SetupObject key={product.id}>
             <Link to={`/productdetail/${product.id}`}>
               <ObjectImage src={product.img} />
               <ObjectNameContainer>

@@ -7,6 +7,7 @@ import Navbar from '../components/Navbar';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { TextField, Box } from '@mui/material';
+import { transformer } from 'zod';
 
 const Centerdiv = styled.div`
   display: flex;
@@ -83,7 +84,7 @@ const UploadInput = styled.input`
 
 const UploadButton = styled.button`
   background-color: #565e66;
-  width: 49%;
+  width: 68vw;
   color: white;
   font-size: 1.2vw;
   padding: 0.5vw 0.5vw;
@@ -97,7 +98,7 @@ const UploadButton = styled.button`
   }
 `;
 
-const Thumbnail_img = styled.button`
+const Thumbnail_button = styled.button<{ isSelected: boolean }>`
   background: transparent;
   max-width: 68vw;
   cursor: pointer;
@@ -105,15 +106,17 @@ const Thumbnail_img = styled.button`
   width: 9.2vw; /* Set the width of the button */
   height: 8.3vw; /* Set the height of the button */
   margin: 0.2vw;
-  border: none;
   overflow: hidden;
+  position: relative;
+  border: ${({ isSelected }) => (isSelected ? '4px solid #f82020' : 'none')};
+  opacity: ${({ isSelected }) => (isSelected ? '0.7' : '1')};
 
   &:hover {
     border: 2px solid #fc6d6d; /* Add a border on hover */
   }
 
   &:active {
-    opacity: 0.5; /* Reduce opacity when clicked */
+    opacity: 0.5;
     border: 2px solid #fc6d6d;
   }
 `;
@@ -219,6 +222,11 @@ function Post_reg() {
     console.log(imgid); // imgid 상태가 업데이트된 후 로그 출력
   }, [imgid]);
 
+  useEffect(() => {
+    console.log(previewImageUrls); // imgid 상태가 업데이트된 후 로그 출력
+    uploadImages();
+  }, [previewImageUrls]);
+
   const handleSubmit = async () => {
     try {
       const response = await axios.post(
@@ -252,12 +260,23 @@ function Post_reg() {
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      const urls = Array.from(files).map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
-      setPreviewImageUrls(urls); // 미리보기 이미지 URL들 설정
-      console.log(urls);
       const selectedFiles = Array.from(files) as File[];
-      setSelectedImages(selectedFiles);
+      const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
+      setPreviewImageUrls((prevUrls) => [...prevUrls, ...urls]); // 기존 미리보기 이미지 URL에 새 URL 추가
+      setSelectedImages((prevImages) => [...prevImages, ...selectedFiles]); // 기존 이미지 배열에 새 이미지 추가
     }
+  };
+
+  const handleImageDelete = (indexToRemove) => {
+    setPreviewImageUrls((prevUrls) =>
+      prevUrls.filter((_, index) => index !== indexToRemove)
+    );
+    setSelectedImages((prevImages) =>
+      prevImages.filter((_, index) => index !== indexToRemove)
+    );
+    setImgid((prevIds) =>
+      prevIds.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const uploadImages = async () => {
@@ -281,19 +300,15 @@ function Post_reg() {
       const imageIds = response.data.data.map((image) => image.id);
       setImgid(imageIds);
       // setPreviewImageUrls([]);
-      alert(
-        '이미지 업로드가 완료되었습니다. 썸네일로 등록할 이미지를 클릭하세요!'
-      );
+      alert('썸네일로 등록할 이미지를 선택해주세요.');
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
-      alert('이미지 업로드에 실패했습니다.');
     }
   };
 
   return (
     <>
       <Navbar />
-
       <div
         style={{
           display: 'flex',
@@ -337,10 +352,8 @@ function Post_reg() {
               ref={fileInputRef}
             />
             <UploadButton onClick={() => fileInputRef.current?.click()}>
-              이미지 파일 선택
+              Upload image
             </UploadButton>
-
-            <UploadButton onClick={uploadImages}>이미지 업로드</UploadButton>
           </UploadContainer>
           <div
             style={{
@@ -351,11 +364,27 @@ function Post_reg() {
             }}
           >
             {previewImageUrls.map((url, index) => (
-              <Thumbnail_img
+              <Thumbnail_button
                 key={index}
+                isSelected={selectedThumbnail === imgid[index]}
                 onClick={() => handleThumbnailClick(index)}
-                // 이미지 id를 기반으로 선택된 썸네일 설정
               >
+                <button
+                  style={{
+                    backgroundColor: 'transparent',
+                    border: 'none',
+                    zIndex: '5',
+                    width: '10%',
+                    height: '10%',
+                    position: 'absolute',
+                    right: '0.5vw',
+                    color: '#d43921',
+                    fontSize: '1vw',
+                  }}
+                  onClick={() => handleImageDelete(index)}
+                >
+                  X
+                </button>
                 <img
                   key={index}
                   src={url}
@@ -367,7 +396,7 @@ function Post_reg() {
                   }}
                   alt={`Preview ${index}`}
                 />
-              </Thumbnail_img>
+              </Thumbnail_button>
             ))}
           </div>
           <Box
@@ -388,7 +417,11 @@ function Post_reg() {
             }}
           >
             <ReactQuill
-              style={{ height: `600px`, marginTop: '1vw', marginBottom: '1vw' }}
+              style={{
+                height: `600px`,
+                marginTop: '0.5vw',
+                marginBottom: '0.5vw',
+              }}
               theme="snow"
               modules={modules}
               formats={formats}

@@ -2,6 +2,9 @@ import { IconButton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { Favorite, FavoriteBorder } from '@mui/icons-material';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const GoodsBoardFlexbox = styled.div`
   display: flex;
@@ -57,18 +60,105 @@ const formatPrice = (price) => {
 function GoodsItem({ product, id }) {
   const navigate = useNavigate();
 
+  const [wishes, setWishes] = useState(product.wished);
+
+  const searchProduct = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/products/${id}`,
+
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
+      setWishes(response.data.data.product.wished);
+    } catch (error) {
+      console.log('에러');
+    }
+  };
+
+  useEffect(() => {
+    searchProduct();
+  }, [wishes]);
+
+  const postWish = async () => {
+    try {
+      await axios.post(
+        `http://localhost:8080/api/products/wish/${product.id}`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
+      setWishes(true); // 상태 업데이트
+      console.log('Wish added');
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+    }
+  };
+
+  const deleteWish = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:8080/api/products/wish/${product.id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
+      setWishes(false); // 상태 업데이트
+      console.log('Wish deleted');
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+    }
+  };
+
+  const toggleLike = async () => {
+    try {
+      if (wishes) {
+        await deleteWish();
+      } else {
+        await postWish();
+      }
+    } catch (error) {
+      console.error('Error updating like status:', error);
+    }
+  };
+
   return (
     <GoodsBoardFlexbox onClick={() => navigate(`/productdetail/${id}`)}>
       <SetupBoardImage src={product.img} alt={product.productName} />
       <GoodsBoardInfo>
         <GoodsBoardInfoFlexbox>
           <p>{product.productName}</p>
-          <FavoriteButton>
-            <IconButton>
-              <FavoriteIcon color="success" />
+          {wishes ? (
+            <IconButton
+              onClick={(e) => {
+                e.preventDefault(); // Link의 기본 동작을 막음
+                e.stopPropagation(); // 이벤트 전파를 막음
+                toggleLike();
+              }}
+            >
+              <Favorite color="success" />
             </IconButton>
-            <p>{product.price}</p>
-          </FavoriteButton>
+          ) : (
+            <IconButton
+              onClick={(e) => {
+                e.preventDefault(); // Link의 기본 동작을 막음
+                e.stopPropagation(); // 이벤트 전파를 막음
+                toggleLike();
+              }}
+            >
+              <FavoriteBorder color="success" />
+            </IconButton>
+          )}
         </GoodsBoardInfoFlexbox>
         <GoodsBoardInfoFlexbox>
           <p>{`최저가 ${formatPrice(product.lprice)}원`}</p>
