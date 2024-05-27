@@ -282,7 +282,7 @@ export default function SetupBoard() {
       <Container>
         <SetupBoardMenu>
           <SetupBoardTitle>데스크탑 셋업을 공유해보세요!</SetupBoardTitle>
-          <div style={{ alignSelf: 'end' }}>
+          <div style={{ alignSelf: 'end', marginBottom: '1rem' }}>
             <Link to="/Post_registration">
               <Button endIcon={<TvIcon />}>
                 <SetupBoardParagraph>셋업공유</SetupBoardParagraph>
