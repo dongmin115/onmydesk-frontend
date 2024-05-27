@@ -81,12 +81,13 @@ const SetupBoardContainer = styled.div`
 const ImageContainer = styled.div`
   position: relative;
   width: 100%; /* 그리드 셀 너비에 맞춤 */
-  height: 100%; /* 그리드 셀 높이에 맞춤 */
+  height: 30vh; /* 모든 이미지 컨테이너의 높이를 30vh로 고정 */
 `;
 
 const SetupBoardImage = styled.img`
   width: 100%; /* 컨테이너 너비에 맞춤 */
-  height: auto;
+  height: 100%;
+  object-fit: cover; /* 이미지 비율을 유지하면서 컨테이너에 맞춤 */
   max-height: 100%; /* 컨테이너 높이를 초과하지 않도록 설정 */
   border-radius: 1rem;
   drop-shadow: 0 0 0.5rem #000000;
