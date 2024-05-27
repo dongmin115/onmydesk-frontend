@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Navbar from '../components/Navbar';
 import Button from '@mui/material/Button';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { Carousel } from 'react-responsive-carousel';
@@ -485,25 +484,6 @@ const PostDetail = () => {
         <ImageGallery imageUrls={posts.imageUrls} />
         {/* 다른 내용들도 표시 */}
       </div>
-      <RightBox>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'red',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <FavoriteBorderIcon />
-          </Button>
-        </Circle>
-      </RightBox>
       <TextContainer style={{ display: 'flex', justifyContent: 'center' }}>
         <div dangerouslySetInnerHTML={{ __html: posts.content }} />
       </TextContainer>
