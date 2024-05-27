@@ -1,5 +1,6 @@
 import { Button, Menu, MenuItem, CircularProgress } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { ThemeProvider } from '@mui/material';
+import createTheme from '@mui/material/styles/createTheme';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 import { KeyboardArrowDown } from '@mui/icons-material';
@@ -46,7 +47,7 @@ const GoodsBoardTitle = styled.h1`
   color: #ffffff;
   text-align: center;
   width: 100%;
-  margin: 4.5vh 0 4.5vh 0;
+  margin: 5vh 0 5vh 0;
 `;
 
 const SetupBoardContainer = styled.div`
@@ -98,48 +99,48 @@ const Category = function ({
 
   return (
     <GoodsBoardMenu>
-      <Flexbox
-        style={{ alignItems: 'center', justifyContent: 'space-between' }}
-      >
+      <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         <GoodsBoardTitle>셋업에 사용된 상품을 둘러보세요!</GoodsBoardTitle>
-        <Button
-          id="basic-button"
-          aria-controls={open ? 'basic-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-          size="large"
-          style={{
-            minWidth: 120,
-            whiteSpace: 'nowrap',
-            color: '#d3d3d3',
-            fontSize: '1rem',
-          }}
-          endIcon={<KeyboardArrowDown />}
-        >
-          {criteriaLabel} {/* 버튼 라벨 업데이트 */}
-        </Button>
+        <div style={{ alignSelf: 'end', marginBottom: '1rem' }}>
+          <Button
+            id="basic-button"
+            aria-controls={open ? 'basic-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+            size="large"
+            style={{
+              minWidth: 120,
+              whiteSpace: 'nowrap',
+              color: '#d3d3d3',
+              fontSize: '1rem',
+            }}
+            endIcon={<KeyboardArrowDown />}
+          >
+            {criteriaLabel} {/* 버튼 라벨 업데이트 */}
+          </Button>
 
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          MenuListProps={{
-            'aria-labelledby': 'basic-button',
-          }}
-        >
-          <MenuItem onClick={() => handleMenuItemClick(1, '인기순')}>
-            인기순
-          </MenuItem>
-          <MenuItem onClick={() => handleMenuItemClick(2, '좋아요')}>
-            좋아요
-          </MenuItem>
-          <MenuItem onClick={() => handleMenuItemClick(3, '조회수')}>
-            조회수
-          </MenuItem>
-        </Menu>
-      </Flexbox>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem onClick={() => handleMenuItemClick(1, '인기순')}>
+              인기순
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(2, '좋아요')}>
+              좋아요
+            </MenuItem>
+            <MenuItem onClick={() => handleMenuItemClick(3, '조회수')}>
+              조회수
+            </MenuItem>
+          </Menu>
+        </div>
+      </div>
     </GoodsBoardMenu>
   );
 };
