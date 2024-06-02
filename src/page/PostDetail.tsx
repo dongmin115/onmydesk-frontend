@@ -266,7 +266,7 @@ type Comment = {
 const PrevArrow = styled.div`
   position: absolute;
   top: 50%;
-  left: 20vw;
+  left: 0;
   transform: translateY(-50%);
   z-index: 1;
   cursor: pointer;
@@ -283,7 +283,7 @@ const PrevArrow = styled.div`
 const NextArrow = styled.div`
   position: absolute;
   top: 50%;
-  right: 20vw;
+  right: 0;
   transform: translateY(-50%);
   z-index: 1;
   cursor: pointer;
@@ -305,15 +305,12 @@ const StyledCarousel = styled(Carousel)`
     flex-direction: column;
     opacity: 0;
     transition:
-      opacity 0.1s ease-in-out,
+      opacity 1s ease-in-out,
       transform 1s ease-in-out;
   }
 
   .carousel .slide.selected {
     opacity: 1;
-    transition:
-      opacity 1s ease-in-out,
-      transform 1s ease-in-out;
   }
 `;
 
@@ -351,7 +348,7 @@ const ImageGallery = ({ imageUrls }) => {
       }
     >
       {imageUrls.map((imageUrl, index) => (
-        <div key={index} style={{ width: '60%', overflow: 'hidden' }}>
+        <div key={index} style={{ width: '100%' }}>
           <UrlImage key={index} src={imageUrl} alt={`Image ${index}`} />
         </div>
       ))}
@@ -514,7 +511,18 @@ const PostDetail = () => {
         </EditDeleteContainer>
         <DateInfo>{posts.updatedAt}</DateInfo>
       </DeskInfoContainer>
-      <ImageGallery imageUrls={urllist} />
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ width: '60%' }}>
+          <ImageGallery imageUrls={urllist} />
+        </div>
+      </div>
       {/* 다른 내용들도 표시 */}
       <RightBox>
         <Circle>
