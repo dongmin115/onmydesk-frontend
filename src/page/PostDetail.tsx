@@ -266,7 +266,7 @@ type Comment = {
 const PrevArrow = styled.div`
   position: absolute;
   top: 50%;
-  left: 15px;
+  left: 18vw;
   transform: translateY(-50%);
   z-index: 2;
   cursor: pointer;
@@ -278,7 +278,7 @@ const PrevArrow = styled.div`
 const NextArrow = styled.div`
   position: absolute;
   top: 50%;
-  right: 15px;
+  right: 18vw;
   transform: translateY(-50%);
   z-index: 2;
   cursor: pointer;
