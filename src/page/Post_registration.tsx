@@ -223,16 +223,17 @@ function Post_reg() {
   }, [imgid]);
 
   useEffect(() => {
-    console.log(previewImageUrls); // imgid 상태가 업데이트된 후 로그 출력
+    console.log(selectedImages); // imgid 상태가 업데이트된 후 로그 출력
     uploadImages();
-  }, [previewImageUrls]);
+  }, [selectedImages]);
 
   const handleSubmit = async () => {
     if (previewImageUrls.length == 0) {
-      alert('이미지를 최소 1장 업로드해주세요!');
+      alert('셋업 사진을 최소 한장 업로드 해주세요.');
       return;
     }
-    if (previewImageUrls.length > 0 && selectedThumbnail == null) {
+
+    if (selectedThumbnail == null) {
       alert('썸네일을 선택해주세요.');
       return;
     }
@@ -260,7 +261,7 @@ function Post_reg() {
       window.history.back();
     } catch (error) {
       console.log('에러');
-      alert('게시글 등록에 실패했습니다.');
+      alert('썸네일을 선택해주세요.');
     }
   };
 

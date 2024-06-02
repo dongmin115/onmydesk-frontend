@@ -264,11 +264,11 @@ function Post_fix() {
 
   const Handlefix = async () => {
     if (previewImageUrls.length == 0) {
-      alert('이미지를 최소 1장 업로드해주세요!');
+      alert('셋업 사진을 최소 한장 업로드 해주세요.');
       return;
     }
 
-    if (previewImageUrls.length > 0 && selectedThumbnail == null) {
+    if (selectedThumbnail == null) {
       alert('썸네일을 선택해주세요.');
       return;
     }
@@ -295,7 +295,7 @@ function Post_fix() {
       window.history.back();
     } catch (error) {
       console.log('에러');
-      alert('게시글 수정 권한이 없습니다.');
+      alert('썸네일을 선택해주세요.');
     }
   };
 
