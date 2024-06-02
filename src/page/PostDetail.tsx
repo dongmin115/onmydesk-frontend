@@ -55,7 +55,7 @@ const DateInfo = styled.div`
   padding-left: 2%;
 `;
 
-const Image = styled.img`
+const UrlImage = styled.img`
   height: 70vh;
   border-radius: 1rem;
 `;
@@ -266,25 +266,55 @@ type Comment = {
 const PrevArrow = styled.div`
   position: absolute;
   top: 50%;
-  left: 18vw;
+  left: 20vw;
   transform: translateY(-50%);
-  z-index: 2;
+  z-index: 1;
   cursor: pointer;
-  font-size: 4rem;
+  font-size: 3rem;
   color: white;
-  border-width: 0 0 3px 3px;
+
+  &:hover {
+    color: #349af8; /* 호버 시 색상 변경 */
+    font-size: 3.5rem; /* 호버 시 크기 변경 */
+    transition: 0.2s;
+  }
 `;
 
 const NextArrow = styled.div`
   position: absolute;
   top: 50%;
-  right: 18vw;
+  right: 20vw;
   transform: translateY(-50%);
-  z-index: 2;
+  z-index: 1;
   cursor: pointer;
-  font-size: 4rem;
+  font-size: 3rem;
   color: white;
-  border-width: 0 0 3px 3px;
+
+  &:hover {
+    color: #349af8; /* 호버 시 색상 변경 */
+    font-size: 3.5rem; /* 호버 시 크기 변경 */
+    transition: 0.2s;
+  }
+`;
+
+const StyledCarousel = styled(Carousel)`
+  .carousel .slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    transition:
+      opacity 0.1s ease-in-out,
+      transform 1s ease-in-out;
+  }
+
+  .carousel .slide.selected {
+    opacity: 1;
+    transition:
+      opacity 1s ease-in-out,
+      transform 1s ease-in-out;
+  }
 `;
 
 const ImageGallery = ({ imageUrls }) => {
@@ -301,10 +331,10 @@ const ImageGallery = ({ imageUrls }) => {
   };
 
   return (
-    <Carousel
+    <StyledCarousel
       showArrows={true} // 화살표를 숨김
-      showThumbs={false}
       showStatus={false}
+      centerSlidePercentage={45}
       renderArrowPrev={(onClickHandler, hasPrev) =>
         hasPrev && (
           <PrevArrow onClick={() => handlePrevClick(onClickHandler)}>
@@ -321,15 +351,11 @@ const ImageGallery = ({ imageUrls }) => {
       }
     >
       {imageUrls.map((imageUrl, index) => (
-        <div key={index}>
-          <Image
-            src={imageUrl}
-            alt={`Image ${index}`}
-            style={{ width: '65%' }}
-          />
+        <div key={index} style={{ width: '60%', overflow: 'hidden' }}>
+          <UrlImage key={index} src={imageUrl} alt={`Image ${index}`} />
         </div>
       ))}
-    </Carousel>
+    </StyledCarousel>
   );
 };
 
@@ -488,10 +514,8 @@ const PostDetail = () => {
         </EditDeleteContainer>
         <DateInfo>{posts.updatedAt}</DateInfo>
       </DeskInfoContainer>
-      <div>
-        <ImageGallery imageUrls={urllist} />
-        {/* 다른 내용들도 표시 */}
-      </div>
+      <ImageGallery imageUrls={urllist} />
+      {/* 다른 내용들도 표시 */}
       <RightBox>
         <Circle>
           <Button
