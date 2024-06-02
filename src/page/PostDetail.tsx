@@ -36,6 +36,7 @@ const DeskInfoContainer = styled.div`
   margin-top: 6.8vh;
   margin-left: 23vw;
   margin-right: 22vw;
+  margin-bottom: 1vw;
   color: #ffffff;
   font-family: 'Kiwi Maru';
 `;
@@ -53,6 +54,7 @@ const EditDeleteContainer = styled.div`
 
 const DateInfo = styled.div`
   padding-left: 2%;
+  font-size: 1vw;
 `;
 
 const UrlImage = styled.img`
@@ -422,7 +424,18 @@ const PostDetail = () => {
 
     return (
       <Link to={`/Post_fix/${id}`}>
-        <Button>수정</Button>
+        <Button
+          sx={{
+            background: '#565e66', // 기본 백그라운드 색상
+            color: 'white',
+            fontSize: '0.8vw',
+            '&:hover': {
+              background: '#0077cc', // 호버 시 백그라운드 색상 변경
+            },
+          }}
+        >
+          수정
+        </Button>
       </Link>
     );
   };
@@ -503,11 +516,23 @@ const PostDetail = () => {
         <SetupTitle>{posts.title}</SetupTitle>
       </SetupTitleContainer>
       <DeskInfoContainer>
-        <AccountCircleIcon sx={{ fontSize: 50, mb: 2, mr: 2 }} />
+        <AccountCircleIcon sx={{ fontSize: '3vw', mr: 2 }} />
         <DeskInfo>{posts.nickname}</DeskInfo>
         <EditDeleteContainer>
           {Fixbutton()}
-          <Button onClick={postDelCallback}>삭제</Button>
+          <Button
+            sx={{
+              background: '#565e66', // 기본 백그라운드 색상
+              color: 'white',
+              fontSize: '0.8vw',
+              '&:hover': {
+                background: '#0077cc', // 호버 시 백그라운드 색상 변경
+              },
+            }}
+            onClick={postDelCallback}
+          >
+            삭제
+          </Button>
         </EditDeleteContainer>
         <DateInfo>{posts.updatedAt}</DateInfo>
       </DeskInfoContainer>

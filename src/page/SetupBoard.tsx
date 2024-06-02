@@ -198,6 +198,10 @@ export default function SetupBoard() {
     setAnchorEl(null);
   };
 
+  const Pagehandle = () => {
+    setPagenumber((prevPageNumber) => prevPageNumber + 1);
+  };
+
   const fetchPosts = async (criteria: number): Promise<void> => {
     try {
       const response = await axios.get('http://localhost:8080/api/posts', {
@@ -227,6 +231,11 @@ export default function SetupBoard() {
       console.log('Error', error);
     }
   };
+
+  useEffect(() => {
+    console.log(pagenumber);
+    fetchPosts(1);
+  }, [pagenumber]);
 
   const toggleLike = async (postId: number) => {
     const currentLiked = likes[postId];
@@ -394,6 +403,9 @@ export default function SetupBoard() {
           </div>
         </SetupBoardMenu>
         <SetupBoardContainer>{renderPosts()}</SetupBoardContainer>
+        <Button onClick={Pagehandle} style={{ marginBottom: '2vw' }}>
+          더보기
+        </Button>
       </Container>
     </ThemeProvider>
   );
