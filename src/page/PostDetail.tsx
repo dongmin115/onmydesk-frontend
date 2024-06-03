@@ -17,15 +17,15 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const SetupTitleContainer = styled.div`
   width: 100%;
-  height: 12vh;
+  height: 10vh;
   display: flex;
   align-items: flex-end;
 `;
 const SetupTitle = styled.span`
-  margin-left: 23%;
+  margin-left: 20%;
   color: #ffffff;
   width: 100%;
-  height: 5vh;
+  height: 4vh;
   font-family: 'Kiwi Maru';
   font-size: 2.5rem;
 `;
@@ -34,7 +34,7 @@ const DeskInfoContainer = styled.div`
   display: flex;
   align-items: center;
   margin-top: 6.8vh;
-  margin-left: 23vw;
+  margin-left: 20vw;
   margin-right: 22vw;
   margin-bottom: 1vw;
   color: #ffffff;

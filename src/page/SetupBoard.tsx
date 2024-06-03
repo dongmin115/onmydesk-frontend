@@ -188,7 +188,7 @@ export default function SetupBoard() {
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 최신순으로 포스트를 검색하여 가져오기
-    fetchPosts(1, 1); // criteria를 1로 설정하여 최신순으로 검색
+    fetchPosts(1); // criteria를 1로 설정하여 최신순으로 검색
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때 한 번만 호출
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -198,15 +198,15 @@ export default function SetupBoard() {
     setAnchorEl(null);
   };
 
-  const Pagehandle = () => {
-    setPagenumber((prevPageNumber) => prevPageNumber + 1);
-  };
-
-  const fetchPosts = async (criteria: number): Promise<void> => {
+  const fetchPosts = async (
+    criteria: number,
+    append: boolean = false,
+    page: number = pagenumber
+  ): Promise<void> => {
     try {
       const response = await axios.get('http://localhost:8080/api/posts', {
         params: {
-          page: pagenumber,
+          page: page,
           limit: 9,
           criteria: criteria,
         },
@@ -215,8 +215,10 @@ export default function SetupBoard() {
           Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
         },
       });
-      setPosts(response.data.data);
-      console.log(response.data.data);
+      const newPosts = response.data.data;
+      setPosts((prevPosts) =>
+        append ? [...prevPosts, ...newPosts] : newPosts
+      );
 
       const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
       const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
@@ -232,10 +234,21 @@ export default function SetupBoard() {
     }
   };
 
-  useEffect(() => {
-    console.log(pagenumber);
-    fetchPosts(1);
-  }, [pagenumber]);
+  const handleLoadMore = () => {
+    setPagenumber((prev) => {
+      const newPageNumber = prev + 1;
+      fetchPosts(
+        currentSortOption === '최신순'
+          ? 1
+          : currentSortOption === '좋아요 많은 순'
+            ? 2
+            : 3,
+        true,
+        newPageNumber // 새 페이지 번호를 fetchPosts에 전달
+      );
+      return newPageNumber;
+    });
+  };
 
   const toggleLike = async (postId: number) => {
     const currentLiked = likes[postId];
@@ -268,6 +281,7 @@ export default function SetupBoard() {
     handleClose();
     fetchPosts(sortOption, criteria);
     setCurrentSortOption(sortText);
+    setPagenumber(1); // 페이지 번호를 1로 리셋
   };
 
   const renderPosts = () => {
@@ -403,7 +417,7 @@ export default function SetupBoard() {
           </div>
         </SetupBoardMenu>
         <SetupBoardContainer>{renderPosts()}</SetupBoardContainer>
-        <Button onClick={Pagehandle} style={{ marginBottom: '2vw' }}>
+        <Button onClick={handleLoadMore} style={{ marginBottom: '2vw' }}>
           더보기
         </Button>
       </Container>
