@@ -161,7 +161,6 @@ export default function GoodsBoard() {
     append: boolean = false,
     page: number = pagenumber
   ) => {
-    setLoading(true);
     try {
       const response = await axios.get('http://localhost:8080/api/products', {
         params: {
