@@ -426,7 +426,18 @@ export default function SetupBoard() {
           </div>
         </SetupBoardMenu>
         <SetupBoardContainer>{renderPosts()}</SetupBoardContainer>
-        <Button onClick={handleLoadMore} style={{ marginBottom: '2vw' }}>
+        <Button
+          sx={{
+            background: '#565e66', // 기본 백그라운드 색상
+            color: 'white',
+            fontSize: '0.8vw',
+            '&:hover': {
+              background: '#0077cc', // 호버 시 백그라운드 색상 변경
+            },
+          }}
+          onClick={handleLoadMore}
+          style={{ marginBottom: '2vw' }}
+        >
           더보기
         </Button>
       </Container>

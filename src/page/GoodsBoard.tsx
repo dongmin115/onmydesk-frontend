@@ -26,7 +26,7 @@ const theme = createTheme({
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  item-align: center;
+  align-items: center;
   max-width: 1440px;
   margin: 0 auto;
 `;
@@ -38,6 +38,7 @@ const GoodsBoardMenu = styled.div`
   align-items: center;
   height: fit-content;
   padding: 0;
+  width: 100%; // 전체 너비 사용
 `;
 
 const GoodsBoardTitle = styled.h1`
@@ -224,6 +225,15 @@ export default function GoodsBoard() {
           </SetupBoardContainer>
         )}
         <Button
+          sx={{
+            background: '#565e66', // 기본 백그라운드 색상
+            color: 'white',
+            fontSize: '0.8vw',
+
+            '&:hover': {
+              background: '#0077cc', // 호버 시 백그라운드 색상 변경
+            },
+          }}
           onClick={handleLoadMore}
           style={{ marginBottom: '2vw', marginTop: '2vw' }}
         >
