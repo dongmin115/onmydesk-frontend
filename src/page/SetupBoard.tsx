@@ -216,6 +216,12 @@ export default function SetupBoard() {
         },
       });
       const newPosts = response.data.data;
+
+      if (newPosts.length === 0) {
+        window.alert('더 이상 새로운 게시물이 없습니다!');
+        return;
+      }
+
       setPosts((prevPosts) =>
         append ? [...prevPosts, ...newPosts] : newPosts
       );
@@ -238,11 +244,7 @@ export default function SetupBoard() {
     setPagenumber((prev) => {
       const newPageNumber = prev + 1;
       fetchPosts(
-        currentSortOption === '최신순'
-          ? 1
-          : currentSortOption === '좋아요 많은 순'
-            ? 2
-            : 3,
+        3,
         true,
         newPageNumber // 새 페이지 번호를 fetchPosts에 전달
       );
@@ -279,7 +281,7 @@ export default function SetupBoard() {
     criteria: number
   ): void => {
     handleClose();
-    fetchPosts(sortOption, criteria);
+    fetchPosts(sortOption, false, pagenumber);
     setCurrentSortOption(sortText);
     setPagenumber(1); // 페이지 번호를 1로 리셋
   };
