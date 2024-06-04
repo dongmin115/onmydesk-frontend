@@ -48,16 +48,18 @@ const GoodsBoardTitle = styled.h1`
   text-align: center;
   width: 100%;
   margin: 4.5vh 0 4.5vh 0;
+  margin-left: 10vw;
 `;
 
 const SetupBoardContainer = styled.div`
   display: grid;
+  width: 70vw;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(30vh, auto);
   gap: 3vh;
   text-align: center;
   align-items: center;
-  padding: 0;
+  padding: 10;
   height: fit-content;
 `;
 

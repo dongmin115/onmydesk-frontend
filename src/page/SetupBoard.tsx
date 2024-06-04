@@ -90,7 +90,7 @@ const SetupBoardContainer = styled.div`
 
 const ImageContainer = styled.div`
   position: relative;
-  width: fit-content;
+  width: 25vw;
   height: fit-content;
 `;
 
