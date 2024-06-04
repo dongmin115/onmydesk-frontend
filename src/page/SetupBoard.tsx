@@ -220,6 +220,8 @@ export default function SetupBoard() {
 
       if (newPosts.length === 0) {
         window.alert('더 이상 새로운 게시물이 없습니다!');
+        setPagenumber((prevPagenumber) => prevPagenumber - 1);
+        console.log(pagenumber);
         return;
       }
 

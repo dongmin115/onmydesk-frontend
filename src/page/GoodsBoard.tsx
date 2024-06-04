@@ -151,6 +151,11 @@ export default function GoodsBoard() {
   const [criteria, setCriteria] = useState(1);
   const [pagenumber, setPagenumber] = useState(1);
 
+  useEffect(() => {
+    setPagenumber(1);
+    fetchProductList(criteria, false, 1);
+  }, [criteria]);
+
   const fetchProductList = async (
     criteria: number,
     append: boolean = false,
@@ -171,6 +176,13 @@ export default function GoodsBoard() {
         append ? [...prevProducts, ...newProducts] : newProducts
       );
 
+      if (newProducts.length === 0) {
+        window.alert('더 이상 새로운 게시물이 없습니다!');
+        setPagenumber((prevPagenumber) => prevPagenumber - 1);
+        console.log(pagenumber);
+        return;
+      }
+
       console.log(products);
       setLoading(false);
     } catch (error) {
@@ -180,8 +192,6 @@ export default function GoodsBoard() {
     }
   };
 
-  console.log(criteria);
-
   const handleLoadMore = () => {
     setPagenumber((prev) => {
       const newPageNumber = prev + 1;
@@ -190,11 +200,6 @@ export default function GoodsBoard() {
       return newPageNumber;
     });
   };
-
-  useEffect(() => {
-    setPagenumber(1);
-    fetchProductList(criteria, false, 1);
-  }, [criteria]);
 
   return (
     <ThemeProvider theme={theme}>
