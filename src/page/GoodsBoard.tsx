@@ -51,7 +51,7 @@ const GoodsBoardTitle = styled.h1`
 
 const SetupBoardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(30vh, auto);
   gap: 3vh;
   text-align: center;
@@ -149,16 +149,29 @@ export default function GoodsBoard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [criteria, setCriteria] = useState(1);
+  const [pagenumber, setPagenumber] = useState(1);
 
-  const fetchProductList = async () => {
+  const fetchProductList = async (
+    criteria: number,
+    append: boolean = false,
+    page: number = pagenumber
+  ) => {
     setLoading(true);
     try {
       const response = await axios.get('http://localhost:8080/api/products', {
         params: {
+          page: page,
+          limit: 12,
           criteria: criteria,
         },
       });
-      setProducts(response.data.data);
+      const newProducts = response.data.data;
+
+      setProducts((prevProducts) =>
+        append ? [...prevProducts, ...newProducts] : newProducts
+      );
+
+      console.log(products);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -167,8 +180,20 @@ export default function GoodsBoard() {
     }
   };
 
+  console.log(criteria);
+
+  const handleLoadMore = () => {
+    setPagenumber((prev) => {
+      const newPageNumber = prev + 1;
+      fetchProductList(criteria, true, newPageNumber);
+
+      return newPageNumber;
+    });
+  };
+
   useEffect(() => {
-    fetchProductList();
+    setPagenumber(1);
+    fetchProductList(criteria, false, 1);
   }, [criteria]);
 
   return (
@@ -194,6 +219,12 @@ export default function GoodsBoard() {
             ))}
           </SetupBoardContainer>
         )}
+        <Button
+          onClick={handleLoadMore}
+          style={{ marginBottom: '2vw', marginTop: '2vw' }}
+        >
+          더보기
+        </Button>
       </Container>
     </ThemeProvider>
   );
