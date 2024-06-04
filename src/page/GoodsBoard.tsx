@@ -203,6 +203,13 @@ export default function GoodsBoard() {
     });
   };
 
+  const handleScrollTop = () => {
+    window.scrollTo({
+      top: 350,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Navbar />
@@ -226,21 +233,35 @@ export default function GoodsBoard() {
             ))}
           </SetupBoardContainer>
         )}
-        <Button
-          sx={{
-            background: '#565e66', // 기본 백그라운드 색상
-            color: 'white',
-            fontSize: '0.8vw',
-
-            '&:hover': {
-              background: '#0077cc', // 호버 시 백그라운드 색상 변경
-            },
-          }}
-          onClick={handleLoadMore}
-          style={{ marginBottom: '2vw', marginTop: '2vw' }}
-        >
-          더보기
-        </Button>
+        <div style={{ display: 'flex', marginBottom: '2vw', marginTop: '2vw' }}>
+          <Button
+            sx={{
+              background: '#565e66', // 기본 백그라운드 색상
+              color: 'white',
+              fontSize: '0.8vw',
+              '&:hover': {
+                background: '#0077cc', // 호버 시 백그라운드 색상 변경
+              },
+            }}
+            onClick={handleLoadMore}
+          >
+            더보기
+          </Button>
+          <Button
+            sx={{
+              background: '#565e66', // 기본 백그라운드 색상
+              color: 'white',
+              fontSize: '0.8vw',
+              '&:hover': {
+                background: '#0077cc', // 호버 시 백그라운드 색상 변경
+              },
+            }}
+            style={{ marginLeft: '1vw' }}
+            onClick={handleScrollTop}
+          >
+            처음으로
+          </Button>
+        </div>
       </Container>
     </ThemeProvider>
   );
