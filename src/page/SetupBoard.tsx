@@ -185,10 +185,11 @@ export default function SetupBoard() {
   const open = Boolean(anchorEl);
   const [currentSortOption, setCurrentSortOption] = useState('최신순');
   const [pagenumber, setPagenumber] = useState(1);
+  const [criteria, setCriteria] = useState(1);
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 최신순으로 포스트를 검색하여 가져오기
-    fetchPosts(1); // criteria를 1로 설정하여 최신순으로 검색
+    fetchPosts(1, false, pagenumber); // criteria를 1로 설정하여 최신순으로 검색
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때 한 번만 호출
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -226,6 +227,8 @@ export default function SetupBoard() {
         append ? [...prevPosts, ...newPosts] : newPosts
       );
 
+      console.log(newPosts);
+
       const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
       const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
 
@@ -244,10 +247,11 @@ export default function SetupBoard() {
     setPagenumber((prev) => {
       const newPageNumber = prev + 1;
       fetchPosts(
-        3,
+        criteria, //criteria
         true,
-        newPageNumber // 새 페이지 번호를 fetchPosts에 전달
+        newPageNumber
       );
+
       return newPageNumber;
     });
   };
@@ -277,24 +281,25 @@ export default function SetupBoard() {
 
   const handleSortOptionClick = (
     sortOption: number,
-    sortText: string,
-    criteria: number
+    sortText: string
   ): void => {
     handleClose();
-    fetchPosts(sortOption, false, pagenumber);
+    setCriteria(sortOption);
+    setPagenumber(1);
+    fetchPosts(sortOption, false, 1);
     setCurrentSortOption(sortText);
-    setPagenumber(1); // 페이지 번호를 1로 리셋
+    console.log(criteria);
   };
 
   const renderPosts = () => {
     return posts.map((post: Post) => (
-      <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
+      <Link
+        to={`/PostDetail/${post.id}`}
+        key={post.id}
+        style={{ textDecoration: 'none' }}
+      >
         <ImageContainer>
-          <SetupBoardImage
-            key={post.id}
-            src={post.thumbnailUrl}
-            alt={post.title}
-          />
+          <SetupBoardImage src={post.thumbnailUrl} alt={post.title} />
           <Caption>
             <div
               style={{
@@ -404,15 +409,15 @@ export default function SetupBoard() {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={() => handleSortOptionClick(1, '최신순', 1)}>
+              <MenuItem onClick={() => handleSortOptionClick(1, '최신순')}>
                 최신순
               </MenuItem>
               <MenuItem
-                onClick={() => handleSortOptionClick(2, '좋아요 많은 순', 2)}
+                onClick={() => handleSortOptionClick(2, '좋아요 많은 순')}
               >
                 좋아요 많은 순
               </MenuItem>
-              <MenuItem onClick={() => handleSortOptionClick(3, '조회순', 3)}>
+              <MenuItem onClick={() => handleSortOptionClick(3, '조회순')}>
                 조회순
               </MenuItem>
             </Menu>
