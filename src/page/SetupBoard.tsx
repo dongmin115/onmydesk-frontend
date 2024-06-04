@@ -221,15 +221,13 @@ export default function SetupBoard() {
       if (newPosts.length === 0) {
         window.alert('더 이상 새로운 게시물이 없습니다!');
         setPagenumber((prevPagenumber) => prevPagenumber - 1);
-        console.log(pagenumber);
+
         return;
       }
 
       setPosts((prevPosts) =>
         append ? [...prevPosts, ...newPosts] : newPosts
       );
-
-      console.log(newPosts);
 
       const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
       const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
@@ -290,7 +288,6 @@ export default function SetupBoard() {
     setPagenumber(1);
     fetchPosts(sortOption, false, 1);
     setCurrentSortOption(sortText);
-    console.log(criteria);
   };
 
   const handleScrollTop = () => {

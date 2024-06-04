@@ -181,11 +181,10 @@ export default function GoodsBoard() {
       if (newProducts.length === 0) {
         window.alert('더 이상 새로운 게시물이 없습니다!');
         setPagenumber((prevPagenumber) => prevPagenumber - 1);
-        console.log(pagenumber);
+
         return;
       }
 
-      console.log(products);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
