@@ -216,6 +216,14 @@ function Post_fix() {
     setIsModalopen(false);
   };
 
+  useEffect(() => {
+    if (IsModalopen === true) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [IsModalopen]);
+
   const handleQuillChange = (content, delta, source, editor) => {
     setContent(content);
   };
