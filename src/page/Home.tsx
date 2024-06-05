@@ -10,7 +10,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   item-align: center;
-  width: 100wh;
   align-items: center;
   margin: 0 auto; // 가운데 정렬
 `;
@@ -50,6 +49,7 @@ const HotDeskImageLayer = styled.div`
   position: absolute;
   top: 50%;
   width: 30%;
+  height: 70%;
   transform: translateY(-50%);
   display: flex;
   justify-content: center;
@@ -87,6 +87,7 @@ const HotDeskImageLayer = styled.div`
 const HotDeskImage = styled.img`
   width: 100%;
   height: 100%;
+  object-fit: cover;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 0px #000000;
   transition: 0.5s ease;
@@ -103,7 +104,7 @@ const HotGoodsContainer = styled.div`
   gap: 3vh;
   text-align: center;
   align-items: center;
-  padding: 0% 5% 10vh 5%;
+  padding: 0% 5% 10% 5%;
   height: fit-content;
 `;
 
@@ -115,7 +116,7 @@ const SpanningItem4 = styled.div`
 `;
 
 const SpanningItem2 = styled.div`
-  grid-column: span 2;
+  grid-column: span 1;
   height: 100%;
   width: 100%;
 `;
@@ -141,46 +142,26 @@ const HotDesk = (props) => {
       </HotDeskDescription>
       <HotDeskImageContainer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[3].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[3].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[1].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[1].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[0].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[0].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[2].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[2].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
         <HotDeskImageLayer>
-          {/* src={props.hotDesk[4].thumbnail} */}
-          <HotDeskImage
-            src="https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png"
-            alt="hot-desk"
-          />
+          <HotDeskImage src={props.hotDesk[4].thumbnailUrl} alt="hot-desk" />
         </HotDeskImageLayer>
       </HotDeskImageContainer>
     </>
   );
 };
 
-const HotGoods = () => {
+const HotGoods = ({ hotGoods }) => {
   return (
     <>
       <HotDeskTitle>인기있는 셋업 상품</HotDeskTitle>
@@ -188,56 +169,27 @@ const HotGoods = () => {
         On My Desk에서 오늘의 인기있는 셋업 상품을 확인해보세요!
       </HotDeskDescription>
       <HotGoodsContainer>
-        <SpanningItem4>
-          <HotGoodsImage
-            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-            alt="hot-desk"
-          />
-        </SpanningItem4>
-        <SpanningItem2>
-          <HotGoodsImage
-            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-            alt="hot-desk"
-          />
-        </SpanningItem2>
-        <SpanningItem2>
-          <HotGoodsImage
-            src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-            alt="hot-desk"
-          />
-        </SpanningItem2>
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
-        <HotGoodsImage
-          src="https://i.ibb.co/55RX0m5/Get-the-We-Heart-It-app-1.png"
-          alt="hot-desk"
-        />
+        {hotGoods.length > 0 && (
+          <SpanningItem4>
+            <HotGoodsImage src={hotGoods[0].img} alt="hot-desk" />
+          </SpanningItem4>
+        )}
+        {hotGoods.length > 1 && (
+          <SpanningItem2>
+            <HotGoodsImage src={hotGoods[1].img} alt="hot-desk" />
+          </SpanningItem2>
+        )}
+        {hotGoods.length > 2 && (
+          <SpanningItem2>
+            <HotGoodsImage src={hotGoods[2].img} alt="hot-desk" />
+          </SpanningItem2>
+        )}
+        {hotGoods.length > 3 &&
+          hotGoods
+            .slice(3)
+            .map((item, index) => (
+              <HotGoodsImage key={index} src={item.img} alt="hot-desk" />
+            ))}
       </HotGoodsContainer>
     </>
   );
@@ -246,6 +198,7 @@ const HotGoods = () => {
 export default function Home() {
   const { setName, setNickname, setEmail } = userStore();
   const [hotDesk, setHotDesk] = useState([]);
+  const [hotGoods, setHotGoods] = useState([]);
 
   useEffect(() => {
     // 로그인 후 홈페이지로 이동하면 유저 정보를 가져옴
@@ -268,22 +221,46 @@ export default function Home() {
             criteria: 2,
           },
         });
+
         setHotDesk(response.data.data);
       } catch (error) {
         console.log('Error', error);
       }
     };
+    const fetchHotGoods = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/products', {
+          params: {
+            page: 1,
+            limit: 11,
+            criteria: 3,
+          },
+        });
+        setHotGoods(response.data.data);
+      } catch (error) {
+        console.log('Error', error);
+      }
+    };
     fetchHotDesk();
+    fetchHotGoods();
     fetchUserInfo();
   }, []);
   return (
     <Container>
       <Navbar />
       <SectionContainer>
-        <HotDesk hotDesk={hotDesk} />
+        {hotDesk.length !== 5 ? (
+          <div>아직 게시물이 5개 미만입니다.</div>
+        ) : (
+          <HotDesk hotDesk={hotDesk} />
+        )}
       </SectionContainer>
       <SectionContainer>
-        <HotGoods />
+        {hotGoods.length === 0 ? (
+          <div>Loading...</div>
+        ) : (
+          <HotGoods hotGoods={hotGoods} />
+        )}
       </SectionContainer>
     </Container>
   );

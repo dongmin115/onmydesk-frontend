@@ -6,8 +6,8 @@ import {
   Menu,
   MenuItem,
   ThemeProvider,
-  createTheme,
 } from '@mui/material';
+import createTheme from '@mui/material/styles/createTheme';
 import { useEffect, useState } from 'react';
 import {
   FavoriteBorder,
@@ -187,7 +187,7 @@ export default function FavoriteBoard() {
               <ImageContainer>
                 <SetupBoardImage
                   key={e.id}
-                  src={'https://i.ibb.co/4jKpMfL/2024-03-25-3-45-22.png'}
+                  src={e.thumbnailUrl}
                   alt={e.title}
                 />
                 <Caption>
