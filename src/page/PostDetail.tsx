@@ -1,8 +1,13 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
+import SetupImage from '../assets/SetupImage.png';
+import Mouse from '../assets/Mouse.png';
 import Button from '@mui/material/Button';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
+import ShareIcon from '@mui/icons-material/Share';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { Carousel } from 'react-responsive-carousel';
@@ -12,15 +17,15 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const SetupTitleContainer = styled.div`
   width: 100%;
-  height: 12vh;
+  height: 10vh;
   display: flex;
   align-items: flex-end;
 `;
 const SetupTitle = styled.span`
-  margin-left: 23%;
+  margin-left: 20%;
   color: #ffffff;
   width: 100%;
-  height: 5vh;
+  height: 4vh;
   font-family: 'Kiwi Maru';
   font-size: 2.5rem;
 `;
@@ -29,8 +34,9 @@ const DeskInfoContainer = styled.div`
   display: flex;
   align-items: center;
   margin-top: 6.8vh;
-  margin-left: 23vw;
+  margin-left: 20vw;
   margin-right: 22vw;
+  margin-bottom: 1vw;
   color: #ffffff;
   font-family: 'Kiwi Maru';
 `;
@@ -48,9 +54,10 @@ const EditDeleteContainer = styled.div`
 
 const DateInfo = styled.div`
   padding-left: 2%;
+  font-size: 1vw;
 `;
 
-const Image = styled.img`
+const UrlImage = styled.img`
   height: 70vh;
   border-radius: 1rem;
 `;
@@ -261,25 +268,52 @@ type Comment = {
 const PrevArrow = styled.div`
   position: absolute;
   top: 50%;
-  left: 15px;
+  left: 0;
   transform: translateY(-50%);
-  z-index: 2;
+  z-index: 1;
   cursor: pointer;
-  font-size: 4rem;
+  font-size: 3rem;
   color: white;
-  border-width: 0 0 3px 3px;
+
+  &:hover {
+    color: #349af8; /* 호버 시 색상 변경 */
+    font-size: 3.5rem; /* 호버 시 크기 변경 */
+    transition: 0.2s;
+  }
 `;
 
 const NextArrow = styled.div`
   position: absolute;
   top: 50%;
-  right: 15px;
+  right: 0;
   transform: translateY(-50%);
-  z-index: 2;
+  z-index: 1;
   cursor: pointer;
-  font-size: 4rem;
+  font-size: 3rem;
   color: white;
-  border-width: 0 0 3px 3px;
+
+  &:hover {
+    color: #349af8; /* 호버 시 색상 변경 */
+    font-size: 3.5rem; /* 호버 시 크기 변경 */
+    transition: 0.2s;
+  }
+`;
+
+const StyledCarousel = styled(Carousel)`
+  .carousel .slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    opacity: 0;
+    transition:
+      opacity 1s ease-in-out,
+      transform 1s ease-in-out;
+  }
+
+  .carousel .slide.selected {
+    opacity: 1;
+  }
 `;
 
 const ImageGallery = ({ imageUrls }) => {
@@ -296,10 +330,10 @@ const ImageGallery = ({ imageUrls }) => {
   };
 
   return (
-    <Carousel
+    <StyledCarousel
       showArrows={true} // 화살표를 숨김
-      showThumbs={false}
       showStatus={false}
+      centerSlidePercentage={45}
       renderArrowPrev={(onClickHandler, hasPrev) =>
         hasPrev && (
           <PrevArrow onClick={() => handlePrevClick(onClickHandler)}>
@@ -316,15 +350,11 @@ const ImageGallery = ({ imageUrls }) => {
       }
     >
       {imageUrls.map((imageUrl, index) => (
-        <div key={index}>
-          <Image
-            src={imageUrl}
-            alt={`Image ${index}`}
-            style={{ width: '65%' }}
-          />
+        <div key={index} style={{ width: '100%' }}>
+          <UrlImage key={index} src={imageUrl} alt={`Image ${index}`} />
         </div>
       ))}
-    </Carousel>
+    </StyledCarousel>
   );
 };
 
@@ -359,6 +389,9 @@ const PostDetail = () => {
     fetchPosts();
   }, [id]);
 
+  const urllist = posts.imageUrls.map((value) => value.url);
+  //객체의 값 뽑아서 새로운 이미지 배열 만들기~
+
   const PostDel = async () => {
     try {
       const response = await axios.delete(
@@ -391,7 +424,18 @@ const PostDetail = () => {
 
     return (
       <Link to={`/Post_fix/${id}`}>
-        <Button>수정</Button>
+        <Button
+          sx={{
+            background: '#565e66', // 기본 백그라운드 색상
+            color: 'white',
+            fontSize: '0.8vw',
+            '&:hover': {
+              background: '#0077cc', // 호버 시 백그라운드 색상 변경
+            },
+          }}
+        >
+          수정
+        </Button>
       </Link>
     );
   };
@@ -472,18 +516,92 @@ const PostDetail = () => {
         <SetupTitle>{posts.title}</SetupTitle>
       </SetupTitleContainer>
       <DeskInfoContainer>
-        <AccountCircleIcon sx={{ fontSize: 50, mb: 2, mr: 2 }} />
+        <AccountCircleIcon sx={{ fontSize: '3vw', mr: 2 }} />
         <DeskInfo>{posts.nickname}</DeskInfo>
         <EditDeleteContainer>
           {Fixbutton()}
-          <Button onClick={postDelCallback}>삭제</Button>
+          <Button
+            sx={{
+              background: '#565e66', // 기본 백그라운드 색상
+              color: 'white',
+              fontSize: '0.8vw',
+              '&:hover': {
+                background: '#0077cc', // 호버 시 백그라운드 색상 변경
+              },
+            }}
+            onClick={postDelCallback}
+          >
+            삭제
+          </Button>
         </EditDeleteContainer>
         <DateInfo>{posts.updatedAt}</DateInfo>
       </DeskInfoContainer>
-      <div>
-        <ImageGallery imageUrls={posts.imageUrls} />
-        {/* 다른 내용들도 표시 */}
+      <div
+        style={{
+          display: 'flex',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ width: '60%' }}>
+          <ImageGallery imageUrls={urllist} />
+        </div>
       </div>
+      {/* 다른 내용들도 표시 */}
+      <RightBox>
+        <Circle>
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: '50%',
+              minWidth: '50px',
+              height: '50px',
+              bgcolor: 'grey.800',
+              color: 'red',
+              '&:hover': {
+                bgcolor: 'grey.700',
+              },
+            }}
+          >
+            <FavoriteBorderIcon />
+          </Button>
+        </Circle>
+        <Circle>
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: '50%',
+              minWidth: '50px',
+              height: '50px',
+              bgcolor: 'grey.800',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'grey.700',
+              },
+            }}
+          >
+            <BookmarkIcon />
+          </Button>
+        </Circle>
+        <Circle>
+          <Button
+            variant="contained"
+            sx={{
+              borderRadius: '50%',
+              minWidth: '50px',
+              height: '50px',
+              bgcolor: 'grey.800',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'grey.700',
+              },
+            }}
+          >
+            <ShareIcon />
+          </Button>
+        </Circle>
+      </RightBox>
       <TextContainer style={{ display: 'flex', justifyContent: 'center' }}>
         <div dangerouslySetInnerHTML={{ __html: posts.content }} />
       </TextContainer>

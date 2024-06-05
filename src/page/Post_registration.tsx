@@ -223,11 +223,21 @@ function Post_reg() {
   }, [imgid]);
 
   useEffect(() => {
-    console.log(previewImageUrls); // imgid 상태가 업데이트된 후 로그 출력
+    console.log(selectedImages); // imgid 상태가 업데이트된 후 로그 출력
     uploadImages();
-  }, [previewImageUrls]);
+  }, [selectedImages]);
 
   const handleSubmit = async () => {
+    if (previewImageUrls.length == 0) {
+      alert('셋업 사진을 최소 한장 업로드 해주세요.');
+      return;
+    }
+
+    if (selectedThumbnail == null) {
+      alert('썸네일을 선택해주세요.');
+      return;
+    }
+
     try {
       const response = await axios.post(
         `http://localhost:8080/api/posts`,
@@ -251,7 +261,7 @@ function Post_reg() {
       window.history.back();
     } catch (error) {
       console.log('에러');
-      alert('게시글 등록에 실패했습니다.');
+      alert('썸네일을 선택해주세요.');
     }
   };
 
@@ -263,7 +273,7 @@ function Post_reg() {
       const selectedFiles = Array.from(files) as File[];
       const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
       setPreviewImageUrls((prevUrls) => [...prevUrls, ...urls]); // 기존 미리보기 이미지 URL에 새 URL 추가
-      setSelectedImages((prevImages) => [...prevImages, ...selectedFiles]); // 기존 이미지 배열에 새 이미지 추가
+      setSelectedImages(selectedFiles); // 기존 이미지 배열에 새 이미지 추가
     }
   };
 
@@ -297,8 +307,8 @@ function Post_reg() {
         }
       );
 
-      const imageIds = response.data.data.map((image) => image.id);
-      setImgid(imageIds);
+      const newImageIds = response.data.data.map((image) => image.id);
+      setImgid((prevId) => [...prevId, ...newImageIds]);
       // setPreviewImageUrls([]);
       alert('썸네일로 등록할 이미지를 선택해주세요.');
     } catch (error) {

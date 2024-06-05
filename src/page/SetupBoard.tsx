@@ -7,13 +7,12 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  createTheme,
   ThemeProvider,
 } from '@mui/material';
-import createTheme from '@mui/material/styles/createTheme';
 import TvIcon from '@mui/icons-material/Tv';
 import { useEffect, useState } from 'react';
 import { Favorite, KeyboardArrowDown, RemoveRedEye } from '@mui/icons-material';
-import { Pagination } from '@mui/material';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import { disFavorite, favorite } from '../api/Favorite';
 import { LikeCountsMap, LikesMap, Post } from '../types/type';
@@ -123,13 +122,14 @@ export default function SetupBoard() {
   const [likes, setLikes] = useState<LikesMap>({}); // 포스트의 좋아요 상태를 저장하는 객체
   const [likeCounts, setLikeCounts] = useState<LikeCountsMap>({}); // 포스트의 좋아요 수를 저장하는 객체
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [pagenation, setPagenation] = useState(1);
   const open = Boolean(anchorEl);
   const [currentSortOption, setCurrentSortOption] = useState('최신순');
+  const [pagenumber, setPagenumber] = useState(1);
+  const [criteria, setCriteria] = useState(1);
 
   useEffect(() => {
     // 컴포넌트가 마운트될 때 최신순으로 포스트를 검색하여 가져오기
-    fetchPosts(1, 1); // criteria를 1로 설정하여 최신순으로 검색
+    fetchPosts(1, false, pagenumber); // criteria를 1로 설정하여 최신순으로 검색
   }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때 한 번만 호출
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -139,18 +139,35 @@ export default function SetupBoard() {
     setAnchorEl(null);
   };
 
-  const fetchPosts = async (page: number, criteria: number): Promise<void> => {
+  const fetchPosts = async (
+    criteria: number,
+    append: boolean = false,
+    page: number = pagenumber
+  ): Promise<void> => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/api/posts?page=${page}&limit=10&criteria=${criteria}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-          },
-        }
+      const response = await axios.get('http://localhost:8080/api/posts', {
+        params: {
+          page: page,
+          limit: 9,
+          criteria: criteria,
+        },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+        },
+      });
+      const newPosts = response.data.data;
+
+      if (newPosts.length === 0) {
+        window.alert('더 이상 새로운 게시물이 없습니다!');
+        setPagenumber((prevPagenumber) => prevPagenumber - 1);
+
+        return;
+      }
+
+      setPosts((prevPosts) =>
+        append ? [...prevPosts, ...newPosts] : newPosts
       );
-      setPosts(response.data.data);
 
       const initialLikes: { [key: number]: boolean } = {}; // 초기 좋아요 상태 설정
       const initialLikeCounts: { [key: number]: number } = {}; // 초기 좋아요 개수 상태 설정
@@ -161,10 +178,22 @@ export default function SetupBoard() {
       });
       setLikes(initialLikes);
       setLikeCounts(initialLikeCounts);
-      console.log(response);
     } catch (error) {
       console.log('Error', error);
     }
+  };
+
+  const handleLoadMore = () => {
+    setPagenumber((prev) => {
+      const newPageNumber = prev + 1;
+      fetchPosts(
+        criteria, //criteria
+        true,
+        newPageNumber
+      );
+
+      return newPageNumber;
+    });
   };
 
   const toggleLike = async (postId: number) => {
@@ -190,24 +219,31 @@ export default function SetupBoard() {
     }
   };
 
-  const handlePageChange = async (page, criteria) => {
-    setPagenation(page);
-    await fetchPosts(page, criteria);
+  const handleSortOptionClick = (
+    sortOption: number,
+    sortText: string
+  ): void => {
+    handleClose();
+    setCriteria(sortOption);
+    setPagenumber(1);
+    fetchPosts(sortOption, false, 1);
+    setCurrentSortOption(sortText);
   };
 
-  const handleSortOptionClick = async (
-    sortOption: number,
-    sortText: string,
-    criteria: number
-  ) => {
-    handleClose();
-    await fetchPosts(1, criteria);
-    setCurrentSortOption(sortText);
+  const handleScrollTop = () => {
+    window.scrollTo({
+      top: 350,
+      behavior: 'smooth',
+    });
   };
 
   const renderPosts = () => {
     return posts.map((post: Post) => (
-      <Link to={`/PostDetail/${post.id}`} style={{ textDecoration: 'none' }}>
+      <Link
+        to={`/PostDetail/${post.id}`}
+        key={post.id}
+        style={{ textDecoration: 'none' }}
+      >
         <ImageContainer>
           <SetupBoardImage
             key={post.id}
@@ -308,32 +344,50 @@ export default function SetupBoard() {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={() => handleSortOptionClick(1, '최신순', 1)}>
+              <MenuItem onClick={() => handleSortOptionClick(1, '최신순')}>
                 최신순
               </MenuItem>
               <MenuItem
-                onClick={() => handleSortOptionClick(2, '좋아요 많은 순', 2)}
+                onClick={() => handleSortOptionClick(2, '좋아요 많은 순')}
               >
                 좋아요 많은 순
               </MenuItem>
-              <MenuItem onClick={() => handleSortOptionClick(3, '조회순', 3)}>
+              <MenuItem onClick={() => handleSortOptionClick(3, '조회순')}>
                 조회순
               </MenuItem>
             </Menu>
           </div>
         </SetupBoardMenu>
         <SetupBoardContainer>{renderPosts()}</SetupBoardContainer>
-        <Pagination
-          count={10} // 전체 페이지 수
-          page={pagenation} // 현재 페이지
-          color="primary"
-          onChange={handlePageChange}
-          sx={{
-            '& .MuiPaginationItem-root': { color: 'white', fontSize: '1vw' },
-          }}
-          style={{ marginBottom: '3vw' }}
-          // 페이지 변경 핸들러
-        />
+        <div style={{ display: 'flex', marginBottom: '2vw' }}>
+          <Button
+            sx={{
+              background: '#565e66', // 기본 백그라운드 색상
+              color: 'white',
+              fontSize: '0.8vw',
+              '&:hover': {
+                background: '#0077cc', // 호버 시 백그라운드 색상 변경
+              },
+            }}
+            onClick={handleLoadMore}
+          >
+            더보기
+          </Button>
+          <Button
+            sx={{
+              background: '#565e66', // 기본 백그라운드 색상
+              color: 'white',
+              fontSize: '0.8vw',
+              '&:hover': {
+                background: '#0077cc', // 호버 시 백그라운드 색상 변경
+              },
+            }}
+            style={{ marginLeft: '1vw' }}
+            onClick={handleScrollTop}
+          >
+            처음으로
+          </Button>
+        </div>
       </Container>
     </ThemeProvider>
   );

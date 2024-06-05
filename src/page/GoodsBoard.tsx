@@ -27,7 +27,7 @@ const theme = createTheme({
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  item-align: center;
+  align-items: center;
   max-width: 1440px;
   margin: 0 auto;
 `;
@@ -39,6 +39,7 @@ const GoodsBoardMenu = styled.div`
   align-items: center;
   height: fit-content;
   padding: 0;
+  width: 100%; // 전체 너비 사용
 `;
 
 const GoodsBoardTitle = styled.h1`
@@ -47,17 +48,18 @@ const GoodsBoardTitle = styled.h1`
   color: #ffffff;
   text-align: center;
   width: 100%;
-  margin: 5vh 0 5vh 0;
+  margin: 4.5vh 0 4.5vh 0;
 `;
 
 const SetupBoardContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  width: 70vw;
+  grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(30vh, auto);
   gap: 3vh;
   text-align: center;
   align-items: center;
-  padding: 0;
+  padding: 10;
   height: fit-content;
 `;
 
@@ -150,16 +152,39 @@ export default function GoodsBoard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [criteria, setCriteria] = useState(1);
+  const [pagenumber, setPagenumber] = useState(1);
 
-  const fetchProductList = async () => {
-    setLoading(true);
+  useEffect(() => {
+    setPagenumber(1);
+    fetchProductList(criteria, false, 1);
+  }, [criteria]);
+
+  const fetchProductList = async (
+    criteria: number,
+    append: boolean = false,
+    page: number = pagenumber
+  ) => {
     try {
       const response = await axios.get('http://localhost:8080/api/products', {
         params: {
+          page: page,
+          limit: 12,
           criteria: criteria,
         },
       });
-      setProducts(response.data.data);
+      const newProducts = response.data.data;
+
+      setProducts((prevProducts) =>
+        append ? [...prevProducts, ...newProducts] : newProducts
+      );
+
+      if (newProducts.length === 0) {
+        window.alert('더 이상 새로운 게시물이 없습니다!');
+        setPagenumber((prevPagenumber) => prevPagenumber - 1);
+
+        return;
+      }
+
       setLoading(false);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -168,9 +193,21 @@ export default function GoodsBoard() {
     }
   };
 
-  useEffect(() => {
-    fetchProductList();
-  }, [criteria]);
+  const handleLoadMore = () => {
+    setPagenumber((prev) => {
+      const newPageNumber = prev + 1;
+      fetchProductList(criteria, true, newPageNumber);
+
+      return newPageNumber;
+    });
+  };
+
+  const handleScrollTop = () => {
+    window.scrollTo({
+      top: 350,
+      behavior: 'smooth',
+    });
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -195,6 +232,35 @@ export default function GoodsBoard() {
             ))}
           </SetupBoardContainer>
         )}
+        <div style={{ display: 'flex', marginBottom: '2vw', marginTop: '2vw' }}>
+          <Button
+            sx={{
+              background: '#565e66', // 기본 백그라운드 색상
+              color: 'white',
+              fontSize: '0.8vw',
+              '&:hover': {
+                background: '#0077cc', // 호버 시 백그라운드 색상 변경
+              },
+            }}
+            onClick={handleLoadMore}
+          >
+            더보기
+          </Button>
+          <Button
+            sx={{
+              background: '#565e66', // 기본 백그라운드 색상
+              color: 'white',
+              fontSize: '0.8vw',
+              '&:hover': {
+                background: '#0077cc', // 호버 시 백그라운드 색상 변경
+              },
+            }}
+            style={{ marginLeft: '1vw' }}
+            onClick={handleScrollTop}
+          >
+            처음으로
+          </Button>
+        </div>
       </Container>
     </ThemeProvider>
   );

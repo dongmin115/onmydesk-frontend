@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
@@ -129,6 +129,7 @@ function Post_fix() {
   const [content, setContent] = useState(``);
   const [IsModalopen, setIsModalopen] = useState(false); //상품 창 모달
   const [ArrProduct, setArrProduct] = useState<Product[]>([]);
+  const [Image, setImage] = useState([]);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [imgid, setImgid] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -156,8 +157,12 @@ function Post_fix() {
       setTitle(Previous_post.post.title);
       setContent(Previous_post.post.content);
       setArrProduct(Previous_post.products);
-      setPreviewImageUrls(Previous_post.post.imageUrls);
-      console.log(Previous_post);
+      setImage(Previous_post.post.imageUrls);
+      const preImageUrl = Image.map((value) => value.url); //이미지 url 배열 값에서 url 추출 배열 만들기!
+      const preImageID = Image.map((value) => value.id); //이미지 url 배열 값에서 id 추출 배열 만들기!
+      setPreviewImageUrls(preImageUrl);
+      setSelectedImages(preImageUrl);
+      setImgid(preImageID);
     }
   }, [Previous_post]);
 
@@ -253,11 +258,21 @@ function Post_fix() {
   };
 
   useEffect(() => {
-    console.log(previewImageUrls); // imgid 상태가 업데이트된 후 로그 출력
+    console.log(selectedImages); // imgid 상태가 업데이트된 후 로그 출력
     uploadImages();
-  }, [previewImageUrls]);
+  }, [selectedImages]);
 
   const Handlefix = async () => {
+    if (previewImageUrls.length == 0) {
+      alert('셋업 사진을 최소 한장 업로드 해주세요.');
+      return;
+    }
+
+    if (selectedThumbnail == null) {
+      alert('썸네일을 선택해주세요.');
+      return;
+    }
+
     try {
       const response = await axios.put(
         `http://localhost:8080/api/posts/${id}`,
@@ -275,14 +290,12 @@ function Post_fix() {
           },
         }
       );
-      console.log(response.data);
-      console.log(ArrProduct);
 
       alert('게시글이 수정되었습니다.');
       window.history.back();
     } catch (error) {
       console.log('에러');
-      alert('게시글 수정 권한이 없습니다.');
+      alert('썸네일을 선택해주세요.');
     }
   };
 
@@ -294,10 +307,9 @@ function Post_fix() {
       const selectedFiles = Array.from(files) as File[];
       const urls = selectedFiles.map((file) => URL.createObjectURL(file)); // 선택된 각 파일을 URL로 변환
       setPreviewImageUrls((prevUrls) => [...prevUrls, ...urls]); // 기존 미리보기 이미지 URL에 새 URL 추가
-      setSelectedImages((prevImages) => [...prevImages, ...selectedFiles]); // 기존 이미지 배열에 새 이미지 추가
+      setSelectedImages(selectedFiles); // 기존 이미지 배열에 새 이미지 추가
     }
   };
-
   const handleImageDelete = (indexToRemove) => {
     setPreviewImageUrls((prevUrls) =>
       prevUrls.filter((_, index) => index !== indexToRemove)
@@ -328,9 +340,10 @@ function Post_fix() {
         }
       );
 
-      const imageIds = response.data.data.map((image) => image.id);
-      setImgid(imageIds);
-      //setPreviewImageUrls([]);
+      const newImageIds = response.data.data.map((image) => image.id);
+      console.log(newImageIds);
+
+      setImgid((prevId) => [...prevId, ...newImageIds]);
       alert('썸네일로 등록할 이미지를 클릭하세요');
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
