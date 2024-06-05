@@ -49,7 +49,6 @@ const GoodsBoardTitle = styled.h1`
   text-align: center;
   width: 100%;
   margin: 4.5vh 0 4.5vh 0;
-  margin-left: 10vw;
 `;
 
 const SetupBoardContainer = styled.div`
