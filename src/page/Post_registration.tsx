@@ -165,8 +165,6 @@ function Post_reg() {
       (_, index) => index !== indexToRemove
     );
     setArrProduct(updatedProducts);
-
-    console.log(ArrProduct);
   };
 
   const Modalopen = () => {
@@ -176,6 +174,14 @@ function Post_reg() {
   const Modalclose = () => {
     setIsModalopen(false);
   };
+
+  useEffect(() => {
+    if (IsModalopen === true) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [IsModalopen]);
 
   const handleQuillChange = (content, delta, source, editor) => {
     setContent(content);
@@ -223,7 +229,7 @@ function Post_reg() {
   }, [imgid]);
 
   useEffect(() => {
-    console.log(selectedImages); // imgid 상태가 업데이트된 후 로그 출력
+    // imgid 상태가 업데이트된 후 로그 출력
     uploadImages();
   }, [selectedImages]);
 

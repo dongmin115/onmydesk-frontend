@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { TextField } from '@mui/material';
@@ -98,6 +98,7 @@ const InputTextField = styled(TextField)({
 function ProductModal({ isOpen, onClose, onSelect }) {
   const [Keyword, setKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [productNumber, setProductNumber] = useState(1);
 
   const ClickProduct = (product) => {
     onSelect(product);
@@ -118,6 +119,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
           params: {
             query: Keyword,
             display: 10,
+            start: productNumber,
           },
         }
       );
