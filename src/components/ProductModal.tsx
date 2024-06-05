@@ -40,9 +40,15 @@ const ModalContent = styled.div`
 `;
 
 const ModalCloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  position: relative;
+  top: -1vw;
+  left: 59vw;
+  width: 1vw;
+  font-size: 1.5vw;
+  color: gray;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 `;
 
 const SearchButton = styled.button`
@@ -135,7 +141,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
     return (
       <ModalWrapper>
         <ModalContent>
-          <ModalCloseButton onClick={onClose}>닫기</ModalCloseButton>
+          <ModalCloseButton onClick={onClose}>x</ModalCloseButton>
           <div>
             <InputTextField
               sx={{
