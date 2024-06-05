@@ -35,8 +35,7 @@ const theme = createTheme({
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  max-width: 1440px;
+  width: 75vw;
   align-items: center;
   margin: 0 auto; // 가운데 정렬
 `;
