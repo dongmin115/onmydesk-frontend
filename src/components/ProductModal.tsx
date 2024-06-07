@@ -142,9 +142,11 @@ function ProductModal({ isOpen, onClose, onSelect }) {
 
   const handleScroll = (event) => {
     const { scrollTop, scrollHeight, clientHeight } = event.target;
-    // 약간의 여유를 두고 조건을 체크
+
     if (scrollTop + clientHeight >= scrollHeight - 1) {
-      setProductNumber((prevNumber) => prevNumber + 10);
+      setTimeout(() => {
+        setProductNumber((prevNumber) => prevNumber + 10);
+      }, 1000);
     }
   };
 
