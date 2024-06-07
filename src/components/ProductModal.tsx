@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { TextField } from '@mui/material';
+import { boolean } from 'zod';
 
 // 모달 스타일드 컴포넌트 생성
 const ModalWrapper = styled.div`
@@ -117,7 +118,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
     }
   };
 
-  const searchProduct = async () => {
+  const searchProduct = async (append: boolean = false) => {
     try {
       const response = await axios.get(
         'http://localhost:8080/api/products/search',
@@ -129,8 +130,11 @@ function ProductModal({ isOpen, onClose, onSelect }) {
           },
         }
       );
-      console.log(response.data);
-      setSearchResults(response.data);
+      const NewProductArray = response.data;
+
+      setSearchResults((PrevProductArray) =>
+        append ? [...PrevProductArray, ...NewProductArray] : NewProductArray
+      );
     } catch (error) {
       console.log('Error', error);
     }
@@ -138,10 +142,18 @@ function ProductModal({ isOpen, onClose, onSelect }) {
 
   const handleScroll = (event) => {
     const { scrollTop, scrollHeight, clientHeight } = event.target;
-    if (scrollTop + clientHeight === scrollHeight) {
-      console.log('스크롤이 맨 아래로 이동했습니다.');
+    // 약간의 여유를 두고 조건을 체크
+    if (scrollTop + clientHeight >= scrollHeight - 1) {
+      setProductNumber((prevNumber) => prevNumber + 10);
     }
   };
+
+  useEffect(() => {
+    if (isOpen) {
+      searchProduct(true);
+      console.log(productNumber);
+    }
+  }, [productNumber]);
 
   useEffect(() => {
     // isOpen이 변경되었을 때만 이벤트 리스너를 추가하거나 제거합니다.
@@ -149,7 +161,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
       const modalContent = document.getElementById('modal-content');
       modalContent.addEventListener('scroll', handleScroll);
       return () => {
-        modalContent.removeEventListener('scroll', handleScroll);
+        modalContent.removeEventListener('scroll', handleScroll); //마운트 해체될때 실행 리스너 제거하기
       };
     }
   }, [isOpen]);
