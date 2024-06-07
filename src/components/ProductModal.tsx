@@ -168,6 +168,10 @@ function ProductModal({ isOpen, onClose, onSelect }) {
     }
   }, [isOpen]);
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   if (isOpen) {
     console.log();
     return (
@@ -231,7 +235,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
                     marginLeft: '6vw',
                   }}
                 >
-                  <Item_text>가격</Item_text> {product.lprice} KRW
+                  <Item_text>가격</Item_text> {formatPrice(product.lprice)} KRW
                 </div>
                 <div
                   style={{

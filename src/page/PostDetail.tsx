@@ -628,7 +628,7 @@ const PostDetail = () => {
                 ></ObjectName>
               </ObjectNameContainer>
               <ObjectCostContainer>
-                <ObjectCost>{product.lprice} KRW</ObjectCost>
+                <ObjectCost>{formatPrice(product.lprice)} KRW</ObjectCost>
               </ObjectCostContainer>
             </Link>
           </SetupObject>
