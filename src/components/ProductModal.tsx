@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { TextField } from '@mui/material';
+import { boolean } from 'zod';
 
 // 모달 스타일드 컴포넌트 생성
 const ModalWrapper = styled.div`
@@ -40,9 +41,15 @@ const ModalContent = styled.div`
 `;
 
 const ModalCloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  position: relative;
+  top: -1vw;
+  left: 59vw;
+  width: 1vw;
+  font-size: 1.5vw;
+  color: gray;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 `;
 
 const SearchButton = styled.button`
@@ -98,6 +105,7 @@ const InputTextField = styled(TextField)({
 function ProductModal({ isOpen, onClose, onSelect }) {
   const [Keyword, setKeyword] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [productNumber, setProductNumber] = useState(1);
 
   const ClickProduct = (product) => {
     onSelect(product);
@@ -110,7 +118,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
     }
   };
 
-  const searchProduct = async () => {
+  const searchProduct = async (append: boolean = false) => {
     try {
       const response = await axios.get(
         'http://localhost:8080/api/products/search',
@@ -118,22 +126,58 @@ function ProductModal({ isOpen, onClose, onSelect }) {
           params: {
             query: Keyword,
             display: 10,
+            start: productNumber,
           },
         }
       );
-      console.log(response.data);
-      setSearchResults(response.data);
+      const NewProductArray = response.data;
+
+      setSearchResults((PrevProductArray) =>
+        append ? [...PrevProductArray, ...NewProductArray] : NewProductArray
+      );
     } catch (error) {
       console.log('Error', error);
     }
+  };
+
+  const handleScroll = (event) => {
+    const { scrollTop, scrollHeight, clientHeight } = event.target;
+
+    if (scrollTop + clientHeight >= scrollHeight - 1) {
+      setTimeout(() => {
+        setProductNumber((prevNumber) => prevNumber + 10);
+      }, 1000);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      searchProduct(true);
+      console.log(productNumber);
+    }
+  }, [productNumber]);
+
+  useEffect(() => {
+    // isOpen이 변경되었을 때만 이벤트 리스너를 추가하거나 제거합니다.
+    if (isOpen) {
+      const modalContent = document.getElementById('modal-content');
+      modalContent.addEventListener('scroll', handleScroll);
+      return () => {
+        modalContent.removeEventListener('scroll', handleScroll); //마운트 해체될때 실행 리스너 제거하기
+      };
+    }
+  }, [isOpen]);
+
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
   if (isOpen) {
     console.log();
     return (
       <ModalWrapper>
-        <ModalContent>
-          <ModalCloseButton onClick={onClose}>닫기</ModalCloseButton>
+        <ModalContent id="modal-content">
+          <ModalCloseButton onClick={onClose}>x</ModalCloseButton>
           <div>
             <InputTextField
               sx={{
@@ -191,7 +235,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
                     marginLeft: '6vw',
                   }}
                 >
-                  <Item_text>가격</Item_text> {product.lprice} KRW
+                  <Item_text>가격</Item_text> {formatPrice(product.lprice)} KRW
                 </div>
                 <div
                   style={{
