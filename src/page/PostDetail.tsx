@@ -65,8 +65,8 @@ const UrlImage = styled.img`
 const TextContainer = styled.div`
   color: #ffffff;
   width: 55vw;
-  height: 80vh;
   margin-left: 23%;
+  padding: 1rem;
 `;
 
 const SetupItemContainer = styled.div`

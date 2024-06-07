@@ -330,6 +330,10 @@ function Post_fix() {
     );
   };
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   const uploadImages = async () => {
     const formData = new FormData();
     selectedImages.forEach((file) => {
@@ -531,7 +535,7 @@ function Post_fix() {
                     marginLeft: '6vw',
                   }}
                 >
-                  <Item_text>가격</Item_text>: {product.lprice} KRW
+                  <Item_text>가격</Item_text>: {formatPrice(product.lprice)} KRW
                 </div>
                 <div
                   style={{

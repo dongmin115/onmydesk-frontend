@@ -233,6 +233,10 @@ function Post_reg() {
     uploadImages();
   }, [selectedImages]);
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   const handleSubmit = async () => {
     if (previewImageUrls.length == 0) {
       alert('셋업 사진을 최소 한장 업로드 해주세요.');
@@ -492,7 +496,7 @@ function Post_reg() {
                     marginLeft: '6vw',
                   }}
                 >
-                  <Item_text>가격</Item_text>: {product.lprice} KRW
+                  <Item_text>가격</Item_text>: {formatPrice(product.lprice)} KRW
                 </div>
                 <div
                   style={{
