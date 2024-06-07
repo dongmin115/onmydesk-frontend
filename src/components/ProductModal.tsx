@@ -136,11 +136,29 @@ function ProductModal({ isOpen, onClose, onSelect }) {
     }
   };
 
+  const handleScroll = (event) => {
+    const { scrollTop, scrollHeight, clientHeight } = event.target;
+    if (scrollTop + clientHeight === scrollHeight) {
+      console.log('스크롤이 맨 아래로 이동했습니다.');
+    }
+  };
+
+  useEffect(() => {
+    // isOpen이 변경되었을 때만 이벤트 리스너를 추가하거나 제거합니다.
+    if (isOpen) {
+      const modalContent = document.getElementById('modal-content');
+      modalContent.addEventListener('scroll', handleScroll);
+      return () => {
+        modalContent.removeEventListener('scroll', handleScroll);
+      };
+    }
+  }, [isOpen]);
+
   if (isOpen) {
     console.log();
     return (
       <ModalWrapper>
-        <ModalContent>
+        <ModalContent id="modal-content">
           <ModalCloseButton onClick={onClose}>x</ModalCloseButton>
           <div>
             <InputTextField
