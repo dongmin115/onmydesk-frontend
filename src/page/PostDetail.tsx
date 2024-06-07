@@ -509,6 +509,10 @@ const PostDetail = () => {
     }
   };
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   return (
     <>
       <Navbar />
@@ -629,7 +633,7 @@ const PostDetail = () => {
 
       <Line></Line>
       <TotalContainer>
-        <Total>{posts.totalPrice} KRW</Total>
+        <Total>{formatPrice(posts.totalPrice)} KRW</Total>
       </TotalContainer>
       <CommentContainer>
         <TextArea
