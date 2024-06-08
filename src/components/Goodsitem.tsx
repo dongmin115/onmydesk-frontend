@@ -1,5 +1,4 @@
 import { IconButton } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
@@ -41,13 +40,6 @@ const GoodsBoardInfoFlexbox = styled.div`
   padding: 0 5% 0 5%;
 `;
 
-const FavoriteButton = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
 const SetupBoardImage = styled.img`
   width: 100%;
   height: 20vh;
@@ -65,7 +57,7 @@ function GoodsItem({ product, id }) {
   const searchProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/products/${id}`,
+        `${import.meta.env.VITE_API_KEY}/products/${id}`,
 
         {
           headers: {
@@ -86,7 +78,7 @@ function GoodsItem({ product, id }) {
   const postWish = async () => {
     try {
       await axios.post(
-        `http://localhost:8080/api/products/wish/${product.id}`,
+        `${import.meta.env.VITE_API_KEY}/products/wish/${product.id}`,
         {},
         {
           headers: {
@@ -96,7 +88,6 @@ function GoodsItem({ product, id }) {
         }
       );
       setWishes(true); // 상태 업데이트
-      console.log('Wish added');
     } catch (error) {
       console.error('Error adding to wishlist:', error);
     }
@@ -105,7 +96,7 @@ function GoodsItem({ product, id }) {
   const deleteWish = async () => {
     try {
       await axios.delete(
-        `http://localhost:8080/api/products/wish/${product.id}`,
+        `${import.meta.env.VITE_API_KEY}/products/wish/${product.id}`,
         {
           headers: {
             'Content-Type': 'application/json',
@@ -114,7 +105,6 @@ function GoodsItem({ product, id }) {
         }
       );
       setWishes(false); // 상태 업데이트
-      console.log('Wish deleted');
     } catch (error) {
       console.error('Error adding to wishlist:', error);
     }

@@ -8,10 +8,9 @@ export default function Postlist() {
     async function fetchPosts() {
       try {
         const response = await axios.get(
-          'http://localhost:8080/api/posts?page=1&limit=9&criteria=1'
+          `${import.meta.env.VITE_API_KEY}/posts?page=1&limit=9&criteria=1`
         );
         setPosts(response.data.data);
-        console.log('목록 불러오기 성공:', response.data.data);
       } catch (error) {
         console.log('목록 불러오기 실패:', error);
       }

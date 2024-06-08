@@ -275,7 +275,7 @@ function Mypage() {
     try {
       // 서버에 업데이트 요청
       const response = await axios.put(
-        `http://localhost:8080/api/setups/${setupId}`,
+        `${import.meta.env.VITE_API_KEY}/setups/${setupId}`,
         {
           setupName: 'Setup Name', // 셋업 이름 업데이트 필요 시 수정
           products: updatedProducts,
@@ -360,7 +360,7 @@ function Mypage() {
   const fetchGoodsDetail = async (productId: number) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/products/${productId}`,
+        `${import.meta.env.VITE_API_KEY}/products/${productId}`,
         {
           headers: {
             'Content-Type': 'application/json',

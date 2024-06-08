@@ -6,9 +6,7 @@ import ProductModal from '../components/ProductModal';
 import Navbar from '../components/Navbar';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
 import { TextField, Box } from '@mui/material';
-import { boolean } from 'zod';
 
 const Centerdiv = styled.div`
   display: flex;
@@ -174,11 +172,9 @@ function Post_fix() {
     async function fetchPosts() {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/posts/${id}`
+          `${import.meta.env.VITE_API_KEY}/posts/${id}`
         );
         setPrevious_post(response.data.data);
-
-        console.log('목록 불러오기 성공:', response.data.data);
       } catch (error) {
         console.log('목록 불러오기 실패:', error);
       }
@@ -190,7 +186,6 @@ function Post_fix() {
   const handleThumbnailClick = (index) => {
     if (imgid.length > index) {
       setSelectedThumbnail(imgid[index]);
-      console.log('썸네일 이미지 ID:', imgid[index]);
     }
   };
 
@@ -283,7 +278,7 @@ function Post_fix() {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/posts/${id}`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}`,
         {
           title: `${title}`,
           content: `${content}`,
@@ -342,7 +337,7 @@ function Post_fix() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/images/upload',
+        `${import.meta.env.VITE_API_KEY}/images/upload`,
         formData,
         {
           headers: {

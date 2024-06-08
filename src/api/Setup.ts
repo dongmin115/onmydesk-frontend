@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getSetups = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/setups', {
+    const response = await axios.get(`${import.meta.env.VITE_API_KEY}/setups`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -22,7 +22,7 @@ export const getSetups = async () => {
 export const postSetup = async () => {
   try {
     const response = await axios.post(
-      'http://localhost:8080/api/setups',
+      `${import.meta.env.VITE_API_KEY}/setups`,
       {
         setupName: 'setup name',
         products: [],
@@ -44,7 +44,7 @@ export const postSetup = async () => {
 export const deleteSetups = async (setupId: number) => {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/setups/${setupId}`,
+      `${import.meta.env.VITE_API_KEY}/setups/${setupId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export const deleteSetups = async (setupId: number) => {
 export const getSetupDetail = async (setupId: number) => {
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/setups/${setupId}`,
+      `${import.meta.env.VITE_API_KEY}/setups/${setupId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export const deleteSetupGoods = async (
 ) => {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/setups/${setupId}/${setupProductId}`,
+      `${import.meta.env.VITE_API_KEY}/setups/${setupId}/${setupProductId}`,
       {
         headers: {
           'Content-Type': 'application/json',

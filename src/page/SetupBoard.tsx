@@ -35,8 +35,7 @@ const theme = createTheme({
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  max-width: 1440px;
+  width: 75vw;
   align-items: center;
   margin: 0 auto; // 가운데 정렬
 `;
@@ -74,6 +73,7 @@ const SetupBoardContainer = styled.div`
   align-items: center;
   padding: 0% 0% 10vh 0%;
   height: fit-content;
+  width: 100%;
 `;
 
 const ImageContainer = styled.div`
@@ -145,17 +145,20 @@ export default function SetupBoard() {
     page: number = pagenumber
   ): Promise<void> => {
     try {
-      const response = await axios.get('http://localhost:8080/api/posts', {
-        params: {
-          page: page,
-          limit: 9,
-          criteria: criteria,
-        },
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_KEY}/posts`,
+        {
+          params: {
+            page: page,
+            limit: 9,
+            criteria: criteria,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
       const newPosts = response.data.data;
 
       if (newPosts.length === 0) {

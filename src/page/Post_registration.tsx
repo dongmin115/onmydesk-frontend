@@ -7,7 +7,6 @@ import Navbar from '../components/Navbar';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { TextField, Box } from '@mui/material';
-import { transformer } from 'zod';
 
 const Centerdiv = styled.div`
   display: flex;
@@ -250,7 +249,7 @@ function Post_reg() {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/posts`,
+        `${import.meta.env.VITE_API_KEY}/posts`,
         {
           title: `${title}`,
           content: `${content}`,
@@ -307,7 +306,7 @@ function Post_reg() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/images/upload',
+        `${import.meta.env.VITE_API_KEY}/images/upload`,
         formData,
         {
           headers: {

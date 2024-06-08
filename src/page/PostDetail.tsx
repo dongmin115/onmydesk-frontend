@@ -1,13 +1,8 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import SetupImage from '../assets/SetupImage.png';
-import Mouse from '../assets/Mouse.png';
 import Button from '@mui/material/Button';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import ShareIcon from '@mui/icons-material/Share';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { Carousel } from 'react-responsive-carousel';
@@ -371,16 +366,15 @@ const PostDetail = () => {
     async function fetchPosts() {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/posts/${id}`
+          `${import.meta.env.VITE_API_KEY}/posts/${id}`
         );
         setPosts(response.data.data.post);
         setProductPost(response.data.data.products);
 
         const commentsResponse = await axios.get(
-          `http://localhost:8080/api/posts/${id}/comments`
+          `${import.meta.env.VITE_API_KEY}/posts/${id}/comments`
         );
         setComments(commentsResponse.data.data);
-        console.log('목록 불러오기 성공:', response.data.data);
       } catch (error) {
         console.log('목록 불러오기 실패:', error);
       }
@@ -395,7 +389,7 @@ const PostDetail = () => {
   const PostDel = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/posts/${id}`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}`,
 
         {
           headers: {
@@ -445,7 +439,7 @@ const PostDetail = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/posts/${id}/comments`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}/comments`,
         { content: comment },
         {
           headers: {
@@ -467,7 +461,7 @@ const PostDetail = () => {
   const updateComment = async (commentId, updatedContent) => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/posts/${id}/comments/${commentId}`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}/comments/${commentId}`,
         { content: updatedContent },
         {
           headers: {
@@ -493,7 +487,7 @@ const PostDetail = () => {
   const deleteComment = async (commentId) => {
     try {
       await axios.delete(
-        `http://localhost:8080/api/posts/${id}/comments/${commentId}`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}/comments/${commentId}`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -556,60 +550,6 @@ const PostDetail = () => {
           <ImageGallery imageUrls={urllist} />
         </div>
       </div>
-      {/* 다른 내용들도 표시 */}
-      <RightBox>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'red',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <FavoriteBorderIcon />
-          </Button>
-        </Circle>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <BookmarkIcon />
-          </Button>
-        </Circle>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <ShareIcon />
-          </Button>
-        </Circle>
-      </RightBox>
       <TextContainer style={{ display: 'flex', justifyContent: 'center' }}>
         <div dangerouslySetInnerHTML={{ __html: posts.content }} />
       </TextContainer>

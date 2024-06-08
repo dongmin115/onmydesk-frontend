@@ -75,7 +75,6 @@ function GoodsModal({ isOpen, onClose, onSelect, setupId }) {
 
   const ClickProduct = (product) => {
     //여기의 product는 productDetail
-    console.log(product);
     onSelect(product, setupId);
     onClose();
   };
@@ -83,7 +82,7 @@ function GoodsModal({ isOpen, onClose, onSelect, setupId }) {
   const fetchFavoriteGoods = async () => {
     try {
       const response = await axios.get(
-        'http://localhost:8080/api/user/products/wishes',
+        `${import.meta.env.VITE_API_KEY}/user/products/wishes`,
         {
           headers: {
             'Content-Type': 'application/json',

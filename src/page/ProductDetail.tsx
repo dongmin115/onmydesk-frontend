@@ -123,7 +123,7 @@ const ProductDetail = () => {
   const searchProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/products/${id}`,
+        `${import.meta.env.VITE_API_KEY}/products/${id}`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -144,11 +144,15 @@ const ProductDetail = () => {
 
   const wishProduct = async () => {
     try {
-      await axios.post(`http://localhost:8080/api/products/wish/${id}`, null, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-        },
-      });
+      await axios.post(
+        `${import.meta.env.VITE_API_KEY}/products/wish/${id}`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
       setLikeProduct(true);
     } catch (error) {
       console.log('에러', id);
@@ -157,11 +161,14 @@ const ProductDetail = () => {
 
   const wishProductDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8080/api/products/wish/${id}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-        },
-      });
+      await axios.delete(
+        `${import.meta.env.VITE_API_KEY}/products/wish/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
       setLikeProduct(false);
     } catch (error) {
       console.log('에러', id);
