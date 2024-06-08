@@ -150,7 +150,6 @@ function Post_reg() {
   const handleThumbnailClick = (index) => {
     if (imgid.length > index) {
       setSelectedThumbnail(imgid[index]);
-      console.log('썸네일 이미지 ID:', imgid[index]);
     }
   };
 
@@ -223,9 +222,7 @@ function Post_reg() {
     setTitle(event.target.value);
   };
 
-  useEffect(() => {
-    console.log(imgid); // imgid 상태가 업데이트된 후 로그 출력
-  }, [imgid]);
+  useEffect(() => {}, [imgid]);
 
   useEffect(() => {
     // imgid 상태가 업데이트된 후 로그 출력
@@ -263,8 +260,6 @@ function Post_reg() {
           },
         }
       );
-      console.log(response.data);
-      console.log(ArrProduct);
 
       alert('게시글이 등록되었습니다.');
       window.history.back();

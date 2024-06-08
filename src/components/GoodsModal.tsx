@@ -103,7 +103,6 @@ function GoodsModal({ isOpen, onClose, onSelect, setupId }) {
   }, [isOpen]); // isOpen이 변경될 때마다 useEffect를 실행합니다.
 
   if (isOpen) {
-    console.log();
     return (
       <ModalWrapper>
         <ModalContent>

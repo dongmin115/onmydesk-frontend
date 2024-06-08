@@ -31,7 +31,6 @@ const ModalCloseButton = styled.button`
 // 모달 컴포넌트 정의
 function CustomModal({ isOpen, onClose }) {
   if (isOpen) {
-    console.log(isOpen); //isOpen true 될때만 모달 열기
     return (
       <ModalWrapper>
         <ModalContent>

@@ -469,7 +469,6 @@ const PostDetail = () => {
           },
         }
       );
-      console.log('Response:', response.data);
       setComments((currentComments) =>
         currentComments.map((comment) =>
           comment.commentId === commentId

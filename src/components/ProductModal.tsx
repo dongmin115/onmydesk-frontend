@@ -136,7 +136,6 @@ function ProductModal({ isOpen, onClose, onSelect }) {
   useEffect(() => {
     if (isOpen) {
       searchProduct(true);
-      console.log(productNumber);
     }
   }, [productNumber]);
 
@@ -156,7 +155,6 @@ function ProductModal({ isOpen, onClose, onSelect }) {
   };
 
   if (isOpen) {
-    console.log();
     return (
       <ModalWrapper>
         <ModalContent id="modal-content">
