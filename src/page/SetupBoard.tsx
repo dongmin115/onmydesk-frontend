@@ -73,6 +73,7 @@ const SetupBoardContainer = styled.div`
   align-items: center;
   padding: 0% 0% 10vh 0%;
   height: fit-content;
+  width: 100%;
 `;
 
 const ImageContainer = styled.div`
