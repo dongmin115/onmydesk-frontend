@@ -214,13 +214,16 @@ export default function Home() {
     };
     const fetchHotDesk = async (): Promise<void> => {
       try {
-        const response = await axios.get('http://localhost:8080/api/posts', {
-          params: {
-            page: 1,
-            limit: 5,
-            criteria: 2,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_KEY}/posts`,
+          {
+            params: {
+              page: 1,
+              limit: 5,
+              criteria: 2,
+            },
+          }
+        );
 
         setHotDesk(response.data.data);
       } catch (error) {
@@ -229,13 +232,16 @@ export default function Home() {
     };
     const fetchHotGoods = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/products', {
-          params: {
-            page: 1,
-            limit: 11,
-            criteria: 3,
-          },
-        });
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_KEY}/products`,
+          {
+            params: {
+              page: 1,
+              limit: 11,
+              criteria: 3,
+            },
+          }
+        );
         setHotGoods(response.data.data);
       } catch (error) {
         console.log('Error', error);

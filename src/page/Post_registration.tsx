@@ -249,7 +249,7 @@ function Post_reg() {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/posts`,
+        `${import.meta.env.VITE_API_KEY}/posts`,
         {
           title: `${title}`,
           content: `${content}`,
@@ -306,7 +306,7 @@ function Post_reg() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/images/upload',
+        `${import.meta.env.VITE_API_KEY}/images/upload`,
         formData,
         {
           headers: {

@@ -57,7 +57,7 @@ function GoodsItem({ product, id }) {
   const searchProduct = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/products/${id}`,
+        `${import.meta.env.VITE_API_KEY}/products/${id}`,
 
         {
           headers: {
@@ -78,7 +78,7 @@ function GoodsItem({ product, id }) {
   const postWish = async () => {
     try {
       await axios.post(
-        `http://localhost:8080/api/products/wish/${product.id}`,
+        `${import.meta.env.VITE_API_KEY}/products/wish/${product.id}`,
         {},
         {
           headers: {
@@ -96,7 +96,7 @@ function GoodsItem({ product, id }) {
   const deleteWish = async () => {
     try {
       await axios.delete(
-        `http://localhost:8080/api/products/wish/${product.id}`,
+        `${import.meta.env.VITE_API_KEY}/products/wish/${product.id}`,
         {
           headers: {
             'Content-Type': 'application/json',

@@ -51,14 +51,6 @@ const ModalCloseButton = styled.button`
   cursor: pointer;
 `;
 
-const SearchButton = styled.button`
-  height: 3vw;
-  border: #0085ff;
-  background-color: #0085ff;
-  font-size: 16px;
-  cursor: pointer;
-`;
-
 const Item_box = styled.button`
   //상품 등록 박스
   background-color: #3c3c3c;
@@ -82,14 +74,6 @@ const Item_box = styled.button`
 const Item_text = styled.b`
   color: #419df3;
   font-size: 1.2vw;
-`;
-
-const Item_button = styled.button`
-  //상품 등록 추가,삭제 버튼
-  background-color: transparent;
-  border: none;
-  font-size: 1.2vw;
-  cursor: pointer;
 `;
 
 const InputTextField = styled(TextField)({
@@ -120,7 +104,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
   const searchProduct = async (append: boolean = false) => {
     try {
       const response = await axios.get(
-        'http://localhost:8080/api/products/search',
+        `${import.meta.env.VITE_API_KEY}/products/search`,
         {
           params: {
             query: Keyword,

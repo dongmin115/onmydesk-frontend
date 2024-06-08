@@ -366,13 +366,13 @@ const PostDetail = () => {
     async function fetchPosts() {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/posts/${id}`
+          `${import.meta.env.VITE_API_KEY}/posts/${id}`
         );
         setPosts(response.data.data.post);
         setProductPost(response.data.data.products);
 
         const commentsResponse = await axios.get(
-          `http://localhost:8080/api/posts/${id}/comments`
+          `${import.meta.env.VITE_API_KEY}/posts/${id}/comments`
         );
         setComments(commentsResponse.data.data);
       } catch (error) {
@@ -389,7 +389,7 @@ const PostDetail = () => {
   const PostDel = async () => {
     try {
       const response = await axios.delete(
-        `http://localhost:8080/api/posts/${id}`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}`,
 
         {
           headers: {
@@ -439,7 +439,7 @@ const PostDetail = () => {
 
     try {
       const response = await axios.post(
-        `http://localhost:8080/api/posts/${id}/comments`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}/comments`,
         { content: comment },
         {
           headers: {
@@ -461,7 +461,7 @@ const PostDetail = () => {
   const updateComment = async (commentId, updatedContent) => {
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/posts/${id}/comments/${commentId}`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}/comments/${commentId}`,
         { content: updatedContent },
         {
           headers: {
@@ -487,7 +487,7 @@ const PostDetail = () => {
   const deleteComment = async (commentId) => {
     try {
       await axios.delete(
-        `http://localhost:8080/api/posts/${id}/comments/${commentId}`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}/comments/${commentId}`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,

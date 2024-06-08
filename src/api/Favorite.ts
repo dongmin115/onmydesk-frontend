@@ -3,7 +3,7 @@ import axios from 'axios';
 export const getFavorite = async () => {
   try {
     const response = await axios.get(
-      'http://localhost:8080/api/user/posts/hearts',
+      `${import.meta.env.VITE_API_KEY}/user/posts/hearts`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export const getFavorite = async () => {
 export const favorite = async (postId: number) => {
   try {
     const response = await axios.post(
-      `http://localhost:8080/api/posts/hearts/${postId}`,
+      `${import.meta.env.VITE_API_KEY}/posts/hearts/${postId}`,
       {},
       {
         headers: {
@@ -40,7 +40,7 @@ export const favorite = async (postId: number) => {
 export const disFavorite = async (postId: number) => {
   try {
     const response = await axios.delete(
-      `http://localhost:8080/api/posts/hearts/${postId}`,
+      `${import.meta.env.VITE_API_KEY}/posts/hearts/${postId}`,
       {
         headers: {
           'Content-Type': 'application/json',

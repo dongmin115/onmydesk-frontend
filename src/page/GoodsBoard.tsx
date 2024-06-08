@@ -154,13 +154,16 @@ export default function GoodsBoard() {
     page: number = pagenumber
   ) => {
     try {
-      const response = await axios.get('http://localhost:8080/api/products', {
-        params: {
-          page: page,
-          limit: 12,
-          criteria: criteria,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_KEY}/products`,
+        {
+          params: {
+            page: page,
+            limit: 12,
+            criteria: criteria,
+          },
+        }
+      );
       const newProducts = response.data.data;
 
       setProducts((prevProducts) =>

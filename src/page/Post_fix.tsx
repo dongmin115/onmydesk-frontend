@@ -172,7 +172,7 @@ function Post_fix() {
     async function fetchPosts() {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/posts/${id}`
+          `${import.meta.env.VITE_API_KEY}/posts/${id}`
         );
         setPrevious_post(response.data.data);
       } catch (error) {
@@ -278,7 +278,7 @@ function Post_fix() {
 
     try {
       const response = await axios.put(
-        `http://localhost:8080/api/posts/${id}`,
+        `${import.meta.env.VITE_API_KEY}/posts/${id}`,
         {
           title: `${title}`,
           content: `${content}`,
@@ -337,7 +337,7 @@ function Post_fix() {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/images/upload',
+        `${import.meta.env.VITE_API_KEY}/images/upload`,
         formData,
         {
           headers: {

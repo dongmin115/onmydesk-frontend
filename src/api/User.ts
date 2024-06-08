@@ -4,7 +4,7 @@ import { User } from '../types/type';
 export const SignUp = async (jsonData: User) => {
   try {
     const response = await axios.post(
-      'http://localhost:8080/api/signup',
+      `${import.meta.env.VITE_API_KEY}/signup`,
       jsonData,
       {
         headers: {
@@ -12,10 +12,12 @@ export const SignUp = async (jsonData: User) => {
         },
       }
     );
+    console.log(response.data);
     alert('회원가입이 완료되었습니다.');
     return response.data;
   } catch (error) {
     alert('회원가입에 실패했습니다.');
+    console.log(error);
     return error;
   }
 };
@@ -23,7 +25,7 @@ export const SignUp = async (jsonData: User) => {
 export const Login = async (jsonData: { email: string; password: string }) => {
   try {
     const response = await axios.post(
-      'http://localhost:8080/api/login',
+      `${import.meta.env.VITE_API_KEY}/login`,
       jsonData,
       {
         headers: {
@@ -42,7 +44,7 @@ export const Login = async (jsonData: { email: string; password: string }) => {
 
 export const getUserInfo = async () => {
   try {
-    const response = await axios.get('http://localhost:8080/api/user', {
+    const response = await axios.get(`${import.meta.env.VITE_API_KEY}/user`, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -58,7 +60,7 @@ export const getUserInfo = async () => {
 export const putUserInfo = async (name: string, nickname: string) => {
   try {
     const response = await axios.put(
-      'http://localhost:8080/api/user',
+      `${import.meta.env.VITE_API_KEY}/user`,
       { name: name, nickname: nickname },
       {
         headers: {
@@ -76,12 +78,15 @@ export const putUserInfo = async (name: string, nickname: string) => {
 
 export const deleteUser = async () => {
   try {
-    const response = await axios.delete('http://localhost:8080/api/user', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
-      },
-    });
+    const response = await axios.delete(
+      `${import.meta.env.VITE_API_KEY}/user`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        },
+      }
+    );
     return response;
   } catch (error) {
     console.error(error);

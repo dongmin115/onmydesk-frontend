@@ -144,17 +144,20 @@ export default function SetupBoard() {
     page: number = pagenumber
   ): Promise<void> => {
     try {
-      const response = await axios.get('http://localhost:8080/api/posts', {
-        params: {
-          page: page,
-          limit: 9,
-          criteria: criteria,
-        },
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-        },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_KEY}/posts`,
+        {
+          params: {
+            page: page,
+            limit: 9,
+            criteria: criteria,
+          },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+          },
+        }
+      );
       const newPosts = response.data.data;
 
       if (newPosts.length === 0) {
