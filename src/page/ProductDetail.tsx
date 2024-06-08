@@ -1,12 +1,8 @@
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
-import Mouse from '../assets/Mouse.png';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { Product } from '../types/Product';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -30,6 +26,7 @@ const ProductDetails = styled.div`
   width: 40%;
   padding: 2%;
   margin-left: 2%;
+  margin-top: 2%;
 `;
 const TitleContainer = styled.div`
   //상품이름과 하트를 묶는 컨테이너
@@ -82,15 +79,14 @@ const PriceItem = styled.div`
 `;
 
 const ShopName = styled.a`
-  // 스타일을 a 태그에 적용
   margin-right: 5%;
   width: 14vw;
   height: 6vh;
   margin-top: 3%;
-  color: #ffffff; // 링크 색상을 지정
-  text-decoration: none; // 밑줄 제거
+  color: rgba(52, 154, 248, 1);
+  text-decoration: none;
   &:hover {
-    text-decoration: underline; // 호버 시 밑줄 표시
+    text-decoration: underline;
   }
 `;
 const Price = styled.span`
@@ -104,72 +100,16 @@ const Line = styled.div`
   background-color: #ffffff;
   margin-left: 22%;
   margin-top: 6%;
+  margin-bottom: 5%;
 `;
-const SetupItem = styled.span`
-  //You may also like
-  margin-left: 18.5%;
-  color: #ffffff;
-  width: 100%;
-  height: 2.4vh;
-  font-family: 'Kiwi Maru';
-  font-size: 1.4rem;
-`;
-const Recommend = styled.div`
-  //You may also like를 묶는 컨테이너
-  margin-top: 1%;
-  margin-left: 5%;
-`;
-const RecommendProduct = styled.div`
-  width: 100%;
-  height: 35vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 5%;
-`;
-const SetupObjectContainer = styled.div`
-  //상품들을 묵는 컨테이너
-  width: 55vw;
-  height: 35vh;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 3rem;
-`;
-const SetupObject = styled.div`
-  height: 35vh;
-  width: 26%;
-  background-color: #2f2d2d;
-  border-radius: 1rem;
-  transition: 0.5s ease;
-  box-shadow: 0px 0px 10px 0px #000000;
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
-const ObjectImage = styled.img`
-  height: 70%;
-  width: 100%;
-  border-radius: 1rem;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-`;
-const ObjectNameContainer = styled.div`
-  width: 100%;
-  height: 20%;
-  display: flex;
-  justify-content: center;
-`;
-const ObjectName = styled.span`
-  width: 100%;
-  height: 100%;
-  color: #ffffff;
-  font-family: 'Kiwi Maru';
-  margin-left: 26%;
-  margin-top: 12%;
+
+const PriceContainer = styled.div`
+  max-height: 1000px;
+  overflow-y: auto;
 `;
 const ProductDetail = () => {
   const { id } = useParams();
-  const [productDetailData, setProductDetailData] = useState<Product>();
+  const [productDetailData, setProductDetailData] = useState(null);
   const [LikeProduct, setLikeProduct] = useState(false);
 
   const clickLikeProduct = () => {
@@ -184,7 +124,6 @@ const ProductDetail = () => {
     try {
       const response = await axios.get(
         `http://localhost:8080/api/products/${id}`,
-
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
@@ -205,38 +144,37 @@ const ProductDetail = () => {
 
   const wishProduct = async () => {
     try {
-      const response = await axios.post(
-        `http://localhost:8080/api/products/wish/${id}`,
-        null,
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-          },
-        }
-      );
-      setLikeProduct(true); //아이콘 전환하려고 따로
+      await axios.post(`http://localhost:8080/api/products/wish/${id}`, null, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+        },
+      });
+      setLikeProduct(true);
     } catch (error) {
       console.log('에러', id);
     }
   };
+
   const wishProductDelete = async () => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/api/products/wish/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-          },
-        }
-      );
+      await axios.delete(`http://localhost:8080/api/products/wish/${id}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
+        },
+      });
       setLikeProduct(false);
     } catch (error) {
       console.log('에러', id);
     }
   };
+
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar />
       <ProductInfoContainer>
         <ProductImage src={productDetailData?.data.product.img} />
         <ProductDetails>
@@ -268,66 +206,28 @@ const ProductDetail = () => {
             {productDetailData?.data.product.category2}
           </ProductDetail1>
           <ProductDetail2>
-            <PriceList>
-              {productDetailData?.data.pages.slice(0, 5).map((page) => (
-                <PriceItem key={page.id}>
-                  <ShopName
-                    href={page.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {page.storeName}
-                  </ShopName>
-                  <Price>{page.price}</Price>
-                </PriceItem>
-              ))}
-            </PriceList>
+            <PriceContainer>
+              <PriceList>
+                {productDetailData?.data.pages.map((page) => (
+                  <PriceItem key={page.id}>
+                    <ShopName
+                      href={page.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {page.storeName}
+                    </ShopName>
+                    <Price>{formatPrice(page.price)}</Price>
+                  </PriceItem>
+                ))}
+              </PriceList>
+            </PriceContainer>
           </ProductDetail2>
         </ProductDetails>
       </ProductInfoContainer>
-      <Line></Line>
-      <Recommend>
-        <SetupItem>You may also like</SetupItem>
-      </Recommend>
-      <RecommendProduct>
-        <ArrowBackIosNewIcon
-          sx={{
-            height: '50px',
-            color: 'white',
-            mr: 4,
-            mb: 5,
-          }}
-        ></ArrowBackIosNewIcon>
-        <SetupObjectContainer>
-          <SetupObject>
-            <ObjectImage src={Mouse}></ObjectImage>
-            <ObjectNameContainer>
-              <ObjectName>Magic Mouse</ObjectName>
-            </ObjectNameContainer>
-          </SetupObject>
-          <SetupObject>
-            <ObjectImage src={Mouse}></ObjectImage>
-            <ObjectNameContainer>
-              <ObjectName>Magic Mouse</ObjectName>
-            </ObjectNameContainer>
-          </SetupObject>
-          <SetupObject>
-            <ObjectImage src={Mouse}></ObjectImage>
-            <ObjectNameContainer>
-              <ObjectName>Magic Mouse</ObjectName>
-            </ObjectNameContainer>
-          </SetupObject>
-        </SetupObjectContainer>
-        <ArrowForwardIosIcon
-          sx={{
-            height: '50px',
-            color: 'white',
-            ml: 4,
-            mb: 5,
-          }}
-        ></ArrowForwardIosIcon>
-      </RecommendProduct>
+      <Line />
     </>
   );
 };
+
 export default ProductDetail;

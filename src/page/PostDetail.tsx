@@ -65,8 +65,8 @@ const UrlImage = styled.img`
 const TextContainer = styled.div`
   color: #ffffff;
   width: 55vw;
-  height: 80vh;
   margin-left: 23%;
+  padding: 1rem;
 `;
 
 const SetupItemContainer = styled.div`
@@ -509,6 +509,14 @@ const PostDetail = () => {
     }
   };
 
+  const formatPrice = (price?: string) => {
+    if (price == null) {
+      console.error('Price is undefined or null');
+      return '';
+    }
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  };
+
   return (
     <>
       <Navbar />
@@ -620,7 +628,7 @@ const PostDetail = () => {
                 ></ObjectName>
               </ObjectNameContainer>
               <ObjectCostContainer>
-                <ObjectCost>{product.lprice} KRW</ObjectCost>
+                <ObjectCost>{formatPrice(product.lprice)} KRW</ObjectCost>
               </ObjectCostContainer>
             </Link>
           </SetupObject>
@@ -629,7 +637,7 @@ const PostDetail = () => {
 
       <Line></Line>
       <TotalContainer>
-        <Total>{posts.totalPrice} KRW</Total>
+        <Total>{formatPrice(posts.totalPrice)} KRW</Total>
       </TotalContainer>
       <CommentContainer>
         <TextArea

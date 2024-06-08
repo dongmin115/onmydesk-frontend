@@ -216,6 +216,14 @@ function Post_fix() {
     setIsModalopen(false);
   };
 
+  useEffect(() => {
+    if (IsModalopen === true) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [IsModalopen]);
+
   const handleQuillChange = (content, delta, source, editor) => {
     setContent(content);
   };
@@ -320,6 +328,10 @@ function Post_fix() {
     setImgid((prevIds) =>
       prevIds.filter((_, index) => index !== indexToRemove)
     );
+  };
+
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   };
 
   const uploadImages = async () => {
@@ -523,7 +535,7 @@ function Post_fix() {
                     marginLeft: '6vw',
                   }}
                 >
-                  <Item_text>가격</Item_text>: {product.lprice} KRW
+                  <Item_text>가격</Item_text>: {formatPrice(product.lprice)} KRW
                 </div>
                 <div
                   style={{
