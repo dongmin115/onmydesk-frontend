@@ -13,7 +13,6 @@ export const SignUp = async (jsonData: User) => {
       }
     );
     alert('회원가입이 완료되었습니다.');
-    console.log(response.data);
     return response.data;
   } catch (error) {
     alert('회원가입에 실패했습니다.');
@@ -33,7 +32,6 @@ export const Login = async (jsonData: { email: string; password: string }) => {
       }
     );
     // 세션스토리지에 토큰 저장
-    console.log(response.data);
     sessionStorage.setItem('accessToken', response.data.data.accessToken);
     sessionStorage.setItem('refreshToken', response.data.data.refreshToken);
     return response.data;
