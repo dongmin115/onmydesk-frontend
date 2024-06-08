@@ -75,7 +75,6 @@ function GoodsModal({ isOpen, onClose, onSelect, setupId }) {
 
   const ClickProduct = (product) => {
     //여기의 product는 productDetail
-    console.log(product);
     onSelect(product, setupId);
     onClose();
   };
