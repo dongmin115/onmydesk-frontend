@@ -1,13 +1,8 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import Navbar from '../components/Navbar';
-import SetupImage from '../assets/SetupImage.png';
-import Mouse from '../assets/Mouse.png';
 import Button from '@mui/material/Button';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import ShareIcon from '@mui/icons-material/Share';
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { Carousel } from 'react-responsive-carousel';
@@ -380,7 +375,6 @@ const PostDetail = () => {
           `http://localhost:8080/api/posts/${id}/comments`
         );
         setComments(commentsResponse.data.data);
-        console.log('목록 불러오기 성공:', response.data.data);
       } catch (error) {
         console.log('목록 불러오기 실패:', error);
       }
@@ -556,60 +550,6 @@ const PostDetail = () => {
           <ImageGallery imageUrls={urllist} />
         </div>
       </div>
-      {/* 다른 내용들도 표시 */}
-      <RightBox>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'red',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <FavoriteBorderIcon />
-          </Button>
-        </Circle>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <BookmarkIcon />
-          </Button>
-        </Circle>
-        <Circle>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: '50%',
-              minWidth: '50px',
-              height: '50px',
-              bgcolor: 'grey.800',
-              color: 'white',
-              '&:hover': {
-                bgcolor: 'grey.700',
-              },
-            }}
-          >
-            <ShareIcon />
-          </Button>
-        </Circle>
-      </RightBox>
       <TextContainer style={{ display: 'flex', justifyContent: 'center' }}>
         <div dangerouslySetInnerHTML={{ __html: posts.content }} />
       </TextContainer>

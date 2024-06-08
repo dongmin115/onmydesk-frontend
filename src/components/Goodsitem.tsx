@@ -1,5 +1,4 @@
 import { IconButton } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Favorite, FavoriteBorder } from '@mui/icons-material';
@@ -39,13 +38,6 @@ const GoodsBoardInfoFlexbox = styled.div`
   item-align: center;
   text-align: center;
   padding: 0 5% 0 5%;
-`;
-
-const FavoriteButton = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
 `;
 
 const SetupBoardImage = styled.img`
@@ -96,7 +88,6 @@ function GoodsItem({ product, id }) {
         }
       );
       setWishes(true); // 상태 업데이트
-      console.log('Wish added');
     } catch (error) {
       console.error('Error adding to wishlist:', error);
     }
@@ -114,7 +105,6 @@ function GoodsItem({ product, id }) {
         }
       );
       setWishes(false); // 상태 업데이트
-      console.log('Wish deleted');
     } catch (error) {
       console.error('Error adding to wishlist:', error);
     }

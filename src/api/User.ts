@@ -67,7 +67,6 @@ export const putUserInfo = async (name: string, nickname: string) => {
         },
       }
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -83,7 +82,6 @@ export const deleteUser = async () => {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`,
       },
     });
-    console.log(response);
     return response;
   } catch (error) {
     console.error(error);

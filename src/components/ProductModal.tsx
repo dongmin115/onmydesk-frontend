@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { TextField } from '@mui/material';
-import { boolean } from 'zod';
 
 // 모달 스타일드 컴포넌트 생성
 const ModalWrapper = styled.div`

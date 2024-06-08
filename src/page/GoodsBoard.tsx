@@ -53,7 +53,7 @@ const GoodsBoardTitle = styled.h1`
 
 const SetupBoardContainer = styled.div`
   display: grid;
-  width: 70vw;
+  width: 75vw;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: minmax(30vh, auto);
   gap: 3vh;
@@ -61,17 +61,6 @@ const SetupBoardContainer = styled.div`
   align-items: center;
   padding: 10;
   height: fit-content;
-`;
-
-const Flexbox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-  height: 18vh;
-  margin-right: 5%;
-  margin-left: 5%;
 `;
 
 const Category = function ({
