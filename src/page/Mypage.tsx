@@ -136,10 +136,10 @@ const SetupContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
   margin-bottom: 3rem;
-  gap: 2rem;
+  justify-content: start;
+  gap: 1rem;
 `;
 
 const Flexdiv2 = styled.div`
@@ -151,13 +151,14 @@ const Flexdiv2 = styled.div`
 
 const ImageContainer = styled.div`
   position: relative;
-  width: fit-content;
-  height: fit-content;
+  width: 100%; /* 너비를 뷰포트 너비의 30%로 설정 */
+  height: 30vh; /* 높이를 너비의 비율에 맞춰 설정 */
 `;
 
 const SetupBoardImage = styled.img`
   width: 100%;
   height: 100%;
+  object-fit: cover;
   border-radius: 1rem;
   drop-shadow: 0 0 0.5rem #000000;
   transition: transform 0.5s;
@@ -742,7 +743,7 @@ function Mypage() {
               <p
                 style={{
                   color: '#858585',
-                  width: '60%',
+                  width: '75%',
                   textAlign: 'center',
                 }}
               >
@@ -751,13 +752,12 @@ function Mypage() {
               <p
                 style={{
                   color: '#858585',
-                  width: '10vw',
+                  width: '40%',
                   textAlign: 'center',
                 }}
               >
                 최저가
               </p>
-              <div style={{ width: '10vw' }}></div>
             </div>
 
             {setups &&
@@ -793,6 +793,7 @@ function Mypage() {
                             alignItems: 'start',
                             justifyContent: 'center',
                             marginLeft: '1rem',
+                            width: '60%',
                           }}
                         >
                           <p

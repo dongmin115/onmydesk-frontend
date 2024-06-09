@@ -62,6 +62,7 @@ const TextContainer = styled.div`
   width: 55vw;
   margin-left: 23%;
   padding: 1rem;
+  text-align: left;
 `;
 
 const SetupItemContainer = styled.div`
@@ -549,7 +550,7 @@ const PostDetail = () => {
           <ImageGallery imageUrls={urllist} />
         </div>
       </div>
-      <TextContainer style={{ display: 'flex', justifyContent: 'center' }}>
+      <TextContainer style={{ display: 'flex', justifyContent: 'start' }}>
         <div dangerouslySetInnerHTML={{ __html: posts.content }} />
       </TextContainer>
       <SetupItemContainer>
