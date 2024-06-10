@@ -164,9 +164,7 @@ function Post_fix() {
     }
   }, [Previous_post]);
 
-  useEffect(() => {
-    console.log('imgid:', imgid);
-  }, [imgid]);
+  useEffect(() => {}, [imgid]);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -199,8 +197,6 @@ function Post_fix() {
       (_, index) => index !== indexToRemove
     );
     setArrProduct(updatedProducts);
-
-    console.log(ArrProduct);
   };
 
   const Modalopen = () => {
@@ -261,7 +257,6 @@ function Post_fix() {
   };
 
   useEffect(() => {
-    console.log(selectedImages); // imgid 상태가 업데이트된 후 로그 출력
     uploadImages();
   }, [selectedImages]);
 
@@ -348,7 +343,6 @@ function Post_fix() {
       );
 
       const newImageIds = response.data.data.map((image) => image.id);
-      console.log(newImageIds);
 
       setImgid((prevId) => [...prevId, ...newImageIds]);
       alert('썸네일로 등록할 이미지를 클릭하세요');

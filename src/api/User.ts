@@ -12,7 +12,6 @@ export const SignUp = async (jsonData: User) => {
         },
       }
     );
-    console.log(response.data);
     alert('회원가입이 완료되었습니다.');
     return response.data;
   } catch (error) {

@@ -136,7 +136,6 @@ function ProductModal({ isOpen, onClose, onSelect }) {
   useEffect(() => {
     if (isOpen) {
       searchProduct(true);
-      console.log(productNumber);
     }
   }, [productNumber]);
 
@@ -156,7 +155,6 @@ function ProductModal({ isOpen, onClose, onSelect }) {
   };
 
   if (isOpen) {
-    console.log();
     return (
       <ModalWrapper>
         <ModalContent id="modal-content">
@@ -201,7 +199,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
                   style={{
                     color: 'white',
                     width: '20vw',
-                    fontSize: '1.5vw',
+                    fontSize: '1.5rem',
                     marginLeft: '2vw',
                   }}
                 >
@@ -214,7 +212,7 @@ function ProductModal({ isOpen, onClose, onSelect }) {
                   style={{
                     color: 'white',
                     width: '20vw',
-                    fontSize: '1.5vw',
+                    fontSize: '1.5rem',
                     marginLeft: '6vw',
                   }}
                 >

@@ -132,7 +132,6 @@ const ProductDetail = () => {
       );
       setProductDetailData(response.data);
       setLikeProduct(response.data.data.product.wished);
-      console.log(response.data);
     } catch (error) {
       console.log('에러');
     }

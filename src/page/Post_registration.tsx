@@ -24,6 +24,7 @@ const InputTextField = styled(TextField)({
 
 const Item_box = styled.div`
   //상품 등록 박스
+  border-radius: 1rem;
   background-color: #3c3c3c;
   height: 6vw;
   width: 68vw;
@@ -36,6 +37,7 @@ const Item_box = styled.div`
 `;
 
 const Item_text = styled.b`
+  font-size: 1.5rem;
   color: #c9c9c9;
 `;
 
@@ -150,7 +152,6 @@ function Post_reg() {
   const handleThumbnailClick = (index) => {
     if (imgid.length > index) {
       setSelectedThumbnail(imgid[index]);
-      console.log('썸네일 이미지 ID:', imgid[index]);
     }
   };
 
@@ -223,9 +224,7 @@ function Post_reg() {
     setTitle(event.target.value);
   };
 
-  useEffect(() => {
-    console.log(imgid); // imgid 상태가 업데이트된 후 로그 출력
-  }, [imgid]);
+  useEffect(() => {}, [imgid]);
 
   useEffect(() => {
     // imgid 상태가 업데이트된 후 로그 출력
@@ -263,8 +262,6 @@ function Post_reg() {
           },
         }
       );
-      console.log(response.data);
-      console.log(ArrProduct);
 
       alert('게시글이 등록되었습니다.');
       window.history.back();
@@ -448,7 +445,7 @@ function Post_reg() {
             />
           </Box>
 
-          <div style={{ display: 'flex' }}>
+          <div style={{ display: 'flex', marginBottom: '1rem' }}>
             <Item_button
               style={{
                 color: '#349af8',
@@ -479,8 +476,8 @@ function Post_reg() {
                     marginLeft: '2vw',
                   }}
                 >
-                  <Item_text>상품명</Item_text>:
                   <div
+                    style={{ fontSize: '1.5rem' }}
                     dangerouslySetInnerHTML={{
                       __html: product.productName,
                     }}
@@ -491,11 +488,13 @@ function Post_reg() {
                   style={{
                     color: 'white',
                     width: '20vw',
-                    fontSize: '1.5vw',
+                    fontSize: '1.5rem',
                     marginLeft: '6vw',
                   }}
                 >
-                  <Item_text>가격</Item_text>: {formatPrice(product.lprice)} KRW
+                  <Item_text>
+                    가격 : {formatPrice(product.lprice)} KRW
+                  </Item_text>
                 </div>
                 <div
                   style={{
